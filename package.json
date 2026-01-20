@@ -1,0 +1,7 @@
+{
+  "name": "tell-landingpage",
+  "scripts": {
+    "dev": "bun --hot ./index.html",
+    "preview": "bunx serve ."
+  }
+}
