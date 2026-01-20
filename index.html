@@ -58,7 +58,7 @@
       <div class="mt-12 max-w-sm mx-auto">
         <div class="bg-zinc-900 rounded-2xl px-6 py-4 flex items-center justify-between gap-4 shadow-2xl shadow-zinc-900/20">
           <code class="font-mono text-sm text-zinc-300 font-medium">
-            <span class="text-zinc-500 select-none">$ </span>curl -fsSL tell.rs/install.sh | sh
+            <span class="text-zinc-500 select-none">$ </span>curl tell.rs | sh
           </code>
           <button onclick="copy()" class="text-zinc-500 hover:text-white transition p-2 hover:bg-zinc-800 rounded-lg" title="Copy to clipboard">
             <svg id="copy-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -369,7 +369,7 @@
 
   <script>
     function copy() {
-      navigator.clipboard.writeText('curl -fsSL https://tell.rs/install.sh | sh');
+      navigator.clipboard.writeText('curl https://tell.rs | sh');
       document.getElementById('copy-icon').classList.add('hidden');
       document.getElementById('check-icon').classList.remove('hidden');
       setTimeout(() => {
