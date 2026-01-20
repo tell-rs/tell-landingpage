@@ -35,7 +35,7 @@
       <span class="text-[10px] font-semibold px-2 py-1 rounded-full bg-brand text-white uppercase tracking-wider">Alpha</span>
     </div>
     <div class="flex items-center gap-6">
-      <a href="#" class="text-sm text-zinc-500 hover:text-zinc-900 transition font-medium">Docs</a>
+      <a href="https://github.com/tell-rs/tell#readme" target="_blank" rel="noopener noreferrer" class="text-sm text-zinc-500 hover:text-zinc-900 transition font-medium">Docs</a>
       <a href="https://github.com/tell-rs/tell" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-zinc-900 transition">
         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
       </a>
@@ -54,13 +54,13 @@
         Events, logs, business data — one platform.
       </p>
 
-      <!-- Install box -->
-      <div class="mt-12 max-w-sm mx-auto">
-        <div class="bg-zinc-900 rounded-2xl px-6 py-4 flex items-center justify-between gap-4 shadow-2xl shadow-zinc-900/20">
-          <code class="font-mono text-sm text-zinc-300 font-medium">
+      <!-- Install box - fixed for mobile -->
+      <div class="mt-12 max-w-md mx-auto">
+        <div class="bg-zinc-900 rounded-2xl px-4 sm:px-6 py-4 flex items-center justify-between gap-2 shadow-2xl shadow-zinc-900/20 overflow-x-auto">
+          <code class="font-mono text-sm text-zinc-300 font-medium whitespace-nowrap">
             <span class="text-zinc-500 select-none">$ </span>curl tell.rs | sh
           </code>
-          <button onclick="copy()" class="text-zinc-500 hover:text-white transition p-2 hover:bg-zinc-800 rounded-lg" title="Copy to clipboard">
+          <button onclick="copy()" class="text-zinc-500 hover:text-white transition p-2 hover:bg-zinc-800 rounded-lg flex-shrink-0" title="Copy to clipboard">
             <svg id="copy-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
             </svg>
@@ -80,11 +80,11 @@
 
       <!-- Credibility -->
       <p class="mt-16 text-sm text-zinc-400">
-        Built by the founder of Logpoint
+        640x faster ingestion than PostHog
       </p>
 
       <!-- Scroll indicator -->
-      <div class="mt-16 animate-bounce">
+      <div class="mt-12 animate-bounce">
         <svg class="w-6 h-6 mx-auto text-zinc-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
         </svg>
@@ -93,93 +93,92 @@
     </div>
   </main>
 
-  <!-- Features -->
+  <!-- Pipeline -->
   <section class="py-24 px-6 bg-white">
     <div class="max-w-5xl mx-auto">
-
-      <!-- Pipeline -->
-      <div class="text-center mb-20">
+      <div class="text-center mb-16">
         <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Pipeline</p>
-        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-6">
-          Ingest anything. Route anywhere.
+        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">
+          Zero-copy Rust. Predictable latency.
         </h2>
-        <p class="text-zinc-500 max-w-2xl mx-auto">
-          High-throughput Rust pipeline with sub-millisecond latency. Route from any source to any sink with fan-out, filtering, and transforms.
-        </p>
       </div>
 
-      <!-- Sources → Sinks flow -->
-      <div class="grid md:grid-cols-3 gap-8 mb-20">
+      <div class="grid md:grid-cols-3 gap-6">
         <!-- Sources -->
-        <div class="bg-zinc-50 rounded-2xl p-6">
-          <p class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-4">Sources</p>
+        <div class="bg-zinc-50 rounded-2xl p-8 border border-zinc-200">
+          <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Sources</p>
           <ul class="space-y-3">
             <li class="flex items-center gap-3">
-              <span class="w-2 h-2 rounded-full bg-brand"></span>
+              <span class="w-2 h-2 bg-brand rounded-full"></span>
               <span class="font-medium">TCP</span>
-              <span class="text-zinc-400 text-sm">Binary, high-throughput</span>
             </li>
             <li class="flex items-center gap-3">
-              <span class="w-2 h-2 rounded-full bg-brand"></span>
-              <span class="font-medium">Syslog</span>
-              <span class="text-zinc-400 text-sm">TCP & UDP</span>
+              <span class="w-2 h-2 bg-brand rounded-full"></span>
+              <span class="font-medium">Syslog (TCP/UDP)</span>
             </li>
             <li class="flex items-center gap-3">
-              <span class="w-2 h-2 rounded-full bg-brand"></span>
-              <span class="font-medium">HTTP</span>
-              <span class="text-zinc-400 text-sm">JSONL & Binary</span>
+              <span class="w-2 h-2 bg-zinc-300 rounded-full"></span>
+              <span class="font-medium text-zinc-400">HTTP</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <span class="w-2 h-2 bg-zinc-300 rounded-full"></span>
+              <span class="font-medium text-zinc-400">Kafka</span>
             </li>
           </ul>
         </div>
 
         <!-- Routing -->
-        <div class="bg-zinc-50 rounded-2xl p-6">
-          <p class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-4">Routing & Transforms</p>
+        <div class="bg-zinc-50 rounded-2xl p-8 border border-zinc-200">
+          <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Routing</p>
           <ul class="space-y-3">
             <li class="flex items-center gap-3">
-              <span class="w-2 h-2 rounded-full bg-brand"></span>
-              <span class="font-medium">Fan-out</span>
-              <span class="text-zinc-400 text-sm">Multiple destinations</span>
+              <span class="w-2 h-2 bg-brand rounded-full"></span>
+              <span class="font-medium">Source-based routing</span>
             </li>
             <li class="flex items-center gap-3">
-              <span class="w-2 h-2 rounded-full bg-brand"></span>
-              <span class="font-medium">Filter</span>
-              <span class="text-zinc-400 text-sm">By source, type, workspace</span>
+              <span class="w-2 h-2 bg-brand rounded-full"></span>
+              <span class="font-medium">Fan-out to multiple sinks</span>
             </li>
             <li class="flex items-center gap-3">
-              <span class="w-2 h-2 rounded-full bg-zinc-300"></span>
-              <span class="font-medium text-zinc-400">Pattern</span>
-              <span class="text-zinc-400 text-sm">Log clustering</span>
+              <span class="w-2 h-2 bg-brand rounded-full"></span>
+              <span class="font-medium">Filter and transform</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <span class="w-2 h-2 bg-brand rounded-full"></span>
+              <span class="font-medium">Hot config reload</span>
             </li>
           </ul>
         </div>
 
         <!-- Sinks -->
-        <div class="bg-zinc-50 rounded-2xl p-6">
-          <p class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-4">Sinks</p>
+        <div class="bg-zinc-50 rounded-2xl p-8 border border-zinc-200">
+          <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Sinks</p>
           <ul class="space-y-3">
             <li class="flex items-center gap-3">
-              <span class="w-2 h-2 rounded-full bg-brand flex-shrink-0"></span>
+              <span class="w-2 h-2 bg-brand rounded-full"></span>
               <span class="font-medium">ClickHouse</span>
             </li>
             <li class="flex items-center gap-3">
-              <span class="w-2 h-2 rounded-full bg-brand flex-shrink-0"></span>
+              <span class="w-2 h-2 bg-brand rounded-full"></span>
               <span class="font-medium">Parquet / Arrow</span>
             </li>
             <li class="flex items-center gap-3">
-              <span class="w-2 h-2 rounded-full bg-brand flex-shrink-0"></span>
-              <span class="font-medium">Disk</span>
-              <span class="text-zinc-400 text-sm">Binary, plaintext, LZ4</span>
+              <span class="w-2 h-2 bg-brand rounded-full"></span>
+              <span class="font-medium">Disk (binary / plaintext)</span>
             </li>
             <li class="flex items-center gap-3">
-              <span class="w-2 h-2 rounded-full bg-brand flex-shrink-0"></span>
+              <span class="w-2 h-2 bg-brand rounded-full"></span>
               <span class="font-medium">Forwarder</span>
             </li>
           </ul>
         </div>
       </div>
+    </div>
+  </section>
 
-      <!-- CLI -->
+  <!-- CLI -->
+  <section class="py-24 px-6 bg-zinc-50">
+    <div class="max-w-5xl mx-auto">
       <div class="grid md:grid-cols-2 gap-12 items-center">
         <div>
           <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-4">CLI</p>
@@ -187,7 +186,7 @@
             Tail and query from terminal
           </h3>
           <p class="text-zinc-500 mb-6">
-            Live stream with filters. Query events with SQL. Pipe to jq, grep, or your LLM.
+            Live stream with filters. Query events with SQL. Works with jq, grep, and your existing tools.
           </p>
           <ul class="space-y-2 text-sm">
             <li class="flex items-center gap-2">
@@ -214,17 +213,16 @@
             <p class="text-zinc-300"><span class="text-brand">$</span> tell query "SELECT event_name, COUNT(*) FROM events GROUP BY 1"</p>
           </div>
           <div>
-            <p class="text-zinc-500 mb-1"># Pipe to AI</p>
-            <p class="text-zinc-300"><span class="text-brand">$</span> tell tail --limit 100 | claude "summarize errors"</p>
+            <p class="text-zinc-500 mb-1"># Send test data</p>
+            <p class="text-zinc-300"><span class="text-brand">$</span> tell test</p>
           </div>
         </div>
       </div>
-
     </div>
   </section>
 
   <!-- Connectors -->
-  <section class="py-24 px-6 bg-zinc-50">
+  <section class="py-24 px-6 bg-white">
     <div class="max-w-5xl mx-auto">
       <div class="text-center mb-16">
         <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Connectors</p>
@@ -237,19 +235,19 @@
       </div>
 
       <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="bg-white rounded-xl p-5 border border-zinc-200">
+        <div class="bg-zinc-50 rounded-xl p-5 border border-zinc-200">
           <p class="font-semibold mb-1">GitHub</p>
           <p class="text-sm text-zinc-500">Stars, forks, issues, PRs</p>
         </div>
-        <div class="bg-white rounded-xl p-5 border border-zinc-200">
+        <div class="bg-zinc-50 rounded-xl p-5 border border-zinc-200">
           <p class="font-semibold mb-1">Shopify</p>
           <p class="text-sm text-zinc-500">Orders, revenue, customers</p>
         </div>
-        <div class="bg-white rounded-xl p-5 border border-zinc-200/50">
+        <div class="bg-zinc-50 rounded-xl p-5 border border-zinc-200/50">
           <p class="font-semibold text-zinc-400 mb-1">Stripe</p>
           <p class="text-sm text-zinc-400">Coming soon</p>
         </div>
-        <div class="bg-white rounded-xl p-5 border border-zinc-200/50">
+        <div class="bg-zinc-50 rounded-xl p-5 border border-zinc-200/50">
           <p class="font-semibold text-zinc-400 mb-1">Google Analytics</p>
           <p class="text-sm text-zinc-400">Coming soon</p>
         </div>
@@ -258,7 +256,7 @@
   </section>
 
   <!-- Use Cases -->
-  <section class="py-24 px-6 bg-white">
+  <section class="py-24 px-6 bg-zinc-50">
     <div class="max-w-5xl mx-auto">
       <div class="text-center mb-16">
         <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Solutions</p>
@@ -269,7 +267,7 @@
 
       <div class="grid md:grid-cols-2 gap-6">
         <!-- Startups -->
-        <div class="bg-zinc-50 rounded-2xl p-8">
+        <div class="bg-white rounded-2xl p-8 border border-zinc-200">
           <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-3">Startups</p>
           <h3 class="text-xl font-bold mb-3">Product analytics + logs + business signals</h3>
           <p class="text-zinc-500 mb-4">
@@ -279,17 +277,17 @@
         </div>
 
         <!-- DTC / Ecommerce -->
-        <div class="bg-zinc-50 rounded-2xl p-8">
+        <div class="bg-white rounded-2xl p-8 border border-zinc-200">
           <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-3">DTC / Ecommerce</p>
           <h3 class="text-xl font-bold mb-3">360 view across checkout, orders, and campaigns</h3>
           <p class="text-zinc-500 mb-4">
             Unify checkout funnels with orders, refunds, and campaign KPIs. Answer "what changed?" with driver analysis.
           </p>
-          <p class="text-sm text-zinc-400">Replaces: Shopify analytics + GA + spreadsheet archaeology</p>
+          <p class="text-sm text-zinc-400">Replaces: Triple Whale + Supermetrics + spreadsheets</p>
         </div>
 
         <!-- Enterprise -->
-        <div class="bg-zinc-50 rounded-2xl p-8">
+        <div class="bg-white rounded-2xl p-8 border border-zinc-200">
           <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-3">Enterprise</p>
           <h3 class="text-xl font-bold mb-3">Self-hosted logs and observability</h3>
           <p class="text-zinc-500 mb-4">
@@ -299,7 +297,7 @@
         </div>
 
         <!-- OT / Industrial -->
-        <div class="bg-zinc-50 rounded-2xl p-8">
+        <div class="bg-white rounded-2xl p-8 border border-zinc-200">
           <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-3">OT / Industrial</p>
           <h3 class="text-xl font-bold mb-3">Air-gapped, compliance-ready log collection</h3>
           <p class="text-zinc-500 mb-4">
@@ -312,7 +310,7 @@
   </section>
 
   <!-- SDKs -->
-  <section class="py-16 px-6 bg-zinc-50 border-y border-zinc-200">
+  <section class="py-16 px-6 bg-white border-y border-zinc-200">
     <div class="max-w-5xl mx-auto">
       <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
         <div>
@@ -320,14 +318,64 @@
           <p class="text-sm text-zinc-500">Send events and logs from your app</p>
         </div>
         <div class="flex flex-wrap gap-3">
-          <span class="px-4 py-2 bg-white rounded-lg text-sm font-medium border border-zinc-200">Go</span>
-          <span class="px-4 py-2 bg-white rounded-lg text-sm font-medium border border-zinc-200">Swift</span>
-          <span class="px-4 py-2 bg-white rounded-lg text-sm font-medium border border-zinc-200">C++</span>
-          <span class="px-4 py-2 bg-white rounded-lg text-sm font-medium border border-zinc-200/50 text-zinc-400">Flutter</span>
-          <span class="px-4 py-2 bg-white rounded-lg text-sm font-medium border border-zinc-200/50 text-zinc-400">Rust</span>
-          <span class="px-4 py-2 bg-white rounded-lg text-sm font-medium border border-zinc-200/50 text-zinc-400">TypeScript</span>
+          <span class="px-4 py-2 bg-zinc-50 rounded-lg text-sm font-medium border border-zinc-200">Go</span>
+          <span class="px-4 py-2 bg-zinc-50 rounded-lg text-sm font-medium border border-zinc-200">Swift</span>
+          <span class="px-4 py-2 bg-zinc-50 rounded-lg text-sm font-medium border border-zinc-200">C++</span>
+          <span class="px-4 py-2 bg-zinc-50 rounded-lg text-sm font-medium border border-zinc-200/50 text-zinc-400">Flutter</span>
+          <span class="px-4 py-2 bg-zinc-50 rounded-lg text-sm font-medium border border-zinc-200/50 text-zinc-400">Rust</span>
+          <span class="px-4 py-2 bg-zinc-50 rounded-lg text-sm font-medium border border-zinc-200/50 text-zinc-400">TypeScript</span>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="py-24 px-6 bg-zinc-50">
+    <div class="max-w-3xl mx-auto">
+      <div class="text-center mb-12">
+        <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Pricing</p>
+        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
+          Full product for everyone
+        </h2>
+        <p class="text-zinc-500">No feature gating. Revenue-based pricing for companies.</p>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-zinc-200 overflow-hidden">
+        <div class="divide-y divide-zinc-100">
+          <div class="flex justify-between items-center px-6 py-4">
+            <div>
+              <p class="font-semibold">Individual</p>
+              <p class="text-sm text-zinc-500">Personal projects</p>
+            </div>
+            <p class="font-bold text-brand">Free</p>
+          </div>
+          <div class="flex justify-between items-center px-6 py-4">
+            <div>
+              <p class="font-semibold">Company &lt; $1M revenue</p>
+              <p class="text-sm text-zinc-500">Key required</p>
+            </div>
+            <p class="font-bold text-brand">Free</p>
+          </div>
+          <div class="flex justify-between items-center px-6 py-4">
+            <div>
+              <p class="font-semibold">Company $1M - $10M</p>
+              <p class="text-sm text-zinc-500">Pro tier</p>
+            </div>
+            <p class="font-bold">$299<span class="text-zinc-400 font-normal">/mo</span></p>
+          </div>
+          <div class="flex justify-between items-center px-6 py-4">
+            <div>
+              <p class="font-semibold">Company &gt; $10M</p>
+              <p class="text-sm text-zinc-500">Enterprise tier</p>
+            </div>
+            <p class="font-bold">$2,000<span class="text-zinc-400 font-normal">+/mo</span></p>
+          </div>
+        </div>
+      </div>
+
+      <p class="mt-6 text-center text-sm text-zinc-400">
+        <a href="https://github.com/tell-rs/tell/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" class="underline hover:text-zinc-600 transition">View full license</a> · Government, education, non-profit: contact us
+      </p>
     </div>
   </section>
 
@@ -353,16 +401,22 @@
 
   <!-- Footer -->
   <footer class="py-12 px-6 bg-zinc-900 text-zinc-400">
-    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-      <div class="flex items-center gap-2">
-        <span class="text-white font-bold">Tell</span>
-        <span class="text-zinc-600">·</span>
-        <span class="text-sm">Analytics that tell the whole story</span>
+    <div class="max-w-5xl mx-auto">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-6">
+        <div class="flex items-center gap-2">
+          <span class="text-white font-bold">Tell</span>
+          <span class="text-zinc-600">·</span>
+          <span class="text-sm">Analytics that tell the whole story</span>
+        </div>
+        <div class="flex items-center gap-6 text-sm">
+          <a href="https://github.com/tell-rs/tell" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">GitHub</a>
+          <a href="https://github.com/tell-rs/tell#readme" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">Docs</a>
+          <a href="https://github.com/tell-rs/tell/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">License</a>
+        </div>
       </div>
-      <div class="flex items-center gap-6 text-sm">
-        <a href="https://github.com/tell-rs/tell" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">GitHub</a>
-        <a href="#" class="hover:text-white transition">Docs</a>
-        <a href="https://github.com/tell-rs/tell/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">License</a>
+      <div class="mt-8 pt-8 border-t border-zinc-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm">
+        <p>Singapore · Source available</p>
+        <p class="text-zinc-500">Built by the founder of Logpoint</p>
       </div>
     </div>
   </footer>
