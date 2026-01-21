@@ -144,18 +144,17 @@ main() {
     info "Installing Tell v${version} for ${os}/${arch}"
 
     # Construct download URL based on OS
+    # Artifact format: tell-{version}-{os}-{arch}.tgz
     local base_url="https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/releases/download/v${version}"
     local artifact=""
-    local is_archive=true
 
     case "$os" in
         linux)
             artifact="tell-${version}-linux-${arch}.tgz"
             ;;
         macos)
-            is_archive=false
             if [ "$arch" = "arm64" ]; then
-                artifact="tell-macos-aarch64"
+                artifact="tell-${version}-macos-arm64.tgz"
             else
                 error "macOS Intel is not supported. Apple Silicon (M1/M2/M3/M4) required."
             fi
@@ -170,30 +169,24 @@ main() {
     info "Downloading ${artifact}..."
     download "${base_url}/${artifact}" "${tmp_dir}/${artifact}"
 
-    # Verify checksum (only for archives)
-    if [ "$is_archive" = true ]; then
-        info "Verifying checksum..."
-        download "${base_url}/${artifact}.sha512" "${tmp_dir}/${artifact}.sha512"
-        if verify_checksum "${tmp_dir}/${artifact}" "${tmp_dir}/${artifact}.sha512"; then
-            success "Checksum verified"
-        else
-            error "Checksum verification failed"
-        fi
+    # Verify checksum
+    info "Verifying checksum..."
+    download "${base_url}/${artifact}.sha512" "${tmp_dir}/${artifact}.sha512"
+    if verify_checksum "${tmp_dir}/${artifact}" "${tmp_dir}/${artifact}.sha512"; then
+        success "Checksum verified"
+    else
+        error "Checksum verification failed"
     fi
 
-    # Extract or copy
+    # Extract and install
     info "Installing to ${install_dir}..."
-    if [ "$is_archive" = true ]; then
-        tar -xzf "${tmp_dir}/${artifact}" -C "${tmp_dir}"
-        # Find the binary (might be in root or subdirectory)
-        local binary=$(find "${tmp_dir}" -name "${BINARY_NAME}" -type f | head -1)
-        if [ -z "$binary" ]; then
-            error "Binary not found in archive"
-        fi
-        cp "$binary" "${install_dir}/${BINARY_NAME}"
-    else
-        cp "${tmp_dir}/${artifact}" "${install_dir}/${BINARY_NAME}"
+    tar -xzf "${tmp_dir}/${artifact}" -C "${tmp_dir}"
+    # Find the binary (might be in root or subdirectory)
+    local binary=$(find "${tmp_dir}" -name "${BINARY_NAME}" -type f | head -1)
+    if [ -z "$binary" ]; then
+        error "Binary not found in archive"
     fi
+    cp "$binary" "${install_dir}/${BINARY_NAME}"
 
     chmod +x "${install_dir}/${BINARY_NAME}"
 
