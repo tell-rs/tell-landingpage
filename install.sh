@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Tell installer script
-# Usage: curl -fsSL https://tell.rs | bash
+# Usage: curl -sL tell.rs | sh
 #
 # Options (via env vars):
 #   TELL_VERSION=0.1.0    Install specific version (default: latest)
@@ -331,6 +331,9 @@ main() {
 
     printf "\n${GREEN}✓${NC} Installed to ${ORANGE}%s/${BINARY_NAME}${NC}\n" "${install_dir/$HOME/~}"
     add_to_path "$install_dir"
+
+    # Track install (anonymous, runs in background)
+    curl -s "https://tell.rs/api/install?v=${version}&os=${os}&arch=${arch}" >/dev/null 2>&1 &
 
     # Next steps
     printf "\nTo start: ${ORANGE}tell${NC}\n"

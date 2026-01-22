@@ -100,7 +100,7 @@
                             class="font-mono text-sm text-zinc-300 font-medium whitespace-nowrap"
                         >
                             <span class="text-zinc-500 select-none">$ </span
-                            >curl tell.rs | sh
+                            >curl -sL tell.rs | sh
                         </code>
                         <button
                             onclick="copy()"
@@ -797,7 +797,7 @@
 
         <script>
             function copy() {
-                navigator.clipboard.writeText("curl https://tell.rs | sh");
+                navigator.clipboard.writeText("curl -sL tell.rs | sh");
                 document.getElementById("copy-icon").classList.add("hidden");
                 document
                     .getElementById("check-icon")
