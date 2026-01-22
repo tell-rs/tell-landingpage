@@ -1,83 +1,159 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # Tell installer script
-# Usage: curl -fsSL https://raw.githubusercontent.com/tell-rs/tell/main/install.sh | sh
+# Usage: curl -fsSL https://tell.rs | bash
 #
 # Options (via env vars):
-#   TELL_VERSION=2.0.0    Install specific version (default: latest)
-#   TELL_INSTALL_DIR=...  Install directory (default: /usr/local/bin or ~/.local/bin)
+#   TELL_VERSION=0.1.0    Install specific version (default: latest)
+#   TELL_INSTALL_DIR=...  Install directory (default: ~/.local/bin)
 
-set -e
+set -euo pipefail
 
 # Configuration
 GITHUB_OWNER="tell-rs"
 GITHUB_REPO="tell"
 BINARY_NAME="tell"
+DEFAULT_INSTALL_DIR="$HOME/.local/bin"
 
-# Colors (disabled if not terminal)
-if [ -t 1 ]; then
-    RED='\033[0;31m'
-    GREEN='\033[0;32m'
-    YELLOW='\033[0;33m'
-    BLUE='\033[0;34m'
-    NC='\033[0m' # No Color
-else
-    RED=''
-    GREEN=''
-    YELLOW=''
-    BLUE=''
-    NC=''
-fi
+# Global for cleanup
+CLEANUP_DIR=""
 
-info() {
-    printf "${BLUE}==>${NC} %s\n" "$1"
+cleanup() {
+    if [ -n "$CLEANUP_DIR" ] && [ -d "$CLEANUP_DIR" ]; then
+        rm -rf "$CLEANUP_DIR"
+    fi
 }
+trap cleanup EXIT
 
-success() {
-    printf "${GREEN}==>${NC} %s\n" "$1"
-}
-
-warn() {
-    printf "${YELLOW}warning:${NC} %s\n" "$1"
-}
-
-error() {
-    printf "${RED}error:${NC} %s\n" "$1" >&2
-    exit 1
-}
-
-# Detect OS
-detect_os() {
-    case "$(uname -s)" in
-        Linux*)  echo "linux" ;;
-        Darwin*) echo "macos" ;;
-        MINGW*|MSYS*|CYGWIN*) error "Windows is not supported. Use WSL instead." ;;
-        *) error "Unsupported operating system: $(uname -s)" ;;
-    esac
-}
-
-# Detect architecture
-detect_arch() {
-    case "$(uname -m)" in
-        x86_64|amd64) echo "amd64" ;;
-        aarch64|arm64) echo "arm64" ;;
-        *) error "Unsupported architecture: $(uname -m)" ;;
-    esac
-}
-
-# Get latest version from GitHub API
-get_latest_version() {
-    local url="https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/latest"
-
-    if command -v curl >/dev/null 2>&1; then
-        curl -fsSL "$url" | grep '"tag_name"' | sed -E 's/.*"v?([^"]+)".*/\1/'
-    elif command -v wget >/dev/null 2>&1; then
-        wget -qO- "$url" | grep '"tag_name"' | sed -E 's/.*"v?([^"]+)".*/\1/'
+# Colors: Orange (brand) + Gray + Green (success) + Red (errors)
+setup_colors() {
+    if [ -t 1 ]; then
+        ORANGE='\033[38;5;209m'  # Brand color - coral/orange
+        GREEN='\033[0;32m'       # Success checkmarks only
+        RED='\033[0;31m'         # Errors only
+        GRAY='\033[0;90m'        # Secondary text
+        NC='\033[0m'
     else
-        error "curl or wget is required"
+        ORANGE=''
+        GREEN=''
+        RED=''
+        GRAY=''
+        NC=''
     fi
 }
 
-# Download file
+# Print the Tell ASCII art logo
+print_logo() {
+    printf "\n${ORANGE}"
+    cat << 'EOF'
+████████╗███████╗██╗     ██╗
+╚══██╔══╝██╔════╝██║     ██║
+   ██║   █████╗  ██║     ██║
+   ██║   ██╔══╝  ██║     ██║
+   ██║   ███████╗███████╗███████╗
+   ╚═╝   ╚══════╝╚══════╝╚══════╝
+EOF
+    printf "${NC}\n"
+}
+
+# Print a progress bar (real bytes tracking)
+print_progress() {
+    local bytes="$1"
+    local length="$2"
+    [ "$length" -gt 0 ] || return 0
+
+    local width=40
+    local percent=$(( bytes * 100 / length ))
+    [ "$percent" -gt 100 ] && percent=100
+    local on=$(( percent * width / 100 ))
+    local off=$(( width - on ))
+
+    local filled=""
+    local empty=""
+    local i=0
+    while [ $i -lt $on ]; do
+        filled="${filled}█"
+        i=$((i + 1))
+    done
+    i=0
+    while [ $i -lt $off ]; do
+        empty="${empty}░"
+        i=$((i + 1))
+    done
+
+    printf "\r${ORANGE}%s${GRAY}%s${NC} ${GRAY}%3d%%${NC}" "$filled" "$empty" "$percent" >&4
+}
+
+# Unbuffered sed for real-time parsing
+unbuffered_sed() {
+    if echo | sed -u -e "" >/dev/null 2>&1; then
+        sed -nu "$@"
+    elif echo | sed -l -e "" >/dev/null 2>&1; then
+        sed -nl "$@"
+    else
+        local pad
+        pad="$(printf "\n%512s" "")"
+        sed -ne "s/$/\\${pad}/" "$@"
+    fi
+}
+
+# Download with real progress tracking using curl --trace-ascii
+download_with_progress() {
+    local url="$1"
+    local output="$2"
+
+    if [ -t 2 ]; then
+        exec 4>&2
+    else
+        exec 4>/dev/null
+    fi
+
+    local progress_tmp="${TMPDIR:-/tmp}/tell_trace_$$"
+    rm -f "$progress_tmp"
+    mkfifo "$progress_tmp"
+
+    printf "\033[?25l" >&4
+
+    trap 'trap - RETURN; rm -f "$progress_tmp"; printf "\033[?25h" >&4; exec 4>&-' RETURN
+
+    (
+        curl --trace-ascii "$progress_tmp" -s -L -o "$output" "$url"
+    ) &
+    local curl_pid=$!
+
+    unbuffered_sed \
+        -e 'y/ACDEGHLNORTV/acdeghlnortv/' \
+        -e '/^0000: content-length:/p' \
+        -e '/^<= recv data/p' \
+        "$progress_tmp" | \
+    {
+        local length=0
+        local bytes=0
+
+        while IFS=" " read -r -a line; do
+            [ "${#line[@]}" -lt 2 ] && continue
+            local tag="${line[0]} ${line[1]}"
+
+            if [ "$tag" = "0000: content-length:" ]; then
+                length="${line[2]}"
+                length=$(echo "$length" | tr -d '\r')
+                bytes=0
+            elif [ "$tag" = "<= recv" ]; then
+                local size="${line[3]}"
+                bytes=$(( bytes + size ))
+                if [ "$length" -gt 0 ]; then
+                    print_progress "$bytes" "$length"
+                fi
+            fi
+        done
+    }
+
+    wait $curl_pid
+    local ret=$?
+    printf "\n" >&4
+    return $ret
+}
+
+# Simple download without progress
 download() {
     local url="$1"
     local output="$2"
@@ -91,130 +167,174 @@ download() {
     fi
 }
 
-# Verify SHA512 checksum
+success() {
+    printf "${GREEN}✓${NC} %s\n" "$1"
+}
+
+error() {
+    printf "${RED}✗${NC} %s\n" "$1" >&2
+    exit 1
+}
+
+detect_os() {
+    case "$(uname -s)" in
+        Linux*)  echo "linux" ;;
+        Darwin*) echo "macos" ;;
+        MINGW*|MSYS*|CYGWIN*) error "Windows is not supported. Use WSL instead." ;;
+        *) error "Unsupported operating system: $(uname -s)" ;;
+    esac
+}
+
+detect_arch() {
+    case "$(uname -m)" in
+        x86_64|amd64) echo "amd64" ;;
+        aarch64|arm64) echo "arm64" ;;
+        *) error "Unsupported architecture: $(uname -m)" ;;
+    esac
+}
+
+get_latest_version() {
+    local url="https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/latest"
+
+    if command -v curl >/dev/null 2>&1; then
+        curl -fsSL "$url" 2>/dev/null | grep '"tag_name"' | sed -E 's/.*"v?([^"]+)".*/\1/'
+    elif command -v wget >/dev/null 2>&1; then
+        wget -qO- "$url" 2>/dev/null | grep '"tag_name"' | sed -E 's/.*"v?([^"]+)".*/\1/'
+    else
+        error "curl or wget is required"
+    fi
+}
+
 verify_checksum() {
     local file="$1"
     local checksum_file="$2"
 
     if command -v sha512sum >/dev/null 2>&1; then
-        # Linux
         echo "$(cat "$checksum_file")  $file" | sha512sum -c - >/dev/null 2>&1
     elif command -v shasum >/dev/null 2>&1; then
-        # macOS
         echo "$(cat "$checksum_file")  $file" | shasum -a 512 -c - >/dev/null 2>&1
     else
-        warn "Cannot verify checksum (sha512sum/shasum not found)"
         return 0
     fi
 }
 
-# Determine install directory
 get_install_dir() {
-    if [ -n "$TELL_INSTALL_DIR" ]; then
+    if [ -n "${TELL_INSTALL_DIR:-}" ]; then
         echo "$TELL_INSTALL_DIR"
-    elif [ -w "/usr/local/bin" ]; then
-        echo "/usr/local/bin"
     else
-        # Fall back to user directory
-        mkdir -p "$HOME/.local/bin"
-        echo "$HOME/.local/bin"
+        mkdir -p "$DEFAULT_INSTALL_DIR"
+        echo "$DEFAULT_INSTALL_DIR"
     fi
 }
 
-# Check if directory is in PATH
-check_path() {
-    local dir="$1"
-    case ":$PATH:" in
-        *":$dir:"*) return 0 ;;
-        *) return 1 ;;
-    esac
+detect_shell() {
+    if [ -n "${SHELL:-}" ]; then
+        basename "$SHELL"
+    else
+        echo "sh"
+    fi
 }
 
-# Main installation
-main() {
-    local os=$(detect_os)
-    local arch=$(detect_arch)
-    local version="${TELL_VERSION:-$(get_latest_version)}"
-    local install_dir=$(get_install_dir)
+get_shell_config() {
+    local shell_name="$1"
 
-    if [ -z "$version" ]; then
-        error "Could not determine version to install"
-    fi
-
-    info "Installing Tell v${version} for ${os}/${arch}"
-
-    # Construct download URL based on OS
-    # Artifact format: tell-{version}-{os}-{arch}.tgz
-    local base_url="https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/releases/download/v${version}"
-    local artifact=""
-
-    case "$os" in
-        linux)
-            artifact="tell-${version}-linux-${arch}.tgz"
-            ;;
-        macos)
-            if [ "$arch" = "arm64" ]; then
-                artifact="tell-${version}-macos-arm64.tgz"
+    case "$shell_name" in
+        zsh)  echo "$HOME/.zshrc" ;;
+        bash)
+            if [ -f "$HOME/.bash_profile" ]; then
+                echo "$HOME/.bash_profile"
             else
-                error "macOS Intel is not supported. Apple Silicon (M1/M2/M3/M4) required."
+                echo "$HOME/.bashrc"
             fi
             ;;
+        fish) echo "$HOME/.config/fish/config.fish" ;;
+        *)    echo "$HOME/.profile" ;;
+    esac
+}
+
+add_to_path() {
+    local dir="$1"
+    local shell_name
+    local config_file
+    shell_name=$(detect_shell)
+    config_file=$(get_shell_config "$shell_name")
+
+    # Already in PATH
+    case ":$PATH:" in
+        *":$dir:"*) return 0 ;;
     esac
 
+    # Already in config
+    if [ -f "$config_file" ] && grep -q "$dir" "$config_file" 2>/dev/null; then
+        return 0
+    fi
+
+    # Add to config
+    case "$shell_name" in
+        fish)
+            mkdir -p "$(dirname "$config_file")"
+            printf '\n# Tell\nfish_add_path %s\n' "$dir" >> "$config_file"
+            ;;
+        *)
+            printf '\n# Tell\nexport PATH="%s:$PATH"\n' "$dir" >> "$config_file"
+            ;;
+    esac
+
+    printf "${GREEN}✓${NC} Added to PATH\n"
+}
+
+main() {
+    setup_colors
+    print_logo
+
+    local os arch version install_dir
+    os=$(detect_os)
+    arch=$(detect_arch)
+    version="${TELL_VERSION:-}"
+    [ -z "$version" ] && version=$(get_latest_version)
+    install_dir=$(get_install_dir)
+
+    [ -z "$version" ] && error "Could not determine version to install"
+
+    printf "${GRAY}Installing ${NC}${ORANGE}tell${NC} ${GRAY}v%s...${NC}\n\n" "$version"
+
+    # Build artifact name
+    local base_url="https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/releases/download/v${version}"
+    local artifact="tell-${version}-${os}-${arch}.tgz"
+
     # Create temp directory
-    local tmp_dir=$(mktemp -d)
-    trap "rm -rf '$tmp_dir'" EXIT
+    CLEANUP_DIR=$(mktemp -d)
 
-    # Download
-    info "Downloading ${artifact}..."
-    download "${base_url}/${artifact}" "${tmp_dir}/${artifact}"
-
-    # Verify checksum
-    info "Verifying checksum..."
-    download "${base_url}/${artifact}.sha512" "${tmp_dir}/${artifact}.sha512"
-    if verify_checksum "${tmp_dir}/${artifact}" "${tmp_dir}/${artifact}.sha512"; then
-        success "Checksum verified"
+    # Download with progress
+    if [ -t 2 ] && download_with_progress "${base_url}/${artifact}" "${CLEANUP_DIR}/${artifact}"; then
+        : # Success
     else
+        curl -fsSL "${base_url}/${artifact}" -o "${CLEANUP_DIR}/${artifact}" || \
+        wget -q "${base_url}/${artifact}" -O "${CLEANUP_DIR}/${artifact}" || \
+        error "Download failed"
+    fi
+
+    # Verify (silent, just skip if no checksum)
+    if download "${base_url}/${artifact}.sha512" "${CLEANUP_DIR}/${artifact}.sha512" 2>/dev/null; then
+        verify_checksum "${CLEANUP_DIR}/${artifact}" "${CLEANUP_DIR}/${artifact}.sha512" || \
         error "Checksum verification failed"
     fi
 
     # Extract and install
-    info "Installing to ${install_dir}..."
-    tar -xzf "${tmp_dir}/${artifact}" -C "${tmp_dir}"
-    # Find the binary (might be in root or subdirectory)
-    local binary=$(find "${tmp_dir}" -name "${BINARY_NAME}" -type f | head -1)
-    if [ -z "$binary" ]; then
-        error "Binary not found in archive"
-    fi
-    cp "$binary" "${install_dir}/${BINARY_NAME}"
+    tar -xzf "${CLEANUP_DIR}/${artifact}" -C "${CLEANUP_DIR}"
+    local binary
+    binary=$(find "${CLEANUP_DIR}" -name "${BINARY_NAME}" -type f | head -1)
+    [ -z "$binary" ] && error "Binary not found in archive"
 
+    cp "$binary" "${install_dir}/${BINARY_NAME}"
     chmod +x "${install_dir}/${BINARY_NAME}"
 
-    success "Tell v${version} installed to ${install_dir}/${BINARY_NAME}"
+    printf "\n${GREEN}✓${NC} Installed to ${ORANGE}%s/${BINARY_NAME}${NC}\n" "${install_dir/$HOME/~}"
+    add_to_path "$install_dir"
 
-    # Check PATH
-    if ! check_path "$install_dir"; then
-        echo ""
-        warn "${install_dir} is not in your PATH"
-        echo ""
-        echo "Add it to your shell profile:"
-        echo ""
-        echo "  # For bash (~/.bashrc or ~/.bash_profile)"
-        echo "  export PATH=\"${install_dir}:\$PATH\""
-        echo ""
-        echo "  # For zsh (~/.zshrc)"
-        echo "  export PATH=\"${install_dir}:\$PATH\""
-        echo ""
-        echo "  # For fish (~/.config/fish/config.fish)"
-        echo "  set -gx PATH ${install_dir} \$PATH"
-        echo ""
-    fi
-
-    # Verify installation
-    if command -v "${BINARY_NAME}" >/dev/null 2>&1 || [ -x "${install_dir}/${BINARY_NAME}" ]; then
-        echo ""
-        success "Installation complete! Run 'tell --help' to get started."
-    fi
+    # Next steps
+    printf "\nTo start: ${ORANGE}tell${NC}\n"
+    printf "${GRAY}https://tell.rs/docs${NC}\n\n"
 }
 
 main "$@"
