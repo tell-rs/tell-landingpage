@@ -14,6 +14,7 @@ export default defineConfig({
     tanstackStart(),
     nitro({
       preset: "vercel",
+      scanDirs: ["server"],
       vercel: {
         functions: {
           runtime: "bun1.x",
