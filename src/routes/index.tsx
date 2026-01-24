@@ -59,7 +59,7 @@ function Home() {
           <div className="mt-12 max-w-md mx-auto">
             <div className="bg-zinc-900 rounded-2xl px-4 sm:px-6 py-4 flex items-center justify-between gap-2 shadow-2xl shadow-zinc-900/20 overflow-x-auto">
               <code className="font-mono text-sm text-zinc-300 font-medium whitespace-nowrap">
-                <span className="text-zinc-500 select-none">$ </span>
+                <span className="text-brand select-none">$ </span>
                 curl -sL tell.rs | sh
               </code>
               <CopyButton />
