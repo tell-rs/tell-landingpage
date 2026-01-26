@@ -2,11 +2,16 @@ import { defineEventHandler, getRequestHeader, getRequestURL, setResponseHeader 
 
 const installScript = `#!/usr/bin/env bash
 # Tell installer script
-# Usage: curl -sL tell.rs | sh
+# Usage: curl -sSfL https://tell.rs | bash
 #
 # Options (via env vars):
 #   TELL_VERSION=0.1.0    Install specific version (default: latest)
 #   TELL_INSTALL_DIR=...  Install directory (default: ~/.local/bin)
+
+# Re-exec with bash if running under a different shell (e.g., dash on Ubuntu)
+if [ -z "\${BASH_VERSION:-}" ]; then
+    exec bash "$0" "$@"
+fi
 
 set -euo pipefail
 
