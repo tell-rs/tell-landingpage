@@ -53,9 +53,9 @@ function DownloadPage() {
         <div className="bg-zinc-900 rounded-2xl px-4 sm:px-6 py-4 flex items-center justify-between gap-2 shadow-2xl shadow-zinc-900/20 mb-8">
           <code className="font-mono text-sm text-zinc-300 font-medium whitespace-nowrap">
             <span className="text-zinc-500 select-none">$ </span>
-            curl -sSfL https://tell.rs | bash
+            curl -sSfL https://tell.rs | sh
           </code>
-          <CopyButton text="curl -sSfL https://tell.rs | bash" />
+          <CopyButton text="curl -sSfL https://tell.rs | sh" />
         </div>
 
         {/* Next Steps */}

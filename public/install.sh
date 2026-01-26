@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Tell installer script
-# Usage: curl -sSfL https://tell.rs | bash
+# Usage: curl -sSfL https://tell.rs | sh
 #
 # Options (via env vars):
 #   TELL_VERSION=0.1.0    Install specific version (default: latest)
