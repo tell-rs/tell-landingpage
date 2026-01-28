@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 import { createRootRoute, HeadContent, Link, Outlet, Scripts, useLocation } from "@tanstack/react-router";
-import type { ReactNode } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 
 import appCss from "../../styles.css?url";
 
@@ -29,9 +29,20 @@ export const Route = createRootRoute({
 function Nav() {
   const location = useLocation();
   const isHomePage = location.pathname === "/";
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <nav className="fixed top-0 w-full px-4 sm:px-8 py-3 z-50 bg-background/80 backdrop-blur-md border-b border-white/5">
+    <nav className={`fixed top-0 w-full px-4 sm:px-8 py-3 z-50 transition-all duration-300 ${
+      scrolled ? "bg-background/90 backdrop-blur-md border-b border-white/5" : "bg-transparent border-b border-transparent"
+    }`}>
       <div className="relative flex items-center justify-between">
         {/* Left: Logo */}
         <Link to="/" className="flex items-center gap-3">

@@ -33,14 +33,6 @@ function CopyButton() {
   );
 }
 
-function CheckIcon() {
-  return (
-    <svg className="w-4 h-4 text-brand flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-    </svg>
-  );
-}
-
 function ArrowIcon() {
   return (
     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -49,19 +41,15 @@ function ArrowIcon() {
   );
 }
 
-const SDK_DATA = {
-  go: {
-    name: "Go",
-    available: true,
-    repo: "https://github.com/tell-rs/tell-go",
-    example: `import "github.com/tell-rs/tell-go"
+function CheckIcon() {
+  return (
+    <svg className="w-4 h-4 text-brand flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+    </svg>
+  );
+}
 
-client := tell.New("your-api-key")
-client.Track("signup_completed", tell.Props{
-    "user_id": "usr_123",
-    "plan":    "pro",
-})`,
-  },
+const SDK_DATA = {
   swift: {
     name: "Swift",
     available: true,
@@ -69,22 +57,11 @@ client.Track("signup_completed", tell.Props{
     example: `import Tell
 
 let client = Tell(apiKey: "your-api-key")
-client.track("signup_completed", properties: [
-    "user_id": "usr_123",
-    "plan": "pro"
-])`,
-  },
-  cpp: {
-    name: "C++",
-    available: true,
-    repo: "https://github.com/tell-rs/tell-cpp",
-    example: `#include <tell/tell.h>
 
-tell::Client client("your-api-key");
-client.track("signup_completed", {
-    {"user_id", "usr_123"},
-    {"plan", "pro"}
-});`,
+client.track("purchase_completed", properties: [
+    "revenue": 149.99,
+    "product": "Pro Plan"
+])`,
   },
   flutter: {
     name: "Flutter",
@@ -93,10 +70,24 @@ client.track("signup_completed", {
     example: `import 'package:tell/tell.dart';
 
 final client = Tell(apiKey: 'your-api-key');
-client.track('signup_completed', {
-  'user_id': 'usr_123',
-  'plan': 'pro',
+
+client.track('purchase_completed', {
+  'revenue': 149.99,
+  'product': 'Pro Plan',
 });`,
+  },
+  go: {
+    name: "Go",
+    available: true,
+    repo: "https://github.com/tell-rs/tell-go",
+    example: `import "github.com/tell-rs/tell-go"
+
+client := tell.New("your-api-key")
+
+client.Track("purchase_completed", tell.Props{
+    "revenue": 149.99,
+    "product": "Pro Plan",
+})`,
   },
   typescript: {
     name: "TypeScript",
@@ -105,9 +96,10 @@ client.track('signup_completed', {
     example: `import { Tell } from '@tell-rs/sdk';
 
 const client = new Tell({ apiKey: 'your-api-key' });
-client.track('signup_completed', {
-  user_id: 'usr_123',
-  plan: 'pro',
+
+client.track('purchase_completed', {
+  revenue: 149.99,
+  product: 'Pro Plan',
 });`,
   },
   rust: {
@@ -117,26 +109,27 @@ client.track('signup_completed', {
     example: `use tell::Client;
 
 let client = Client::new("your-api-key");
-client.track("signup_completed", json!({
-    "user_id": "usr_123",
-    "plan": "pro"
+
+client.track("purchase_completed", json!({
+    "revenue": 149.99,
+    "product": "Pro Plan"
 })).await?;`,
   },
 };
 
 function SDKSection() {
-  const [activeSDK, setActiveSDK] = useState<keyof typeof SDK_DATA>("go");
+  const [activeSDK, setActiveSDK] = useState<keyof typeof SDK_DATA>("swift");
   const sdk = SDK_DATA[activeSDK];
 
   return (
-    <section className="py-20 px-6 border-y border-white/5">
+    <section className="py-20 px-6">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-10">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-3">Get started in 5 minutes</h2>
-          <p className="text-zinc-400">Lightweight SDKs for every platform. One line to track events.</p>
+          <p className="text-sm font-medium text-brand uppercase tracking-wider mb-4">Integration</p>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-3">Add tracking in minutes</h2>
+          <p className="text-zinc-400 max-w-2xl mx-auto">Lightweight SDKs for mobile and server. A few lines of code to start tracking.</p>
         </div>
 
-        {/* SDK tabs */}
         <div className="flex flex-wrap justify-center gap-2 mb-6">
           {Object.entries(SDK_DATA).map(([key, data]) => (
             <button
@@ -156,8 +149,7 @@ function SDKSection() {
           ))}
         </div>
 
-        {/* SDK code example */}
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-xl mx-auto">
           <div className="bg-zinc-950 rounded-xl border border-white/5 overflow-hidden">
             <div className="flex items-center justify-between px-4 py-2 border-b border-white/5 bg-zinc-900/50">
               <span className="text-xs text-zinc-500">{sdk.name}</span>
@@ -171,7 +163,7 @@ function SDKSection() {
                   <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
                     <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
                   </svg>
-                  View repo
+                  View SDK
                 </a>
               ) : (
                 <span className="text-xs text-zinc-600">Coming soon</span>
@@ -191,8 +183,7 @@ function Home() {
   return (
     <>
       {/* Hero */}
-      <main className="min-h-screen flex flex-col items-center justify-center px-6 pt-24 pb-12 relative overflow-hidden">
-        {/* Gradient mesh background */}
+      <main className="min-h-screen flex flex-col items-center justify-center px-6 pt-20 pb-12 relative overflow-hidden">
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-0 -left-40 w-[600px] h-[600px] bg-brand/15 rounded-full blur-[128px]" />
           <div className="absolute top-20 -right-40 w-[500px] h-[500px] bg-emerald-500/8 rounded-full blur-[128px]" />
@@ -200,10 +191,9 @@ function Home() {
         </div>
 
         <div className="max-w-4xl text-center">
-          {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 mb-8">
             <span className="w-2 h-2 rounded-full bg-brand animate-pulse" />
-            <span className="text-sm text-zinc-400">Source available · Self-host forever</span>
+            <span className="text-sm text-zinc-400">Now in alpha · Free for startups</span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1]">
@@ -211,11 +201,10 @@ function Home() {
           </h1>
 
           <p className="mt-8 text-lg sm:text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-            Product analytics, logs, and business data — unified in one platform.
-            Self-host in minutes. Your data stays yours.
+            Product analytics, logs, and business signals — unified in one platform.
+            Track user behavior. Understand what changed. Ship with confidence.
           </p>
 
-          {/* CTA buttons */}
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/signup"
@@ -237,7 +226,6 @@ function Home() {
             </a>
           </div>
 
-          {/* Install box */}
           <div className="mt-12 max-w-md mx-auto relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-brand/20 via-transparent to-emerald-500/15 rounded-2xl blur-xl opacity-50" />
             <div className="relative bg-zinc-900/80 backdrop-blur-sm rounded-xl px-4 sm:px-5 py-3 flex items-center justify-between gap-2 border border-white/10">
@@ -249,343 +237,340 @@ function Home() {
             </div>
           </div>
 
-          {/* Credibility */}
           <p className="mt-16 text-sm text-zinc-500">
-            640x faster than PostHog · Built by the founder of Logpoint
+            64M events/sec · Self-host in 5 minutes · Built by the founder of Logpoint
           </p>
         </div>
       </main>
 
-      {/* Three Pillars - The core value prop */}
+      {/* Platform - Three Pillars */}
       <section className="py-24 px-6 border-t border-white/5">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">One platform. Three data types. Full picture.</h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto">Most tools show you one slice. Tell correlates everything with shared session IDs.</p>
+            <p className="text-sm font-medium text-brand uppercase tracking-wider mb-4">The Platform</p>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Everything you need to understand your business</h2>
+          </div>
+
+          {/* Product Analytics */}
+          <div className="mb-12">
+            <p className="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-4 pl-1">Product Analytics</p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="p-5 bg-zinc-900/50 rounded-xl border border-white/5">
+                <div className="w-9 h-9 rounded-lg bg-brand/10 flex items-center justify-center mb-3">
+                  <svg className="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </div>
+                <h3 className="font-semibold text-sm mb-1">Funnels</h3>
+                <p className="text-xs text-zinc-500">See where users drop off</p>
+              </div>
+
+              <div className="p-5 bg-zinc-900/50 rounded-xl border border-white/5">
+                <div className="w-9 h-9 rounded-lg bg-brand/10 flex items-center justify-center mb-3">
+                  <svg className="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                </div>
+                <h3 className="font-semibold text-sm mb-1">Retention</h3>
+                <p className="text-xs text-zinc-500">Daily, weekly, monthly</p>
+              </div>
+
+              <div className="p-5 bg-zinc-900/50 rounded-xl border border-white/5">
+                <div className="w-9 h-9 rounded-lg bg-brand/10 flex items-center justify-center mb-3">
+                  <svg className="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <h3 className="font-semibold text-sm mb-1">Cohorts</h3>
+                <p className="text-xs text-zinc-500">Group by behavior</p>
+              </div>
+
+              <div className="p-5 bg-zinc-900/50 rounded-xl border border-white/5">
+                <div className="w-9 h-9 rounded-lg bg-brand/10 flex items-center justify-center mb-3">
+                  <svg className="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                  </svg>
+                </div>
+                <h3 className="font-semibold text-sm mb-1">User Journeys</h3>
+                <p className="text-xs text-zinc-500">Trace paths & patterns</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Logs & Events */}
+          <div className="mb-12">
+            <p className="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-4 pl-1">Logs & Events</p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="p-5 bg-zinc-900/50 rounded-xl border border-white/5">
+                <div className="w-9 h-9 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-3">
+                  <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                <h3 className="font-semibold text-sm mb-1">Application Logs</h3>
+                <p className="text-xs text-zinc-500">Structured app events</p>
+              </div>
+
+              <div className="p-5 bg-zinc-900/50 rounded-xl border border-white/5">
+                <div className="w-9 h-9 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-3">
+                  <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <h3 className="font-semibold text-sm mb-1">Errors</h3>
+                <p className="text-xs text-zinc-500">Exceptions & crashes</p>
+              </div>
+
+              <div className="p-5 bg-zinc-900/50 rounded-xl border border-white/5">
+                <div className="w-9 h-9 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-3">
+                  <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+                  </svg>
+                </div>
+                <h3 className="font-semibold text-sm mb-1">System Events</h3>
+                <p className="text-xs text-zinc-500">Infrastructure signals</p>
+              </div>
+
+              <div className="p-5 bg-zinc-900/50 rounded-xl border border-white/5">
+                <div className="w-9 h-9 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-3">
+                  <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                  </svg>
+                </div>
+                <h3 className="font-semibold text-sm mb-1">Audit Trails</h3>
+                <p className="text-xs text-zinc-500">Who did what, when</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Integrations */}
+          <div>
+            <p className="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-4 pl-1">Integrations</p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="p-5 bg-zinc-900/50 rounded-xl border border-white/5">
+                <div className="w-9 h-9 rounded-lg bg-purple-500/10 flex items-center justify-center mb-3">
+                  <svg className="w-4 h-4 text-purple-400" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M15.337 23.979l2.146-6.203h5.016L8.665 0l-2.148 6.203H1.5l13.837 17.776z"/>
+                  </svg>
+                </div>
+                <h3 className="font-semibold text-sm mb-1">Shopify</h3>
+                <p className="text-xs text-zinc-500">Orders & customers</p>
+              </div>
+
+              <div className="p-5 bg-zinc-900/50 rounded-xl border border-white/5">
+                <div className="w-9 h-9 rounded-lg bg-purple-500/10 flex items-center justify-center mb-3">
+                  <svg className="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 24 24">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                  </svg>
+                </div>
+                <h3 className="font-semibold text-sm mb-1">GitHub</h3>
+                <p className="text-xs text-zinc-500">Deploys & commits</p>
+              </div>
+
+              <div className="p-5 bg-zinc-900/30 rounded-xl border border-white/5">
+                <div className="w-9 h-9 rounded-lg bg-purple-500/5 flex items-center justify-center mb-3">
+                  <svg className="w-4 h-4 text-zinc-600" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z"/>
+                  </svg>
+                </div>
+                <h3 className="font-semibold text-sm mb-1 text-zinc-500">Stripe</h3>
+                <p className="text-xs text-zinc-600">Coming soon</p>
+              </div>
+
+              <div className="p-5 bg-zinc-900/30 rounded-xl border border-white/5">
+                <div className="w-9 h-9 rounded-lg bg-purple-500/5 flex items-center justify-center mb-3">
+                  <svg className="w-4 h-4 text-zinc-600" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 4.5a2.25 2.25 0 110 4.5 2.25 2.25 0 010-4.5zm4.5 13.5h-9v-1.5c0-1.5 3-2.25 4.5-2.25s4.5.75 4.5 2.25v1.5z"/>
+                  </svg>
+                </div>
+                <h3 className="font-semibold text-sm mb-1 text-zinc-500">Klaviyo</h3>
+                <p className="text-xs text-zinc-600">Coming soon</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* The Why - the differentiator */}
+      <section className="py-24 px-6 bg-zinc-900/30">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-sm font-medium text-brand uppercase tracking-wider mb-4">The Difference</p>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">When metrics drop, know exactly why</h2>
+            <p className="text-zinc-400 max-w-2xl mx-auto">Most analytics tools show you what happened. Tell shows you why — with correlated logs and external signals in the same view.</p>
+          </div>
+
+          <div className="bg-zinc-950 rounded-2xl border border-white/5 overflow-hidden">
+            <div className="grid md:grid-cols-2">
+              {/* Left: The insight */}
+              <div className="p-8 md:border-r border-white/5">
+                <p className="text-sm text-zinc-500 mb-6">Example: Checkout conversion dropped</p>
+
+                <div className="space-y-4">
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <svg className="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-medium text-white">Funnel shows 23% drop at payment</p>
+                      <p className="text-sm text-zinc-500">Product analytics</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <svg className="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-medium text-white">Stripe timeout errors spiking</p>
+                      <p className="text-sm text-zinc-500">Correlated logs</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-medium text-white">Deploy changed Stripe config</p>
+                      <p className="text-sm text-zinc-500">External signal (GitHub)</p>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="mt-8 text-sm text-zinc-400">
+                  One dashboard. Full context. No tab switching.
+                </p>
+              </div>
+
+              {/* Right: Visual */}
+              <div className="p-8 bg-zinc-900/30">
+                <div className="flex items-center justify-between mb-4">
+                  <p className="text-sm font-medium text-zinc-400">Checkout Funnel</p>
+                  <span className="px-2 py-1 rounded text-xs bg-red-500/10 text-red-400">-23%</span>
+                </div>
+
+                <div className="h-32 bg-zinc-900/50 rounded-lg flex items-end justify-around px-4 pb-3 mb-6">
+                  <div className="text-center">
+                    <div className="w-10 bg-zinc-600 rounded-t mb-2" style={{ height: '85px' }} />
+                    <p className="text-xs text-zinc-500">Cart</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-10 bg-zinc-600 rounded-t mb-2" style={{ height: '70px' }} />
+                    <p className="text-xs text-zinc-500">Info</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-10 bg-red-500/60 rounded-t mb-2" style={{ height: '40px' }} />
+                    <p className="text-xs text-red-400">Payment</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-10 bg-zinc-700 rounded-t mb-2" style={{ height: '35px' }} />
+                    <p className="text-xs text-zinc-500">Done</p>
+                  </div>
+                </div>
+
+                <p className="text-xs text-zinc-500 mb-3">Correlated events</p>
+                <div className="space-y-2 text-xs">
+                  <div className="flex items-center gap-2 px-3 py-2 bg-zinc-800/50 rounded-lg">
+                    <span className="w-2 h-2 rounded-full bg-red-500" />
+                    <span className="text-zinc-400">14:32</span>
+                    <span className="text-zinc-300">stripe_timeout</span>
+                    <span className="text-zinc-600 ml-auto">×47</span>
+                  </div>
+                  <div className="flex items-center gap-2 px-3 py-2 bg-zinc-800/50 rounded-lg">
+                    <span className="w-2 h-2 rounded-full bg-purple-500" />
+                    <span className="text-zinc-400">11:15</span>
+                    <span className="text-zinc-300">deploy: stripe-sdk</span>
+                    <span className="text-zinc-600 ml-auto">main</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* For Teams */}
+      <section className="py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-sm font-medium text-brand uppercase tracking-wider mb-4">For Teams</p>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Built for how teams actually work</h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {/* Events */}
-            <div className="bg-zinc-900/50 rounded-2xl p-8 border border-white/5 flex flex-col">
-              <div className="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mb-5">
+            <div className="text-center">
+              <div className="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mx-auto mb-4">
                 <svg className="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-2">Product Analytics</h3>
-              <p className="text-zinc-500 mb-4 text-sm leading-relaxed">What did users do?</p>
-              <p className="text-zinc-400 text-sm leading-relaxed flex-grow">Track events, build funnels, measure retention. Like Mixpanel — but unified with everything else.</p>
-              <div className="mt-6 pt-6 border-t border-white/5">
-                <p className="text-xs text-zinc-600">Funnels · Retention · Cohorts · Breakdowns</p>
-              </div>
+              <p className="text-sm font-medium text-brand mb-2">Product</p>
+              <h3 className="font-semibold mb-2">Measure what matters</h3>
+              <p className="text-sm text-zinc-500">Track feature adoption, find drop-off points, understand segments. Make decisions with data.</p>
             </div>
 
-            {/* Logs */}
-            <div className="bg-zinc-900/50 rounded-2xl p-8 border border-white/5 flex flex-col">
-              <div className="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mb-5">
+            <div className="text-center">
+              <div className="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mx-auto mb-4">
                 <svg className="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-2">Logs & Errors</h3>
-              <p className="text-zinc-500 mb-4 text-sm leading-relaxed">What did the system do?</p>
-              <p className="text-zinc-400 text-sm leading-relaxed flex-grow">Same SDK, same session ID. When a user reports a bug, see their journey AND the errors. No more "can't reproduce".</p>
-              <div className="mt-6 pt-6 border-t border-white/5">
-                <p className="text-xs text-zinc-600">Structured logs · Syslog · Error tracking · Correlation</p>
-              </div>
+              <p className="text-sm font-medium text-brand mb-2">Growth</p>
+              <h3 className="font-semibold mb-2">Optimize the funnel</h3>
+              <p className="text-sm text-zinc-500">Acquisition to activation to revenue. See which channels convert, where users churn.</p>
             </div>
 
-            {/* Connectors */}
-            <div className="bg-zinc-900/50 rounded-2xl p-8 border border-white/5 flex flex-col">
-              <div className="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mb-5">
+            <div className="text-center">
+              <div className="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mx-auto mb-4">
                 <svg className="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-2">External Signals</h3>
-              <p className="text-zinc-500 mb-4 text-sm leading-relaxed">What's happening around you?</p>
-              <p className="text-zinc-400 text-sm leading-relaxed flex-grow">Your analytics are blind outside your app. Connect GitHub, Shopify, ads — see stars spike with signups, orders correlate with campaigns.</p>
-              <div className="mt-6 pt-6 border-t border-white/5">
-                <p className="text-xs text-zinc-600">GitHub · Shopify · Stripe · Ads platforms</p>
-              </div>
+              <p className="text-sm font-medium text-brand mb-2">Engineering</p>
+              <h3 className="font-semibold mb-2">Debug in context</h3>
+              <p className="text-sm text-zinc-500">When something breaks, see the user journey alongside errors. One SDK, correlated by session.</p>
             </div>
-          </div>
-
-          {/* The punchline */}
-          <div className="mt-12 text-center">
-            <p className="text-zinc-400">
-              <span className="text-white font-medium">The result:</span> Checkout drop at step 3? See the correlated timeout errors. Revenue down? See which campaign, which flow, which error.
-            </p>
           </div>
         </div>
       </section>
 
-      {/* SDKs - moved up to show ease of use early */}
+      {/* SDK Section */}
       <SDKSection />
 
-      {/* What it replaces - the key insight for switchers */}
-      <section className="py-20 px-6 bg-zinc-900/30">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-4">One platform, not three vendors</h2>
-            <p className="text-zinc-400">Stop paying for tools that don't talk to each other.</p>
-          </div>
 
-          <div className="space-y-3">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-zinc-900/50 rounded-xl border border-white/5 hover:border-white/10 transition-colors">
-              <div className="flex items-center gap-4 mb-3 sm:mb-0">
-                <div className="w-10 h-10 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-medium">Startups & SaaS</p>
-                  <p className="text-sm text-zinc-500">Events + logs + GitHub stars in one place</p>
-                </div>
-              </div>
-              <p className="text-sm text-zinc-500 sm:text-right">Replaces: <span className="text-zinc-400">Mixpanel + Sentry + spreadsheets</span></p>
-            </div>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-zinc-900/50 rounded-xl border border-white/5 hover:border-white/10 transition-colors">
-              <div className="flex items-center gap-4 mb-3 sm:mb-0">
-                <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-medium">E-commerce / DTC</p>
-                  <p className="text-sm text-zinc-500">Checkout funnels + orders + campaign KPIs</p>
-                </div>
-              </div>
-              <p className="text-sm text-zinc-500 sm:text-right">Replaces: <span className="text-zinc-400">Triple Whale + Supermetrics</span></p>
-            </div>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-zinc-900/50 rounded-xl border border-white/5 hover:border-white/10 transition-colors">
-              <div className="flex items-center gap-4 mb-3 sm:mb-0">
-                <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-medium">Enterprise</p>
-                  <p className="text-sm text-zinc-500">Self-hosted logs + dashboards + query</p>
-                </div>
-              </div>
-              <p className="text-sm text-zinc-500 sm:text-right">Replaces: <span className="text-zinc-400">Elastic + Datadog + Splunk</span></p>
-            </div>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-zinc-900/50 rounded-xl border border-white/5 hover:border-white/10 transition-colors">
-              <div className="flex items-center gap-4 mb-3 sm:mb-0">
-                <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-medium">OT / Industrial</p>
-                  <p className="text-sm text-zinc-500">Air-gapped, compliance-ready log collection</p>
-                </div>
-              </div>
-              <p className="text-sm text-zinc-500 sm:text-right">Replaces: <span className="text-zinc-400">rsyslog + Splunk</span></p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Pipeline */}
-      <section id="pipeline" className="py-24 px-6 bg-zinc-900/30">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-sm font-medium text-brand uppercase tracking-wider mb-4">Pipeline</p>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Zero-copy Rust. Predictable latency.</h2>
-            <p className="text-zinc-400 mt-4 max-w-2xl mx-auto">Source-based routing with O(1) lookup. Fan-out to multiple sinks without copying data.</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-zinc-900/50 rounded-2xl p-8 border border-white/5">
-              <p className="text-sm font-medium text-brand uppercase tracking-wider mb-5">Sources</p>
-              <ul className="space-y-3">
-                <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-brand rounded-full" /><span className="text-zinc-300">TCP (Binary)</span></li>
-                <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-brand rounded-full" /><span className="text-zinc-300">HTTP (JSONL / Binary)</span></li>
-                <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-brand rounded-full" /><span className="text-zinc-300">Syslog (TCP / UDP)</span></li>
-                <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-brand rounded-full" /><span className="text-zinc-300">Connectors</span></li>
-              </ul>
-            </div>
-
-            <div className="bg-zinc-900/50 rounded-2xl p-8 border border-white/5">
-              <p className="text-sm font-medium text-brand uppercase tracking-wider mb-5">Routing</p>
-              <ul className="space-y-3">
-                <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-brand rounded-full" /><span className="text-zinc-300">Source-based routing</span></li>
-                <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-brand rounded-full" /><span className="text-zinc-300">Fan-out to multiple sinks</span></li>
-                <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-brand rounded-full" /><span className="text-zinc-300">Filter and transform</span></li>
-              </ul>
-            </div>
-
-            <div className="bg-zinc-900/50 rounded-2xl p-8 border border-white/5">
-              <p className="text-sm font-medium text-brand uppercase tracking-wider mb-5">Sinks</p>
-              <ul className="space-y-3">
-                <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-brand rounded-full" /><span className="text-zinc-300">ClickHouse</span></li>
-                <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-brand rounded-full" /><span className="text-zinc-300">Arrow IPC</span></li>
-                <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-brand rounded-full" /><span className="text-zinc-300">Disk (binary / plaintext)</span></li>
-                <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-brand rounded-full" /><span className="text-zinc-300">Parquet / Forwarder</span></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Connectors - simplified */}
-      <section className="py-16 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            <div>
-              <p className="text-sm font-medium text-brand uppercase tracking-wider mb-2">Connectors</p>
-              <p className="text-zinc-400">Pull external data into your analytics. Scheduled syncs, automatic retry.</p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <span className="px-4 py-2 bg-zinc-900/50 rounded-lg text-sm font-medium border border-white/10">GitHub</span>
-              <span className="px-4 py-2 bg-zinc-900/50 rounded-lg text-sm font-medium border border-white/10">Shopify</span>
-              <span className="px-4 py-2 bg-zinc-900/30 rounded-lg text-sm font-medium border border-white/5 text-zinc-500">Stripe</span>
-              <span className="px-4 py-2 bg-zinc-900/30 rounded-lg text-sm font-medium border border-white/5 text-zinc-500">Klaviyo</span>
-              <span className="px-4 py-2 bg-zinc-900/30 rounded-lg text-sm font-medium border border-white/5 text-zinc-500">Meta Ads</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CLI - MOVED DOWN */}
-      <section className="py-24 px-6 bg-zinc-900/30">
+      {/* CLI */}
+      <section className="py-20 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <p className="text-sm font-medium text-brand uppercase tracking-wider mb-4">CLI</p>
-              <h3 className="text-2xl sm:text-3xl font-bold tracking-tight mb-4">Tail and query from terminal</h3>
+              <h3 className="text-2xl sm:text-3xl font-bold tracking-tight mb-4">Query from your terminal</h3>
               <p className="text-zinc-400 mb-6">
-                Live stream with filters. Query events with SQL. Works with jq, grep, and your existing tools.
+                Live tail events. Run SQL queries. Pipe to jq or your existing tools.
               </p>
               <ul className="space-y-3 text-sm">
+                <li className="flex items-center gap-3"><CheckIcon /><span className="text-zinc-300">Real-time event streaming</span></li>
+                <li className="flex items-center gap-3"><CheckIcon /><span className="text-zinc-300">SQL queries via ClickHouse</span></li>
                 <li className="flex items-center gap-3"><CheckIcon /><span className="text-zinc-300">Filter by workspace, source, type</span></li>
-                <li className="flex items-center gap-3"><CheckIcon /><span className="text-zinc-300">Sampling and rate limiting</span></li>
-                <li className="flex items-center gap-3"><CheckIcon /><span className="text-zinc-300">SQL queries via ClickHouse or Polars</span></li>
               </ul>
             </div>
             <div className="bg-zinc-950 rounded-2xl p-6 font-mono text-sm space-y-4 border border-white/5">
               <div>
-                <p className="text-zinc-600 mb-1"># Live tail with filters</p>
-                <p className="text-zinc-300"><span className="text-brand">$</span> tell tail --source tcp --type event</p>
+                <p className="text-zinc-600 mb-1"># Live tail</p>
+                <p className="text-zinc-300"><span className="text-brand">$</span> tell tail --type event</p>
               </div>
               <div>
-                <p className="text-zinc-600 mb-1"># Query events</p>
-                <p className="text-zinc-300"><span className="text-brand">$</span> tell query "SELECT event_name, COUNT(*) FROM events GROUP BY 1"</p>
-              </div>
-              <div>
-                <p className="text-zinc-600 mb-1"># Send test data</p>
-                <p className="text-zinc-300"><span className="text-brand">$</span> tell test</p>
+                <p className="text-zinc-600 mb-1"># Query</p>
+                <p className="text-zinc-300"><span className="text-brand">$</span> tell query "SELECT event, COUNT(*) GROUP BY 1"</p>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Comparison */}
-      <section className="py-20 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="text-sm font-medium text-brand uppercase tracking-wider mb-4">Comparison</p>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">How Tell compares</h2>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-white/10">
-                  <th className="text-left py-4 pr-4 font-medium text-zinc-400"></th>
-                  <th className="text-center py-4 px-3 font-bold text-brand">Tell</th>
-                  <th className="text-center py-4 px-3 font-medium text-zinc-500">PostHog</th>
-                  <th className="text-center py-4 px-3 font-medium text-zinc-500">Mixpanel</th>
-                  <th className="text-center py-4 px-3 font-medium text-zinc-500">Vector</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                <tr>
-                  <td className="py-3 pr-4 text-zinc-300">Events &amp; funnels</td>
-                  <td className="py-3 px-3 text-center text-brand">✓</td>
-                  <td className="py-3 px-3 text-center text-zinc-400">✓</td>
-                  <td className="py-3 px-3 text-center text-zinc-400">✓</td>
-                  <td className="py-3 px-3 text-center text-zinc-600">—</td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 text-zinc-300">Logs</td>
-                  <td className="py-3 px-3 text-center text-brand">✓</td>
-                  <td className="py-3 px-3 text-center text-zinc-600">—</td>
-                  <td className="py-3 px-3 text-center text-zinc-600">—</td>
-                  <td className="py-3 px-3 text-center text-zinc-400">✓</td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 text-zinc-300">External data connectors</td>
-                  <td className="py-3 px-3 text-center text-brand">✓</td>
-                  <td className="py-3 px-3 text-center text-zinc-600">—</td>
-                  <td className="py-3 px-3 text-center text-zinc-600">—</td>
-                  <td className="py-3 px-3 text-center text-zinc-600">—</td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 text-zinc-300">SDKs (track, identify)</td>
-                  <td className="py-3 px-3 text-center text-brand">✓</td>
-                  <td className="py-3 px-3 text-center text-zinc-400">✓</td>
-                  <td className="py-3 px-3 text-center text-zinc-400">✓</td>
-                  <td className="py-3 px-3 text-center text-zinc-600">—</td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 text-zinc-300">Dashboards</td>
-                  <td className="py-3 px-3 text-center text-brand">✓</td>
-                  <td className="py-3 px-3 text-center text-zinc-400">✓</td>
-                  <td className="py-3 px-3 text-center text-zinc-400">✓</td>
-                  <td className="py-3 px-3 text-center text-zinc-600">—</td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 text-zinc-300">Multi-source routing</td>
-                  <td className="py-3 px-3 text-center text-brand">✓</td>
-                  <td className="py-3 px-3 text-center text-zinc-600">—</td>
-                  <td className="py-3 px-3 text-center text-zinc-600">—</td>
-                  <td className="py-3 px-3 text-center text-zinc-400">✓</td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 text-zinc-300">Multiple sinks</td>
-                  <td className="py-3 px-3 text-center text-brand">✓</td>
-                  <td className="py-3 px-3 text-center text-zinc-600">—</td>
-                  <td className="py-3 px-3 text-center text-zinc-600">—</td>
-                  <td className="py-3 px-3 text-center text-zinc-400">✓</td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 text-zinc-300">CLI (tail, query)</td>
-                  <td className="py-3 px-3 text-center text-brand">✓</td>
-                  <td className="py-3 px-3 text-center text-zinc-600">—</td>
-                  <td className="py-3 px-3 text-center text-zinc-600">—</td>
-                  <td className="py-3 px-3 text-center text-zinc-600">—</td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 text-zinc-300">Self-host (one binary)</td>
-                  <td className="py-3 px-3 text-center text-brand">✓</td>
-                  <td className="py-3 px-3 text-center text-zinc-500 text-xs">Docker</td>
-                  <td className="py-3 px-3 text-center text-zinc-600">—</td>
-                  <td className="py-3 px-3 text-center text-zinc-400">✓</td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 text-zinc-300">Throughput</td>
-                  <td className="py-3 px-3 text-center text-brand font-medium">64M/s</td>
-                  <td className="py-3 px-3 text-center text-zinc-500">~100K/s</td>
-                  <td className="py-3 px-3 text-center text-zinc-600">—</td>
-                  <td className="py-3 px-3 text-center text-zinc-500">86 MiB/s</td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 text-zinc-300">Source available</td>
-                  <td className="py-3 px-3 text-center text-brand">✓</td>
-                  <td className="py-3 px-3 text-center text-zinc-400">✓</td>
-                  <td className="py-3 px-3 text-center text-zinc-600">—</td>
-                  <td className="py-3 px-3 text-center text-zinc-400">✓</td>
-                </tr>
-              </tbody>
-            </table>
           </div>
         </div>
       </section>
@@ -595,19 +580,12 @@ function Home() {
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <p className="text-sm font-medium text-brand uppercase tracking-wider mb-4">Pricing</p>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">Full product for everyone</h2>
-            <p className="text-zinc-400">Revenue-based pricing. All features included.</p>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">Simple, transparent pricing</h2>
+            <p className="text-zinc-400">All features included. No per-seat fees.</p>
           </div>
 
           <div className="bg-zinc-900/80 rounded-2xl border border-white/5 overflow-hidden">
             <div className="divide-y divide-white/5">
-              <div className="flex justify-between items-center px-6 py-5">
-                <div>
-                  <p className="font-semibold">Individual</p>
-                  <p className="text-sm text-zinc-500">Personal projects</p>
-                </div>
-                <p className="font-bold text-brand">Free</p>
-              </div>
               <div className="flex justify-between items-center px-6 py-5">
                 <div>
                   <p className="font-semibold">Startup</p>
@@ -625,7 +603,7 @@ function Home() {
               <div className="flex justify-between items-center px-6 py-5">
                 <div>
                   <p className="font-semibold">Enterprise</p>
-                  <p className="text-sm text-zinc-500">Companies &gt; $10M · SLA + support</p>
+                  <p className="text-sm text-zinc-500">Custom SLA, support, deployment</p>
                 </div>
                 <p className="font-bold">Custom</p>
               </div>
@@ -633,15 +611,13 @@ function Home() {
           </div>
 
           <p className="mt-6 text-center text-sm text-zinc-500">
-            <a href="https://github.com/tell-rs/tell/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" className="underline hover:text-zinc-300 transition-colors duration-200">View full license</a>
-            {" · "}Government, education, non-profit: contact us
+            Self-host free forever · <a href="https://github.com/tell-rs/tell/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" className="underline hover:text-zinc-300 transition-colors duration-200">View license</a>
           </p>
         </div>
       </section>
 
       {/* CTA */}
       <section className="py-24 px-6 relative overflow-hidden">
-        {/* Subtle gradient */}
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-brand/10 rounded-full blur-[128px]" />
           <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-emerald-500/5 rounded-full blur-[128px]" />
@@ -650,7 +626,7 @@ function Home() {
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-6">Ready to see the whole story?</h2>
           <p className="text-zinc-400 mb-10 max-w-xl mx-auto">
-            Join the alpha. Free for startups. Get unified analytics in 5 minutes.
+            Join the alpha. Free for startups. Self-host in 5 minutes.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
