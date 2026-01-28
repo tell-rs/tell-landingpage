@@ -12,11 +12,21 @@ type SignupData = {
 };
 
 // Server function to call tell-platform API
-const submitSignup = createServerFn({ method: "POST" }).handler(
-  async (data: SignupData) => {
+// This runs on Vercel's server, not in the browser - API key is never exposed
+const submitSignup = createServerFn({ method: "POST" })
+  .inputValidator((input: SignupData) => input)
+  .handler(async ({ data }) => {
+    const apiKey = process.env.PLATFORM_API_KEY;
+    if (!apiKey) {
+      throw new Error("Server configuration error");
+    }
+
     const res = await fetch(`${config.apiUrl}/api/v1/signup`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
       body: JSON.stringify(data),
     });
 
@@ -26,8 +36,7 @@ const submitSignup = createServerFn({ method: "POST" }).handler(
     }
 
     return res.json();
-  }
-);
+  });
 
 export const Route = createFileRoute("/signup")({
   component: SignupPage,
@@ -52,14 +61,20 @@ function SignupPage() {
     setError(null);
 
     try {
-      const result = await submitSignup(form);
+      const result = await submitSignup({ data: form });
 
       // Route based on next_step
       if (result.next_step === "free") {
         navigate({ to: "/download" });
       } else if (result.next_step?.monthly_price) {
-        // Pro tier - would go to payment, for now go to thanks
-        navigate({ to: "/thanks", search: { tier: "pro" } });
+        // Pro tier - redirect to Polar checkout
+        const checkoutParams = new URLSearchParams({
+          products: config.polar.proProductId,
+          customerEmail: form.email,
+          customerName: form.company_name,
+          metadata: JSON.stringify({ customer_id: result.customer_id }),
+        });
+        window.location.href = `/api/checkout?${checkoutParams.toString()}`;
       } else {
         // Contact sales
         navigate({ to: "/thanks", search: { tier: "contact" } });

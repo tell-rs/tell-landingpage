@@ -1,11 +1,18 @@
 // Configuration for tell-landingpage
 // This is safe to commit - no secrets here
+// Secrets are in environment variables (set in Vercel dashboard)
 
 export const config = {
   // tell-platform API URL
-  // Change this when tell-platform is deployed
-  apiUrl: "http://localhost:3001",
+  apiUrl: process.env.PLATFORM_API_URL || "http://localhost:3001",
 
-  // For production, update to:
-  // apiUrl: "https://api.tell.rs",
+  // Polar.sh configuration (public values - not secrets)
+  polar: {
+    // Pro tier product ID from Polar dashboard
+    proProductId: "12309e54-3194-4aad-826f-bb1dd64361cb",
+    // Where to redirect after successful checkout
+    successUrl: "https://tell.rs/thanks",
+    // Use sandbox for testing, production for live
+    server: (process.env.NODE_ENV === "production" ? "production" : "sandbox") as "sandbox" | "production",
+  },
 };

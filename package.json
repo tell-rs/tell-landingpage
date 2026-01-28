@@ -18,12 +18,14 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@polar-sh/tanstack-start": "^0.4.3",
     "@tailwindcss/vite": "^4.1.17",
     "@tanstack/react-router": "^1.135.2",
     "@tanstack/react-start": "^1.135.2",
     "nitro": "^3.0.1-alpha.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "tailwindcss": "^4.1.17"
+    "tailwindcss": "^4.1.17",
+    "zod": "^4.3.6"
   }
 }
