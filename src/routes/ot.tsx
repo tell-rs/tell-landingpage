@@ -278,7 +278,7 @@ function OTPage() {
                   <li className="flex items-center gap-3 text-sm"><CheckIcon /><span className="text-zinc-300">Per-workspace metrics isolation</span></li>
                 </ul>
               </div>
-              <div className="bg-zinc-950 rounded-xl p-6 font-mono text-xs border border-white/5">
+              <div className="bg-zinc-950 rounded-xl p-6 font-mono text-sm border border-white/5">
                 <p className="text-zinc-500 mb-2"># apikeys.conf - hot reloaded</p>
                 <p className="text-zinc-300"><span className="text-zinc-500"># format: hex_key:workspace_id</span></p>
                 <p className="text-zinc-300 mt-2"><span className="text-emerald-400">000102030405060708090a0b0c0d0e0f</span>:<span className="text-brand">1</span></p>
@@ -304,7 +304,7 @@ function OTPage() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-zinc-950 rounded-xl p-6 font-mono text-xs border border-white/5 overflow-x-auto">
+            <div className="bg-zinc-950 rounded-xl p-6 font-mono text-sm border border-white/5 overflow-x-auto">
               <p className="text-zinc-500 mb-4"># config.yaml - OT profile</p>
               <p className="text-zinc-400">global:</p>
               <p className="text-zinc-300 pl-4">num_processors: <span className="text-brand">4</span></p>
