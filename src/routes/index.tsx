@@ -256,105 +256,108 @@ function Home() {
         </div>
       </main>
 
-      {/* Why Tell - Competitive positioning */}
-      <section className="py-20 px-6 border-t border-white/5">
+      {/* Three Pillars - The core value prop */}
+      <section className="py-24 px-6 border-t border-white/5">
         <div className="max-w-5xl mx-auto">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mx-auto mb-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">One platform. Three data types. Full picture.</h2>
+            <p className="text-zinc-400 max-w-2xl mx-auto">Most tools show you one slice. Tell correlates everything with shared session IDs.</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Events */}
+            <div className="bg-zinc-900/50 rounded-2xl p-8 border border-white/5">
+              <div className="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mb-5">
                 <svg className="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 7v10c0 2 1 3 3 3h10c2 0 3-1 3-3V7c0-2-1-3-3-3H7C5 4 4 5 4 7z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 7l8 5 8-5" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
                 </svg>
               </div>
-              <h3 className="font-semibold mb-2">More than events</h3>
-              <p className="text-sm text-zinc-500">Logs + business data + product analytics. One platform instead of three.</p>
+              <h3 className="text-xl font-bold mb-2">Product Analytics</h3>
+              <p className="text-zinc-500 mb-4 text-sm leading-relaxed">What did users do?</p>
+              <p className="text-zinc-400 text-sm leading-relaxed">Track events, build funnels, measure retention. Like Mixpanel — but unified with everything else.</p>
+              <div className="mt-6 pt-6 border-t border-white/5">
+                <p className="text-xs text-zinc-600">Funnels · Retention · Cohorts · Breakdowns</p>
+              </div>
             </div>
-            <div className="text-center">
-              <div className="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mx-auto mb-4">
+
+            {/* Logs */}
+            <div className="bg-zinc-900/50 rounded-2xl p-8 border border-white/5">
+              <div className="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mb-5">
                 <svg className="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
-              <h3 className="font-semibold mb-2">64M events/sec</h3>
-              <p className="text-sm text-zinc-500">Zero-copy Rust. &lt;1ms p99 latency. No GC pauses.</p>
+              <h3 className="text-xl font-bold mb-2">Logs & Errors</h3>
+              <p className="text-zinc-500 mb-4 text-sm leading-relaxed">What did the system do?</p>
+              <p className="text-zinc-400 text-sm leading-relaxed">Same SDK, same session ID. When a user reports a bug, see their journey AND the errors. No more "can't reproduce".</p>
+              <div className="mt-6 pt-6 border-t border-white/5">
+                <p className="text-xs text-zinc-600">Structured logs · Syslog · Error tracking · Correlation</p>
+              </div>
             </div>
-            <div className="text-center">
-              <div className="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mx-auto mb-4">
+
+            {/* Connectors */}
+            <div className="bg-zinc-900/50 rounded-2xl p-8 border border-white/5">
+              <div className="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mb-5">
                 <svg className="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 12h14M12 5l7 7-7 7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                 </svg>
               </div>
-              <h3 className="font-semibold mb-2">One binary, 10MB</h3>
-              <p className="text-sm text-zinc-500">No Docker, no K8s. curl | bash and you're running.</p>
-            </div>
-            <div className="text-center">
-              <div className="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mx-auto mb-4">
-                <svg className="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
+              <h3 className="text-xl font-bold mb-2">External Signals</h3>
+              <p className="text-zinc-500 mb-4 text-sm leading-relaxed">What's happening around you?</p>
+              <p className="text-zinc-400 text-sm leading-relaxed">Your analytics are blind outside your app. Connect GitHub, Shopify, ads — see stars spike with signups, orders correlate with campaigns.</p>
+              <div className="mt-6 pt-6 border-t border-white/5">
+                <p className="text-xs text-zinc-600">GitHub · Shopify · Stripe · Ads platforms</p>
               </div>
-              <h3 className="font-semibold mb-2">Your data, forever</h3>
-              <p className="text-sm text-zinc-500">Self-host on your infra. No vendor lock-in.</p>
             </div>
+          </div>
+
+          {/* The punchline */}
+          <div className="mt-12 text-center">
+            <p className="text-zinc-400">
+              <span className="text-white font-medium">The result:</span> Checkout drop at step 3? See the correlated timeout errors. Revenue down? See which campaign, which flow, which error.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Use Cases - MOVED UP */}
-      <section className="py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-sm font-medium text-brand uppercase tracking-wider mb-4">Solutions</p>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Built for teams that need the full picture</h2>
+      {/* SDKs - moved up to show ease of use early */}
+      <SDKSection />
+
+      {/* What it replaces - the key insight for switchers */}
+      <section className="py-20 px-6 bg-zinc-900/30">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-4">One platform, not three vendors</h2>
+            <p className="text-zinc-400">Stop paying for tools that don't talk to each other.</p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="group bg-zinc-900/50 rounded-2xl p-8 border border-white/5 hover:border-white/10 transition-colors duration-200">
-              <div className="w-10 h-10 rounded-xl bg-brand/10 flex items-center justify-center mb-5">
-                <svg className="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
+          <div className="space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-zinc-900/50 rounded-xl border border-white/5">
+              <div className="mb-3 sm:mb-0">
+                <p className="font-medium">Startups & SaaS</p>
+                <p className="text-sm text-zinc-500">Events + logs + GitHub stars in one place</p>
               </div>
-              <p className="text-xs font-medium text-brand uppercase tracking-wider mb-3">Startups</p>
-              <h3 className="text-xl font-bold mb-3">Product analytics + logs + business signals</h3>
-              <p className="text-zinc-400 mb-4">One SDK for events and logs. Connectors for GitHub and Shopify. Funnels, retention, and correlated debugging in one place.</p>
               <p className="text-sm text-zinc-600">Replaces: Mixpanel + Sentry + spreadsheets</p>
             </div>
-
-            <div className="group bg-zinc-900/50 rounded-2xl p-8 border border-white/5 hover:border-white/10 transition-colors duration-200">
-              <div className="w-10 h-10 rounded-xl bg-brand/10 flex items-center justify-center mb-5">
-                <svg className="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                </svg>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-zinc-900/50 rounded-xl border border-white/5">
+              <div className="mb-3 sm:mb-0">
+                <p className="font-medium">E-commerce / DTC</p>
+                <p className="text-sm text-zinc-500">Checkout funnels + orders + campaign KPIs</p>
               </div>
-              <p className="text-xs font-medium text-brand uppercase tracking-wider mb-3">E-commerce</p>
-              <h3 className="text-xl font-bold mb-3">360 view across checkout, orders, and campaigns</h3>
-              <p className="text-zinc-400 mb-4">Unify checkout funnels with orders, refunds, and campaign KPIs. Answer "what changed?" with driver analysis.</p>
-              <p className="text-sm text-zinc-600">Replaces: Triple Whale + Supermetrics + spreadsheets</p>
+              <p className="text-sm text-zinc-600">Replaces: Triple Whale + Supermetrics</p>
             </div>
-
-            <div className="group bg-zinc-900/50 rounded-2xl p-8 border border-white/5 hover:border-white/10 transition-colors duration-200">
-              <div className="w-10 h-10 rounded-xl bg-brand/10 flex items-center justify-center mb-5">
-                <svg className="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                </svg>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-zinc-900/50 rounded-xl border border-white/5">
+              <div className="mb-3 sm:mb-0">
+                <p className="font-medium">Enterprise</p>
+                <p className="text-sm text-zinc-500">Self-hosted logs + dashboards + query</p>
               </div>
-              <p className="text-xs font-medium text-brand uppercase tracking-wider mb-3">Enterprise</p>
-              <h3 className="text-xl font-bold mb-3">Self-hosted logs and observability</h3>
-              <p className="text-zinc-400 mb-4">Fast pipeline with dashboards and query. Replace heavy ELK-style ops. Unify data across teams with no vendor lock-in.</p>
               <p className="text-sm text-zinc-600">Replaces: Elastic + Datadog + Splunk</p>
             </div>
-
-            <div className="group bg-zinc-900/50 rounded-2xl p-8 border border-white/5 hover:border-white/10 transition-colors duration-200">
-              <div className="w-10 h-10 rounded-xl bg-brand/10 flex items-center justify-center mb-5">
-                <svg className="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-                </svg>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-zinc-900/50 rounded-xl border border-white/5">
+              <div className="mb-3 sm:mb-0">
+                <p className="font-medium">OT / Industrial</p>
+                <p className="text-sm text-zinc-500">Air-gapped, compliance-ready log collection</p>
               </div>
-              <p className="text-xs font-medium text-brand uppercase tracking-wider mb-3">Industrial</p>
-              <h3 className="text-xl font-bold mb-3">Air-gapped, compliance-ready log collection</h3>
-              <p className="text-zinc-400 mb-4">One Rust binary, deterministic performance, runs fully off-grid. High-throughput collector with syslog support.</p>
               <p className="text-sm text-zinc-600">Replaces: rsyslog + Splunk</p>
             </div>
           </div>
@@ -403,33 +406,20 @@ function Home() {
         </div>
       </section>
 
-      {/* Connectors */}
-      <section className="py-24 px-6">
+      {/* Connectors - simplified */}
+      <section className="py-16 px-6">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-sm font-medium text-brand uppercase tracking-wider mb-4">Connectors</p>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Business data, not just events</h2>
-            <p className="text-zinc-400 mt-4 max-w-2xl mx-auto">
-              Pull from GitHub, Shopify, and more. Correlate product events with stars, orders, revenue.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-zinc-900/50 rounded-xl p-5 border border-white/5 hover:border-white/10 transition-colors duration-200">
-              <p className="font-semibold mb-1">GitHub</p>
-              <p className="text-sm text-zinc-500">Stars, forks, issues, PRs</p>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div>
+              <p className="text-sm font-medium text-brand uppercase tracking-wider mb-2">Connectors</p>
+              <p className="text-zinc-400">Pull external data into your analytics. Scheduled syncs, automatic retry.</p>
             </div>
-            <div className="bg-zinc-900/50 rounded-xl p-5 border border-white/5 hover:border-white/10 transition-colors duration-200">
-              <p className="font-semibold mb-1">Shopify</p>
-              <p className="text-sm text-zinc-500">Orders, revenue, customers</p>
-            </div>
-            <div className="bg-zinc-900/30 rounded-xl p-5 border border-white/5">
-              <p className="font-semibold text-zinc-500 mb-1">Stripe</p>
-              <p className="text-sm text-zinc-600">Coming soon</p>
-            </div>
-            <div className="bg-zinc-900/30 rounded-xl p-5 border border-white/5">
-              <p className="font-semibold text-zinc-500 mb-1">Google Analytics</p>
-              <p className="text-sm text-zinc-600">Coming soon</p>
+            <div className="flex flex-wrap gap-3">
+              <span className="px-4 py-2 bg-zinc-900/50 rounded-lg text-sm font-medium border border-white/10">GitHub</span>
+              <span className="px-4 py-2 bg-zinc-900/50 rounded-lg text-sm font-medium border border-white/10">Shopify</span>
+              <span className="px-4 py-2 bg-zinc-900/30 rounded-lg text-sm font-medium border border-white/5 text-zinc-500">Stripe</span>
+              <span className="px-4 py-2 bg-zinc-900/30 rounded-lg text-sm font-medium border border-white/5 text-zinc-500">Klaviyo</span>
+              <span className="px-4 py-2 bg-zinc-900/30 rounded-lg text-sm font-medium border border-white/5 text-zinc-500">Meta Ads</span>
             </div>
           </div>
         </div>
@@ -469,9 +459,6 @@ function Home() {
         </div>
       </section>
 
-      {/* SDKs */}
-      <SDKSection />
-
       {/* Comparison */}
       <section className="py-20 px-6">
         <div className="max-w-5xl mx-auto">
@@ -507,7 +494,7 @@ function Home() {
                   <td className="py-3 px-3 text-center text-zinc-400">✓</td>
                 </tr>
                 <tr>
-                  <td className="py-3 pr-4 text-zinc-300">Connectors (GitHub, Shopify, ...)</td>
+                  <td className="py-3 pr-4 text-zinc-300">External data connectors</td>
                   <td className="py-3 px-3 text-center text-brand">✓</td>
                   <td className="py-3 px-3 text-center text-zinc-600">—</td>
                   <td className="py-3 px-3 text-center text-zinc-600">—</td>
