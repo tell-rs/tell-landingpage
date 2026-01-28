@@ -591,7 +591,7 @@ function Home() {
                   <p className="font-semibold">Free</p>
                   <p className="text-sm text-zinc-500">Companies &lt; $100K ARR</p>
                 </div>
-                <p className="font-bold text-brand">$0</p>
+                <p className="font-bold">$0</p>
               </div>
               <div className="flex justify-between items-center px-6 py-5">
                 <div>

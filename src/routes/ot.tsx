@@ -115,9 +115,9 @@ function OTPage() {
             <div className="p-6 bg-zinc-900/50 rounded-xl border border-red-500/10">
               <p className="font-semibold text-red-400 mb-3">Splunk</p>
               <ul className="space-y-2 text-sm text-zinc-400">
-                <li>Cloud-dependent</li>
-                <li>Data leaves your network</li>
-                <li>Vendor lock-in</li>
+                <li>Requires proprietary hardware (Edge Hub)</li>
+                <li>Complex multi-component architecture</li>
+                <li>Enterprise pricing</li>
               </ul>
             </div>
 
