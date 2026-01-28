@@ -13,7 +13,17 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Tell - Analytics that tell the whole story" },
-      { name: "description", content: "Events, logs, business data - one platform. 64M events/sec. One binary. Self-host forever." },
+      { name: "description", content: "Product analytics, logs, and business signals unified. See what changed when metrics drop. 64M events/sec. Self-host in 5 minutes." },
+      // Open Graph (default for all pages)
+      { property: "og:title", content: "Tell - Analytics that tell the whole story" },
+      { property: "og:description", content: "Product analytics, logs, and business signals unified. See what changed when metrics drop. 64M events/sec. Self-host in 5 minutes." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://tell.rs" },
+      { property: "og:site_name", content: "Tell" },
+      // Twitter
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Tell - Analytics that tell the whole story" },
+      { name: "twitter:description", content: "Product analytics, logs, and business signals unified. 64M events/sec. Self-host in 5 minutes." },
     ],
     links: [
       { rel: "preload", href: "/fonts/space-grotesk-latin.woff2", as: "font", type: "font/woff2", crossOrigin: "anonymous" },

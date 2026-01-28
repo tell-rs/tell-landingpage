@@ -580,30 +580,37 @@ function Home() {
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <p className="text-sm font-medium text-brand uppercase tracking-wider mb-4">Pricing</p>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">Simple, transparent pricing</h2>
-            <p className="text-zinc-400">All features included. No per-seat fees.</p>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">Simple, revenue-based pricing</h2>
+            <p className="text-zinc-400">All features included. No per-seat fees. Pay based on your company's ARR.</p>
           </div>
 
           <div className="bg-zinc-900/80 rounded-2xl border border-white/5 overflow-hidden">
             <div className="divide-y divide-white/5">
               <div className="flex justify-between items-center px-6 py-5">
                 <div>
-                  <p className="font-semibold">Startup</p>
-                  <p className="text-sm text-zinc-500">Companies &lt; $1M revenue</p>
+                  <p className="font-semibold">Free</p>
+                  <p className="text-sm text-zinc-500">Companies &lt; $100K ARR</p>
                 </div>
-                <p className="font-bold text-brand">Free</p>
+                <p className="font-bold text-brand">$0</p>
+              </div>
+              <div className="flex justify-between items-center px-6 py-5">
+                <div>
+                  <p className="font-semibold">Starter</p>
+                  <p className="text-sm text-zinc-500">$100K – $1M ARR</p>
+                </div>
+                <p className="font-bold">$9<span className="text-zinc-500 font-normal">/mo</span></p>
               </div>
               <div className="flex justify-between items-center px-6 py-5 bg-brand/5 border-l-2 border-l-brand">
                 <div>
                   <p className="font-semibold">Pro</p>
-                  <p className="text-sm text-zinc-500">Companies $1M – $10M</p>
+                  <p className="text-sm text-zinc-500">$1M – $10M ARR</p>
                 </div>
                 <p className="font-bold">$299<span className="text-zinc-500 font-normal">/mo</span></p>
               </div>
               <div className="flex justify-between items-center px-6 py-5">
                 <div>
                   <p className="font-semibold">Enterprise</p>
-                  <p className="text-sm text-zinc-500">Custom SLA, support, deployment</p>
+                  <p className="text-sm text-zinc-500">&gt; $10M ARR, custom terms</p>
                 </div>
                 <p className="font-bold">Custom</p>
               </div>
@@ -611,7 +618,7 @@ function Home() {
           </div>
 
           <p className="mt-6 text-center text-sm text-zinc-500">
-            Self-host free forever · <a href="https://github.com/tell-rs/tell/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" className="underline hover:text-zinc-300 transition-colors duration-200">View license</a>
+            Self-host anywhere · Source available · <a href="https://github.com/tell-rs/tell/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" className="underline hover:text-zinc-300 transition-colors duration-200">View license</a>
           </p>
         </div>
       </section>

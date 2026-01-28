@@ -2,6 +2,21 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/ot")({
   component: OTPage,
+  head: () => ({
+    meta: [
+      { title: "Tell for OT - Secure Log Collection for Critical Infrastructure" },
+      { name: "description", content: "Air-gapped log collection built in Rust. Single binary, no cloud dependency, no GC pauses. CRA, NIS2, IEC 62443 ready." },
+      // Open Graph
+      { property: "og:title", content: "Tell for OT - Secure Log Collection for Critical Infrastructure" },
+      { property: "og:description", content: "Air-gapped log collection built in Rust. Single binary, no cloud dependency, no GC pauses. CRA, NIS2, IEC 62443 ready." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://tell.rs/ot" },
+      // Twitter
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Tell for OT - Secure Log Collection for Critical Infrastructure" },
+      { name: "twitter:description", content: "Air-gapped log collection built in Rust. Single binary, no cloud dependency, no GC pauses." },
+    ],
+  }),
 });
 
 function ArrowIcon() {
