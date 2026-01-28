@@ -115,7 +115,7 @@ function Footer() {
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-zinc-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm">
-          <p>Singapore · Source available</p>
+          <p>Singapore</p>
           <p className="text-zinc-500">Built by the founder of Logpoint</p>
         </div>
       </div>

@@ -89,7 +89,7 @@ function OTPage() {
           </div>
 
           <p className="mt-16 text-sm text-zinc-500">
-            65M events/sec · &lt;1ms P99 · &lt;15MB binary · Built by the founder of Logpoint
+            65M events/sec · &lt;1ms P99 · ~20MB binary · Built by the founder of Logpoint
           </p>
         </div>
       </main>
@@ -218,11 +218,11 @@ function OTPage() {
               </div>
               <div className="bg-zinc-950 rounded-xl p-6 font-mono text-sm border border-white/5">
                 <p className="text-zinc-500 mb-2"># Deploy</p>
-                <p className="text-zinc-300"><span className="text-brand">$</span> scp tell-collector edge-node:/usr/local/bin/</p>
-                <p className="text-zinc-300"><span className="text-brand">$</span> ssh edge-node "tell-collector -config /etc/tell/config.yaml"</p>
+                <p className="text-zinc-300"><span className="text-brand">$</span> scp tell edge-node:/usr/local/bin/</p>
+                <p className="text-zinc-300"><span className="text-brand">$</span> ssh edge-node "tell run"</p>
                 <p className="text-zinc-500 mt-4"># Binary size</p>
-                <p className="text-zinc-300"><span className="text-brand">$</span> ls -lh tell-collector</p>
-                <p className="text-zinc-400">-rwxr-xr-x 1 root root <span className="text-emerald-400">12M</span> tell-collector</p>
+                <p className="text-zinc-300"><span className="text-brand">$</span> ls -lh tell</p>
+                <p className="text-zinc-400">-rwxr-xr-x 1 root root <span className="text-emerald-400">20M</span> tell</p>
               </div>
             </div>
 
@@ -438,7 +438,7 @@ function OTPage() {
               <p className="text-sm text-zinc-500">P99 latency</p>
             </div>
             <div className="text-center p-6 bg-zinc-900/50 rounded-xl border border-white/5">
-              <p className="text-3xl font-bold text-brand mb-2">&lt;15MB</p>
+              <p className="text-3xl font-bold text-brand mb-2">~20MB</p>
               <p className="text-sm text-zinc-500">binary size</p>
             </div>
             <div className="text-center p-6 bg-zinc-900/50 rounded-xl border border-white/5">
