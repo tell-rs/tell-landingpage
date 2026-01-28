@@ -266,7 +266,7 @@ function Home() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* Events */}
-            <div className="bg-zinc-900/50 rounded-2xl p-8 border border-white/5">
+            <div className="bg-zinc-900/50 rounded-2xl p-8 border border-white/5 flex flex-col">
               <div className="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mb-5">
                 <svg className="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
@@ -274,14 +274,14 @@ function Home() {
               </div>
               <h3 className="text-xl font-bold mb-2">Product Analytics</h3>
               <p className="text-zinc-500 mb-4 text-sm leading-relaxed">What did users do?</p>
-              <p className="text-zinc-400 text-sm leading-relaxed">Track events, build funnels, measure retention. Like Mixpanel — but unified with everything else.</p>
+              <p className="text-zinc-400 text-sm leading-relaxed flex-grow">Track events, build funnels, measure retention. Like Mixpanel — but unified with everything else.</p>
               <div className="mt-6 pt-6 border-t border-white/5">
                 <p className="text-xs text-zinc-600">Funnels · Retention · Cohorts · Breakdowns</p>
               </div>
             </div>
 
             {/* Logs */}
-            <div className="bg-zinc-900/50 rounded-2xl p-8 border border-white/5">
+            <div className="bg-zinc-900/50 rounded-2xl p-8 border border-white/5 flex flex-col">
               <div className="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mb-5">
                 <svg className="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -289,14 +289,14 @@ function Home() {
               </div>
               <h3 className="text-xl font-bold mb-2">Logs & Errors</h3>
               <p className="text-zinc-500 mb-4 text-sm leading-relaxed">What did the system do?</p>
-              <p className="text-zinc-400 text-sm leading-relaxed">Same SDK, same session ID. When a user reports a bug, see their journey AND the errors. No more "can't reproduce".</p>
+              <p className="text-zinc-400 text-sm leading-relaxed flex-grow">Same SDK, same session ID. When a user reports a bug, see their journey AND the errors. No more "can't reproduce".</p>
               <div className="mt-6 pt-6 border-t border-white/5">
                 <p className="text-xs text-zinc-600">Structured logs · Syslog · Error tracking · Correlation</p>
               </div>
             </div>
 
             {/* Connectors */}
-            <div className="bg-zinc-900/50 rounded-2xl p-8 border border-white/5">
+            <div className="bg-zinc-900/50 rounded-2xl p-8 border border-white/5 flex flex-col">
               <div className="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mb-5">
                 <svg className="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
@@ -304,7 +304,7 @@ function Home() {
               </div>
               <h3 className="text-xl font-bold mb-2">External Signals</h3>
               <p className="text-zinc-500 mb-4 text-sm leading-relaxed">What's happening around you?</p>
-              <p className="text-zinc-400 text-sm leading-relaxed">Your analytics are blind outside your app. Connect GitHub, Shopify, ads — see stars spike with signups, orders correlate with campaigns.</p>
+              <p className="text-zinc-400 text-sm leading-relaxed flex-grow">Your analytics are blind outside your app. Connect GitHub, Shopify, ads — see stars spike with signups, orders correlate with campaigns.</p>
               <div className="mt-6 pt-6 border-t border-white/5">
                 <p className="text-xs text-zinc-600">GitHub · Shopify · Stripe · Ads platforms</p>
               </div>
@@ -331,34 +331,62 @@ function Home() {
             <p className="text-zinc-400">Stop paying for tools that don't talk to each other.</p>
           </div>
 
-          <div className="space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-zinc-900/50 rounded-xl border border-white/5">
-              <div className="mb-3 sm:mb-0">
-                <p className="font-medium">Startups & SaaS</p>
-                <p className="text-sm text-zinc-500">Events + logs + GitHub stars in one place</p>
+          <div className="space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-zinc-900/50 rounded-xl border border-white/5 hover:border-white/10 transition-colors">
+              <div className="flex items-center gap-4 mb-3 sm:mb-0">
+                <div className="w-10 h-10 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="font-medium">Startups & SaaS</p>
+                  <p className="text-sm text-zinc-500">Events + logs + GitHub stars in one place</p>
+                </div>
               </div>
-              <p className="text-sm text-zinc-600">Replaces: Mixpanel + Sentry + spreadsheets</p>
+              <p className="text-sm text-zinc-500 sm:text-right">Replaces: <span className="text-zinc-400">Mixpanel + Sentry + spreadsheets</span></p>
             </div>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-zinc-900/50 rounded-xl border border-white/5">
-              <div className="mb-3 sm:mb-0">
-                <p className="font-medium">E-commerce / DTC</p>
-                <p className="text-sm text-zinc-500">Checkout funnels + orders + campaign KPIs</p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-zinc-900/50 rounded-xl border border-white/5 hover:border-white/10 transition-colors">
+              <div className="flex items-center gap-4 mb-3 sm:mb-0">
+                <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="font-medium">E-commerce / DTC</p>
+                  <p className="text-sm text-zinc-500">Checkout funnels + orders + campaign KPIs</p>
+                </div>
               </div>
-              <p className="text-sm text-zinc-600">Replaces: Triple Whale + Supermetrics</p>
+              <p className="text-sm text-zinc-500 sm:text-right">Replaces: <span className="text-zinc-400">Triple Whale + Supermetrics</span></p>
             </div>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-zinc-900/50 rounded-xl border border-white/5">
-              <div className="mb-3 sm:mb-0">
-                <p className="font-medium">Enterprise</p>
-                <p className="text-sm text-zinc-500">Self-hosted logs + dashboards + query</p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-zinc-900/50 rounded-xl border border-white/5 hover:border-white/10 transition-colors">
+              <div className="flex items-center gap-4 mb-3 sm:mb-0">
+                <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="font-medium">Enterprise</p>
+                  <p className="text-sm text-zinc-500">Self-hosted logs + dashboards + query</p>
+                </div>
               </div>
-              <p className="text-sm text-zinc-600">Replaces: Elastic + Datadog + Splunk</p>
+              <p className="text-sm text-zinc-500 sm:text-right">Replaces: <span className="text-zinc-400">Elastic + Datadog + Splunk</span></p>
             </div>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-zinc-900/50 rounded-xl border border-white/5">
-              <div className="mb-3 sm:mb-0">
-                <p className="font-medium">OT / Industrial</p>
-                <p className="text-sm text-zinc-500">Air-gapped, compliance-ready log collection</p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-zinc-900/50 rounded-xl border border-white/5 hover:border-white/10 transition-colors">
+              <div className="flex items-center gap-4 mb-3 sm:mb-0">
+                <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="font-medium">OT / Industrial</p>
+                  <p className="text-sm text-zinc-500">Air-gapped, compliance-ready log collection</p>
+                </div>
               </div>
-              <p className="text-sm text-zinc-600">Replaces: rsyslog + Splunk</p>
+              <p className="text-sm text-zinc-500 sm:text-right">Replaces: <span className="text-zinc-400">rsyslog + Splunk</span></p>
             </div>
           </div>
         </div>
@@ -624,18 +652,6 @@ function Home() {
           <p className="text-zinc-400 mb-10 max-w-xl mx-auto">
             Join the alpha. Free for startups. Get unified analytics in 5 minutes.
           </p>
-
-          {/* Install box in CTA */}
-          <div className="max-w-md mx-auto mb-8 relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-brand/20 via-transparent to-emerald-500/15 rounded-2xl blur-xl opacity-50" />
-            <div className="relative bg-zinc-900/80 backdrop-blur-sm rounded-xl px-4 sm:px-5 py-3 flex items-center justify-between gap-2 border border-white/10">
-              <code className="font-mono text-sm text-zinc-300 whitespace-nowrap">
-                <span className="text-brand select-none">$ </span>
-                curl -sSfL https://tell.rs | bash
-              </code>
-              <CopyButton />
-            </div>
-          </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

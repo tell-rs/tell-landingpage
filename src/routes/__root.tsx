@@ -31,7 +31,7 @@ function Nav() {
   const isHomePage = location.pathname === "/";
 
   return (
-    <nav className="fixed top-0 w-full px-6 sm:px-10 py-5 z-50 bg-background/80 backdrop-blur-md border-b border-white/5">
+    <nav className="fixed top-0 w-full px-4 sm:px-8 py-3 z-50 bg-background/80 backdrop-blur-md border-b border-white/5">
       <div className="relative flex items-center justify-between">
         {/* Left: Logo */}
         <Link to="/" className="flex items-center gap-3">
@@ -69,7 +69,7 @@ function Nav() {
             to="/signup"
             className="px-4 py-2 bg-white text-zinc-900 rounded-lg text-sm font-semibold hover:bg-zinc-200 transition-colors"
           >
-            Get Started
+            Sign Up
           </Link>
         </div>
       </div>
