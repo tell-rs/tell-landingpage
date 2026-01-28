@@ -4,6 +4,9 @@ import type { ReactNode } from "react";
 
 import appCss from "../../styles.css?url";
 
+// Theme toggle: set to true for dark mode, false for light mode
+const DARK_MODE = false;
+
 export const Route = createRootRoute({
   head: () => ({
     meta: [
@@ -59,7 +62,7 @@ function Nav() {
 
 function Footer() {
   return (
-    <footer className="py-12 px-6 bg-zinc-900 text-zinc-400">
+    <footer className="py-12 px-6 bg-zinc-900 text-zinc-400 border-t border-border">
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-2">
@@ -88,7 +91,7 @@ function NotFoundComponent() {
       <div className="text-center">
         <h1 className="text-4xl font-bold mb-4">404</h1>
         <p className="text-muted-foreground mb-8">Page not found</p>
-        <Link to="/" className="px-6 py-3 bg-zinc-900 text-white rounded-xl font-semibold hover:bg-zinc-800 transition">
+        <Link to="/" className="px-6 py-3 bg-brand text-white rounded-xl font-semibold hover:bg-brand/90 transition">
           Back to Home
         </Link>
       </div>
@@ -108,7 +111,7 @@ function RootComponent() {
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={DARK_MODE ? "dark" : ""}>
       <head>
         <HeadContent />
       </head>

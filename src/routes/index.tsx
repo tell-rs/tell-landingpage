@@ -9,7 +9,7 @@ function CopyButton() {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText("curl -sSfL https://tell.rs | sh");
+    navigator.clipboard.writeText("curl -sSfL https://tell.rs | bash");
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -60,7 +60,7 @@ function Home() {
             <div className="bg-zinc-900 rounded-2xl px-4 sm:px-6 py-4 flex items-center justify-between gap-2 shadow-2xl shadow-zinc-900/20 overflow-x-auto">
               <code className="font-mono text-sm text-zinc-300 font-medium whitespace-nowrap">
                 <span className="text-brand select-none">$ </span>
-                curl -sSfL https://tell.rs | sh
+                curl -sSfL https://tell.rs | bash
               </code>
               <CopyButton />
             </div>
@@ -68,9 +68,9 @@ function Home() {
 
           {/* Stats pills */}
           <div className="mt-10 flex flex-wrap justify-center gap-3">
-            <span className="px-4 py-2 bg-zinc-100 rounded-full text-sm font-medium text-muted">64M events/sec</span>
-            <span className="px-4 py-2 bg-zinc-100 rounded-full text-sm font-medium text-muted">One binary</span>
-            <span className="px-4 py-2 bg-zinc-100 rounded-full text-sm font-medium text-muted">Self-host forever</span>
+            <span className="px-4 py-2 bg-pill-bg rounded-full text-sm font-medium text-muted">64M events/sec</span>
+            <span className="px-4 py-2 bg-pill-bg rounded-full text-sm font-medium text-muted">One binary</span>
+            <span className="px-4 py-2 bg-pill-bg rounded-full text-sm font-medium text-muted">Self-host forever</span>
           </div>
 
           {/* Credibility */}
@@ -80,7 +80,7 @@ function Home() {
 
           {/* Scroll indicator */}
           <div className="mt-12 animate-bounce">
-            <svg className="w-6 h-6 mx-auto text-zinc-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-6 h-6 mx-auto text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
             </svg>
           </div>
@@ -88,7 +88,7 @@ function Home() {
       </main>
 
       {/* Pipeline */}
-      <section className="py-24 px-6 bg-white">
+      <section className="py-24 px-6 bg-card">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Pipeline</p>
@@ -97,7 +97,7 @@ function Home() {
 
           <div className="grid md:grid-cols-3 gap-6">
             {/* Sources */}
-            <div className="bg-zinc-50 rounded-2xl p-8 border border-zinc-200">
+            <div className="bg-surface rounded-2xl p-8 border border-border">
               <p className="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Sources</p>
               <ul className="space-y-3">
                 <li className="flex items-center gap-3"><span className="w-2 h-2 bg-brand rounded-full" /><span className="font-medium">TCP (Binary)</span></li>
@@ -108,7 +108,7 @@ function Home() {
             </div>
 
             {/* Routing */}
-            <div className="bg-zinc-50 rounded-2xl p-8 border border-zinc-200">
+            <div className="bg-surface rounded-2xl p-8 border border-border">
               <p className="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Routing</p>
               <ul className="space-y-3">
                 <li className="flex items-center gap-3"><span className="w-2 h-2 bg-brand rounded-full" /><span className="font-medium">Source-based routing</span></li>
@@ -118,7 +118,7 @@ function Home() {
             </div>
 
             {/* Sinks */}
-            <div className="bg-zinc-50 rounded-2xl p-8 border border-zinc-200">
+            <div className="bg-surface rounded-2xl p-8 border border-border">
               <p className="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Sinks</p>
               <ul className="space-y-3">
                 <li className="flex items-center gap-3"><span className="w-2 h-2 bg-brand rounded-full" /><span className="font-medium">ClickHouse</span></li>
@@ -133,7 +133,7 @@ function Home() {
       </section>
 
       {/* CLI */}
-      <section className="py-24 px-6 bg-zinc-50">
+      <section className="py-24 px-6 bg-surface">
         <div className="max-w-5xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
@@ -167,7 +167,7 @@ function Home() {
       </section>
 
       {/* Connectors */}
-      <section className="py-24 px-6 bg-white">
+      <section className="py-24 px-6 bg-card">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Connectors</p>
@@ -178,19 +178,19 @@ function Home() {
           </div>
 
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-zinc-50 rounded-xl p-5 border border-zinc-200">
+            <div className="bg-surface rounded-xl p-5 border border-border">
               <p className="font-semibold mb-1">GitHub</p>
               <p className="text-sm text-muted">Stars, forks, issues, PRs</p>
             </div>
-            <div className="bg-zinc-50 rounded-xl p-5 border border-zinc-200">
+            <div className="bg-surface rounded-xl p-5 border border-border">
               <p className="font-semibold mb-1">Shopify</p>
               <p className="text-sm text-muted">Orders, revenue, customers</p>
             </div>
-            <div className="bg-zinc-50 rounded-xl p-5 border border-zinc-200/50">
+            <div className="bg-surface rounded-xl p-5 border border-border/50">
               <p className="font-semibold text-muted-foreground mb-1">Stripe</p>
               <p className="text-sm text-muted-foreground">Coming soon</p>
             </div>
-            <div className="bg-zinc-50 rounded-xl p-5 border border-zinc-200/50">
+            <div className="bg-surface rounded-xl p-5 border border-border/50">
               <p className="font-semibold text-muted-foreground mb-1">Google Analytics</p>
               <p className="text-sm text-muted-foreground">Coming soon</p>
             </div>
@@ -199,7 +199,7 @@ function Home() {
       </section>
 
       {/* Use Cases */}
-      <section className="py-24 px-6 bg-zinc-50">
+      <section className="py-24 px-6 bg-surface">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Solutions</p>
@@ -207,28 +207,28 @@ function Home() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-white rounded-2xl p-8 border border-zinc-200">
+            <div className="bg-card rounded-2xl p-8 border border-border">
               <p className="text-sm font-semibold text-brand uppercase tracking-wider mb-3">Startups</p>
               <h3 className="text-xl font-bold mb-3">Product analytics + logs + business signals</h3>
               <p className="text-muted mb-4">One SDK for events and logs. Connectors for GitHub and Shopify. Funnels, retention, and correlated debugging in one place.</p>
               <p className="text-sm text-muted-foreground">Replaces: Mixpanel + Sentry + spreadsheets</p>
             </div>
 
-            <div className="bg-white rounded-2xl p-8 border border-zinc-200">
+            <div className="bg-card rounded-2xl p-8 border border-border">
               <p className="text-sm font-semibold text-brand uppercase tracking-wider mb-3">DTC / Ecommerce</p>
               <h3 className="text-xl font-bold mb-3">360 view across checkout, orders, and campaigns</h3>
               <p className="text-muted mb-4">Unify checkout funnels with orders, refunds, and campaign KPIs. Answer "what changed?" with driver analysis.</p>
               <p className="text-sm text-muted-foreground">Replaces: Triple Whale + Supermetrics + spreadsheets</p>
             </div>
 
-            <div className="bg-white rounded-2xl p-8 border border-zinc-200">
+            <div className="bg-card rounded-2xl p-8 border border-border">
               <p className="text-sm font-semibold text-brand uppercase tracking-wider mb-3">Enterprise</p>
               <h3 className="text-xl font-bold mb-3">Self-hosted logs and observability</h3>
               <p className="text-muted mb-4">Fast pipeline with dashboards and query. Replace heavy ELK-style ops. Unify data across teams with no vendor lock-in.</p>
               <p className="text-sm text-muted-foreground">Replaces: Elastic + Datadog + Splunk</p>
             </div>
 
-            <div className="bg-white rounded-2xl p-8 border border-zinc-200">
+            <div className="bg-card rounded-2xl p-8 border border-border">
               <p className="text-sm font-semibold text-brand uppercase tracking-wider mb-3">OT / Industrial</p>
               <h3 className="text-xl font-bold mb-3">Air-gapped, compliance-ready log collection</h3>
               <p className="text-muted mb-4">One Rust binary, deterministic performance, runs fully off-grid. High-throughput binary collector with syslog support for legacy devices.</p>
@@ -239,7 +239,7 @@ function Home() {
       </section>
 
       {/* SDKs */}
-      <section className="py-16 px-6 bg-white border-y border-zinc-200">
+      <section className="py-16 px-6 bg-card border-y border-border">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div>
@@ -247,19 +247,19 @@ function Home() {
               <p className="text-sm text-muted">Send events and logs from your app</p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <span className="px-4 py-2 bg-zinc-50 rounded-lg text-sm font-medium border border-zinc-200">Go</span>
-              <span className="px-4 py-2 bg-zinc-50 rounded-lg text-sm font-medium border border-zinc-200">Swift</span>
-              <span className="px-4 py-2 bg-zinc-50 rounded-lg text-sm font-medium border border-zinc-200">C++</span>
-              <span className="px-4 py-2 bg-zinc-50 rounded-lg text-sm font-medium border border-zinc-200/50 text-muted-foreground">Flutter</span>
-              <span className="px-4 py-2 bg-zinc-50 rounded-lg text-sm font-medium border border-zinc-200/50 text-muted-foreground">Rust</span>
-              <span className="px-4 py-2 bg-zinc-50 rounded-lg text-sm font-medium border border-zinc-200/50 text-muted-foreground">TypeScript</span>
+              <span className="px-4 py-2 bg-surface rounded-lg text-sm font-medium border border-border">Go</span>
+              <span className="px-4 py-2 bg-surface rounded-lg text-sm font-medium border border-border">Swift</span>
+              <span className="px-4 py-2 bg-surface rounded-lg text-sm font-medium border border-border">C++</span>
+              <span className="px-4 py-2 bg-surface rounded-lg text-sm font-medium border border-border/50 text-muted-foreground">Flutter</span>
+              <span className="px-4 py-2 bg-surface rounded-lg text-sm font-medium border border-border/50 text-muted-foreground">Rust</span>
+              <span className="px-4 py-2 bg-surface rounded-lg text-sm font-medium border border-border/50 text-muted-foreground">TypeScript</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* Pricing */}
-      <section className="py-24 px-6 bg-zinc-50">
+      <section className="py-24 px-6 bg-surface">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <p className="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Pricing</p>
@@ -267,8 +267,8 @@ function Home() {
             <p className="text-muted">No feature gating. Revenue-based pricing for companies.</p>
           </div>
 
-          <div className="bg-white rounded-2xl border border-zinc-200 overflow-hidden">
-            <div className="divide-y divide-zinc-100">
+          <div className="bg-card rounded-2xl border border-border overflow-hidden">
+            <div className="divide-y divide-border">
               <div className="flex justify-between items-center px-6 py-4">
                 <div>
                   <p className="font-semibold">Individual</p>
@@ -308,17 +308,17 @@ function Home() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 px-6 bg-white">
+      <section className="py-24 px-6 bg-card">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-6">Ready to see the whole story?</h2>
           <p className="text-muted mb-10 max-w-xl mx-auto">
             Tell is in alpha. We're working with early teams to shape the product. If you're interested in unified analytics, let's talk.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/signup" className="px-8 py-4 bg-zinc-900 text-white rounded-xl font-semibold hover:bg-zinc-800 transition">
+            <Link to="/signup" className="px-8 py-4 bg-brand text-white rounded-xl font-semibold hover:bg-brand/90 transition">
               Get Started
             </Link>
-            <a href="https://github.com/tell-rs/tell" target="_blank" rel="noopener noreferrer" className="px-8 py-4 bg-zinc-100 text-zinc-900 rounded-xl font-semibold hover:bg-zinc-200 transition">
+            <a href="https://github.com/tell-rs/tell" target="_blank" rel="noopener noreferrer" className="px-8 py-4 bg-surface text-foreground rounded-xl font-semibold hover:bg-surface/80 transition border border-border">
               View on GitHub
             </a>
           </div>

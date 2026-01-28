@@ -53,13 +53,13 @@ function DownloadPage() {
         <div className="bg-zinc-900 rounded-2xl px-4 sm:px-6 py-4 flex items-center justify-between gap-2 shadow-2xl shadow-zinc-900/20 mb-8">
           <code className="font-mono text-sm text-zinc-300 font-medium whitespace-nowrap">
             <span className="text-zinc-500 select-none">$ </span>
-            curl -sSfL https://tell.rs | sh
+            curl -sSfL https://tell.rs | bash
           </code>
-          <CopyButton text="curl -sSfL https://tell.rs | sh" />
+          <CopyButton text="curl -sSfL https://tell.rs | bash" />
         </div>
 
         {/* Next Steps */}
-        <div className="bg-zinc-50 rounded-2xl p-6 text-left mb-8">
+        <div className="bg-surface rounded-2xl p-6 text-left mb-8">
           <h3 className="font-semibold mb-4">Quick Start</h3>
           <ol className="space-y-3 text-sm text-muted">
             <li className="flex gap-3">
@@ -68,11 +68,11 @@ function DownloadPage() {
             </li>
             <li className="flex gap-3">
               <span className="flex-shrink-0 w-6 h-6 rounded-full bg-brand text-white text-xs font-semibold flex items-center justify-center">2</span>
-              <span>Start Tell with <code className="bg-zinc-200 px-1.5 py-0.5 rounded text-xs">tell serve</code></span>
+              <span>Start Tell with <code className="bg-card border border-border px-1.5 py-0.5 rounded text-xs">tell serve</code></span>
             </li>
             <li className="flex gap-3">
               <span className="flex-shrink-0 w-6 h-6 rounded-full bg-brand text-white text-xs font-semibold flex items-center justify-center">3</span>
-              <span>Send your first event with <code className="bg-zinc-200 px-1.5 py-0.5 rounded text-xs">tell test</code></span>
+              <span>Send your first event with <code className="bg-card border border-border px-1.5 py-0.5 rounded text-xs">tell test</code></span>
             </li>
           </ol>
         </div>
@@ -83,11 +83,11 @@ function DownloadPage() {
             href="https://github.com/tell-rs/tell#readme"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-6 py-3 bg-zinc-900 text-white rounded-xl font-semibold hover:bg-zinc-800 transition"
+            className="px-6 py-3 bg-brand text-white rounded-xl font-semibold hover:bg-brand/90 transition"
           >
             View Documentation
           </a>
-          <Link to="/" className="px-6 py-3 bg-zinc-100 text-zinc-900 rounded-xl font-semibold hover:bg-zinc-200 transition">
+          <Link to="/" className="px-6 py-3 bg-surface text-foreground rounded-xl font-semibold hover:bg-surface/80 transition border border-border">
             Back to Home
           </Link>
         </div>

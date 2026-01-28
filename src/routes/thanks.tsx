@@ -33,7 +33,7 @@ function ThanksPage() {
         </p>
 
         {/* Info Card */}
-        <div className="bg-zinc-50 rounded-2xl p-6 text-left mb-8">
+        <div className="bg-surface rounded-2xl p-6 text-left mb-8">
           <h3 className="font-semibold mb-4">What happens next?</h3>
           {isPro ? (
             <ul className="space-y-3 text-sm text-muted">
@@ -74,11 +74,11 @@ function ThanksPage() {
             href="https://github.com/tell-rs/tell#readme"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-6 py-3 bg-zinc-900 text-white rounded-xl font-semibold hover:bg-zinc-800 transition"
+            className="px-6 py-3 bg-brand text-white rounded-xl font-semibold hover:bg-brand/90 transition"
           >
             View Documentation
           </a>
-          <Link to="/" className="px-6 py-3 bg-zinc-100 text-zinc-900 rounded-xl font-semibold hover:bg-zinc-200 transition">
+          <Link to="/" className="px-6 py-3 bg-surface text-foreground rounded-xl font-semibold hover:bg-surface/80 transition border border-border">
             Back to Home
           </Link>
         </div>

@@ -71,13 +71,13 @@ function SignupPage() {
     }
   };
 
-  const inputClass = "w-full h-12 px-4 rounded-xl border border-zinc-200 bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition";
-  const selectClass = "w-full h-12 px-4 rounded-xl border border-zinc-200 bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition appearance-none cursor-pointer bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2371717a%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:16px] bg-[right_16px_center] bg-no-repeat";
+  const inputClass = "w-full h-12 px-4 rounded-xl border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition";
+  const selectClass = "w-full h-12 px-4 rounded-xl border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition appearance-none cursor-pointer bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2371717a%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:16px] bg-[right_16px_center] bg-no-repeat";
 
   return (
     <main className="min-h-screen flex items-center justify-center px-6 pt-20 pb-12">
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl border border-zinc-200 p-8 shadow-sm">
+        <div className="bg-card rounded-2xl border border-border p-8 shadow-sm">
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold tracking-tight mb-2">Get Started with Tell</h1>
             <p className="text-sm text-muted">Create your account to get a license key</p>
@@ -175,7 +175,7 @@ function SignupPage() {
 
             {/* Error */}
             {error && (
-              <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
+              <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-500 text-sm">
                 {error}
               </div>
             )}
@@ -184,7 +184,7 @@ function SignupPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-12 mt-2 bg-zinc-900 text-white rounded-xl font-semibold hover:bg-zinc-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full h-12 mt-2 bg-brand text-white rounded-xl font-semibold hover:bg-brand/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Creating account..." : "Get Started"}
             </button>
