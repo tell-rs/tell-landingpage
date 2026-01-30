@@ -161,7 +161,7 @@ function SDKSection() {
   const sdk = SDK_DATA[activeSDK];
 
   return (
-    <section className="py-32 px-6">
+    <section id="sdks" className="py-32 px-6">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-12">
           <p className="text-sm font-medium text-brand uppercase tracking-wider mb-4">Integration</p>
