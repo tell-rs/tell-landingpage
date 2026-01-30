@@ -5,10 +5,10 @@ export const Route = createFileRoute("/ot")({
   head: () => ({
     meta: [
       { title: "Tell for OT - Secure Log Collection for Critical Infrastructure" },
-      { name: "description", content: "Air-gapped log collection built in Rust. Single binary, no cloud dependency, no GC pauses. CRA, NIS2, IEC 62443 ready." },
+      { name: "description", content: "Air-gapped log collection built in Rust. Single binary, no cloud dependency, no GC pauses. Designed for CRA, NIS2, IEC 62443." },
       // Open Graph
       { property: "og:title", content: "Tell for OT - Secure Log Collection for Critical Infrastructure" },
-      { property: "og:description", content: "Air-gapped log collection built in Rust. Single binary, no cloud dependency, no GC pauses. CRA, NIS2, IEC 62443 ready." },
+      { property: "og:description", content: "Air-gapped log collection built in Rust. Single binary, no cloud dependency, no GC pauses. Designed for CRA, NIS2, IEC 62443." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://tell.rs/ot" },
       // Twitter
@@ -89,7 +89,7 @@ function OTPage() {
           </div>
 
           <p className="mt-16 text-sm text-zinc-500">
-            65M events/sec · &lt;1ms P99 · ~20MB binary · Built by the founder of Logpoint
+            64M events/sec · Sub-millisecond latency · Single binary · Built by the founder of Logpoint
           </p>
         </div>
       </main>
@@ -212,8 +212,8 @@ function OTPage() {
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-3 text-sm"><CheckIcon /><span className="text-zinc-300">Static linking — copy to deploy</span></li>
-                  <li className="flex items-center gap-3 text-sm"><CheckIcon /><span className="text-zinc-300">Automated SBOM generation</span></li>
-                  <li className="flex items-center gap-3 text-sm"><CheckIcon /><span className="text-zinc-300">Each dependency audited and justified</span></li>
+                  <li className="flex items-center gap-3 text-sm"><CheckIcon /><span className="text-zinc-300">SBOM generation via cargo tree</span></li>
+                  <li className="flex items-center gap-3 text-sm"><CheckIcon /><span className="text-zinc-300">Minimal dependency tree, each justified</span></li>
                 </ul>
               </div>
               <div className="bg-zinc-950 rounded-xl p-6 font-mono text-sm border border-white/5">
@@ -305,32 +305,31 @@ function OTPage() {
 
           <div className="grid md:grid-cols-2 gap-8">
             <div className="bg-zinc-950 rounded-xl p-6 font-mono text-sm border border-white/5 overflow-x-auto">
-              <p className="text-zinc-500 mb-4"># config.yaml - OT profile</p>
-              <p className="text-zinc-400">global:</p>
-              <p className="text-zinc-300 pl-4">num_processors: <span className="text-brand">4</span></p>
-              <p className="text-zinc-300 pl-4">buffer_size: <span className="text-brand">65536</span>  <span className="text-zinc-600"># 64KB</span></p>
-              <p className="text-zinc-300 pl-4">batch_size: <span className="text-brand">100</span></p>
-              <p className="text-zinc-300 pl-4">api_keys_file: <span className="text-emerald-400">"apikeys.conf"</span></p>
-              <p className="text-zinc-400 mt-3">metrics:</p>
-              <p className="text-zinc-300 pl-4">profile: <span className="text-emerald-400">"ot"</span></p>
-              <p className="text-zinc-300 pl-4">interval: <span className="text-brand">60s</span>  <span className="text-zinc-600"># minimal</span></p>
-              <p className="text-zinc-300 pl-4">format: <span className="text-emerald-400">"compact"</span></p>
-              <p className="text-zinc-400 mt-3">sources:</p>
-              <p className="text-zinc-300 pl-4">tcp:</p>
-              <p className="text-zinc-300 pl-6">- address: <span className="text-emerald-400">"127.0.0.1"</span>  <span className="text-zinc-600"># localhost only</span></p>
-              <p className="text-zinc-300 pl-8">port: <span className="text-brand">50000</span></p>
-              <p className="text-zinc-300 pl-8">forwarding_mode: <span className="text-red-400">false</span></p>
+              <p className="text-zinc-500 mb-4"># config.toml - recommended for OT</p>
+              <p className="text-zinc-400">[global]</p>
+              <p className="text-zinc-300 pl-4">num_processors = <span className="text-brand">4</span></p>
+              <p className="text-zinc-300 pl-4">buffer_size = <span className="text-brand">262144</span>  <span className="text-zinc-600"># 256KB</span></p>
+              <p className="text-zinc-300 pl-4">batch_size = <span className="text-brand">500</span></p>
+              <p className="text-zinc-300 pl-4">api_keys_file = <span className="text-emerald-400">"configs/apikeys.conf"</span></p>
+              <p className="text-zinc-400 mt-3">[metrics]</p>
+              <p className="text-zinc-300 pl-4">enabled = <span className="text-emerald-400">true</span></p>
+              <p className="text-zinc-300 pl-4">interval = <span className="text-brand">3600</span>  <span className="text-zinc-600"># 1 hour</span></p>
+              <p className="text-zinc-300 pl-4">format = <span className="text-emerald-400">"json"</span></p>
+              <p className="text-zinc-400 mt-3">[[sources.tcp]]</p>
+              <p className="text-zinc-300 pl-4">address = <span className="text-emerald-400">"127.0.0.1"</span>  <span className="text-zinc-600"># localhost only</span></p>
+              <p className="text-zinc-300 pl-4">port = <span className="text-brand">50000</span></p>
+              <p className="text-zinc-300 pl-4">forwarding_mode = <span className="text-red-400">false</span></p>
             </div>
 
             <div className="space-y-6">
               <div>
-                <h3 className="font-semibold mb-3">OT Profile Defaults</h3>
+                <h3 className="font-semibold mb-3">Recommended for OT</h3>
                 <ul className="space-y-2 text-sm">
-                  <li className="flex items-center gap-3"><CheckIcon /><span className="text-zinc-300">4 processors (low resource usage)</span></li>
-                  <li className="flex items-center gap-3"><CheckIcon /><span className="text-zinc-300">64KB buffers (minimal memory)</span></li>
-                  <li className="flex items-center gap-3"><CheckIcon /><span className="text-zinc-300">60s metric intervals (reduced overhead)</span></li>
+                  <li className="flex items-center gap-3"><CheckIcon /><span className="text-zinc-300">Fixed processor count (predictable resource usage)</span></li>
+                  <li className="flex items-center gap-3"><CheckIcon /><span className="text-zinc-300">256KB buffers (default, tunable)</span></li>
+                  <li className="flex items-center gap-3"><CheckIcon /><span className="text-zinc-300">1-hour metric intervals (low overhead)</span></li>
                   <li className="flex items-center gap-3"><CheckIcon /><span className="text-zinc-300">Localhost binding (no external exposure)</span></li>
-                  <li className="flex items-center gap-3"><CheckIcon /><span className="text-zinc-300">Compact format (no PII in logs)</span></li>
+                  <li className="flex items-center gap-3"><CheckIcon /><span className="text-zinc-300">JSON format (machine-parseable for auditing)</span></li>
                 </ul>
               </div>
 
@@ -340,7 +339,7 @@ function OTPage() {
                   <li>disk_plaintext — Human-readable, daily/hourly rotation</li>
                   <li>disk_binary — LZ4 compressed, high throughput</li>
                   <li>parquet — Columnar, Snappy/LZ4/Gzip compression</li>
-                  <li>clickhouse — When upstream connectivity allows</li>
+                  <li>clickhouse — Columnar analytics database</li>
                 </ul>
               </div>
             </div>
@@ -353,16 +352,16 @@ function OTPage() {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-sm font-medium text-brand uppercase tracking-wider mb-4">Compliance</p>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-6">Built for regulatory requirements</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-6">Designed for regulatory environments</h2>
             <p className="text-zinc-400 max-w-2xl mx-auto">
-              Designed from the ground up to meet CRA, NIS2, and IEC 62443 requirements for critical infrastructure.
+              Architected to support CRA, NIS2, and IEC 62443 requirements for critical infrastructure.
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
             <div className="p-6 bg-zinc-900/50 rounded-xl border border-white/5">
               <p className="text-xs font-medium text-emerald-400 uppercase tracking-wider mb-3">EU Cyber Resilience Act</p>
-              <h3 className="font-semibold mb-4">CRA Ready</h3>
+              <h3 className="font-semibold mb-4">Designed for CRA</h3>
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start gap-3">
                   <CheckIcon className="text-emerald-500 mt-0.5" />
@@ -370,7 +369,7 @@ function OTPage() {
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckIcon className="text-emerald-500 mt-0.5" />
-                  <span className="text-zinc-400">Supply chain transparency — automated SBOM</span>
+                  <span className="text-zinc-400">Supply chain transparency — SBOM via cargo tree</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckIcon className="text-emerald-500 mt-0.5" />
@@ -381,7 +380,7 @@ function OTPage() {
 
             <div className="p-6 bg-zinc-900/50 rounded-xl border border-white/5">
               <p className="text-xs font-medium text-emerald-400 uppercase tracking-wider mb-3">Network & Information Security</p>
-              <h3 className="font-semibold mb-4">NIS2 Compliant</h3>
+              <h3 className="font-semibold mb-4">NIS2 Aligned</h3>
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start gap-3">
                   <CheckIcon className="text-emerald-500 mt-0.5" />
@@ -430,20 +429,20 @@ function OTPage() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="text-center p-6 bg-zinc-900/50 rounded-xl border border-white/5">
-              <p className="text-3xl font-bold text-brand mb-2">65M</p>
+              <p className="text-3xl font-bold text-brand mb-2">64M</p>
               <p className="text-sm text-zinc-500">events/sec sustained</p>
             </div>
             <div className="text-center p-6 bg-zinc-900/50 rounded-xl border border-white/5">
-              <p className="text-3xl font-bold text-brand mb-2">&lt;1ms</p>
-              <p className="text-sm text-zinc-500">P99 latency</p>
+              <p className="text-3xl font-bold text-brand mb-2">84ns</p>
+              <p className="text-sm text-zinc-500">caller latency</p>
             </div>
             <div className="text-center p-6 bg-zinc-900/50 rounded-xl border border-white/5">
-              <p className="text-3xl font-bold text-brand mb-2">~20MB</p>
-              <p className="text-sm text-zinc-500">binary size</p>
+              <p className="text-3xl font-bold text-brand mb-2">0</p>
+              <p className="text-sm text-zinc-500">runtime dependencies</p>
             </div>
             <div className="text-center p-6 bg-zinc-900/50 rounded-xl border border-white/5">
-              <p className="text-3xl font-bold text-brand mb-2">&lt;100ms</p>
-              <p className="text-sm text-zinc-500">startup time</p>
+              <p className="text-3xl font-bold text-brand mb-2">1</p>
+              <p className="text-sm text-zinc-500">binary to deploy</p>
             </div>
           </div>
 

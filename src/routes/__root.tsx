@@ -68,6 +68,7 @@ function Nav() {
           <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
             <a href="#pipeline" className="text-sm text-zinc-400 hover:text-white transition-colors">Pipeline</a>
             <a href="#pricing" className="text-sm text-zinc-400 hover:text-white transition-colors">Pricing</a>
+            <Link to="/ot" className="text-sm text-zinc-400 hover:text-white transition-colors">OT</Link>
             <a
               href="https://github.com/tell-rs/tell#readme"
               target="_blank"
