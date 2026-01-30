@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { config } from "../config";
 
 type License = {
@@ -9,6 +9,7 @@ type License = {
   issued: string;
   expires: string;
   revoked: boolean;
+  license_key: string | null;
 };
 
 type Profile = {
@@ -42,46 +43,96 @@ const getProfile = createServerFn({ method: "POST" })
 
 export const Route = createFileRoute("/account")({
   component: AccountPage,
+  validateSearch: (search: Record<string, unknown>) => ({
+    pending: search.pending === "true" || search.pending === true,
+  }),
 });
 
 function AccountPage() {
   const navigate = useNavigate();
+  const { pending } = Route.useSearch();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [polling, setPolling] = useState(pending);
 
-  useEffect(() => {
-    const loadProfile = async () => {
-      const accessToken = localStorage.getItem("access_token");
+  const loadProfile = useCallback(async () => {
+    const accessToken = localStorage.getItem("access_token");
 
-      if (!accessToken) {
+    if (!accessToken) {
+      navigate({ to: "/login" });
+      return null;
+    }
+
+    try {
+      const data = await getProfile({ data: { accessToken } });
+      return data;
+    } catch (err) {
+      if (err instanceof Error && err.message === "Session expired") {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
         navigate({ to: "/login" });
-        return;
+        return null;
       }
-
-      try {
-        const data = await getProfile({ data: { accessToken } });
-        setProfile(data);
-      } catch (err) {
-        if (err instanceof Error && err.message === "Session expired") {
-          localStorage.removeItem("access_token");
-          localStorage.removeItem("refresh_token");
-          navigate({ to: "/login" });
-          return;
-        }
-        setError(err instanceof Error ? err.message : "Failed to load profile");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadProfile();
+      throw err;
+    }
   }, [navigate]);
+
+  // Initial load
+  useEffect(() => {
+    loadProfile()
+      .then((data) => {
+        if (data) setProfile(data);
+      })
+      .catch((err) => {
+        setError(err instanceof Error ? err.message : "Failed to load profile");
+      })
+      .finally(() => setLoading(false));
+  }, [loadProfile]);
+
+  // Poll when pending (waiting for webhook to fire after payment)
+  useEffect(() => {
+    if (!polling || !profile) return;
+
+    const activeLicense = profile.licenses.find((l) => !l.revoked && l.license_key);
+    if (activeLicense) {
+      setPolling(false);
+      return;
+    }
+
+    let attempts = 0;
+    const maxAttempts = 10; // 10 * 3s = 30s max
+    const interval = setInterval(async () => {
+      attempts++;
+      try {
+        const data = await loadProfile();
+        if (data) {
+          setProfile(data);
+          const found = data.licenses.find((l) => !l.revoked && l.license_key);
+          if (found || attempts >= maxAttempts) {
+            setPolling(false);
+            clearInterval(interval);
+          }
+        }
+      } catch {
+        // Ignore poll errors, keep trying
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [polling, profile, loadProfile]);
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     navigate({ to: "/" });
+  };
+
+  const copyLicenseKey = async (key: string) => {
+    await navigator.clipboard.writeText(key);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   if (loading) {
@@ -129,6 +180,14 @@ function AccountPage() {
           </button>
         </div>
 
+        {/* Polling Banner */}
+        {polling && (
+          <div className="bg-brand/5 border border-brand/20 rounded-2xl p-4 mb-6 flex items-center gap-3">
+            <div className="w-5 h-5 border-2 border-brand border-t-transparent rounded-full animate-spin flex-shrink-0" />
+            <p className="text-sm">Setting up your license... This may take a moment.</p>
+          </div>
+        )}
+
         {/* Profile Card */}
         <div className="bg-card rounded-2xl border border-border p-6 mb-6">
           <h2 className="font-semibold mb-4">Profile</h2>
@@ -145,7 +204,7 @@ function AccountPage() {
             )}
             <div className="flex justify-between">
               <dt className="text-muted">Customer ID</dt>
-              <dd className="font-mono text-xs">{profile.customer_id || "—"}</dd>
+              <dd className="font-mono text-xs">{profile.customer_id || "\u2014"}</dd>
             </div>
           </dl>
         </div>
@@ -163,6 +222,8 @@ function AccountPage() {
                       ? "bg-purple-500/10 text-purple-500"
                       : activeLicense.tier === "pro"
                       ? "bg-brand/10 text-brand"
+                      : activeLicense.tier === "starter"
+                      ? "bg-blue-500/10 text-blue-500"
                       : "bg-zinc-500/10 text-zinc-500"
                   }`}
                 >
@@ -172,6 +233,33 @@ function AccountPage() {
                   Expires {new Date(activeLicense.expires).toLocaleDateString()}
                 </span>
               </div>
+
+              {/* License Key Display */}
+              {activeLicense.license_key ? (
+                <div className="mt-4 p-4 rounded-xl bg-surface border border-border">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium">License Key</span>
+                    <button
+                      onClick={() => copyLicenseKey(activeLicense.license_key!)}
+                      className="text-xs px-3 py-1 rounded-lg bg-brand/10 text-brand hover:bg-brand/20 transition font-medium"
+                    >
+                      {copied ? "Copied!" : "Copy"}
+                    </button>
+                  </div>
+                  <code className="block text-xs font-mono break-all text-muted leading-relaxed select-all">
+                    {activeLicense.license_key}
+                  </code>
+                </div>
+              ) : (
+                <div className="mt-4 p-4 rounded-xl bg-surface text-sm">
+                  <p className="text-muted">
+                    License key not available.{" "}
+                    <a href="mailto:hello@tell.rs" className="underline hover:text-foreground">
+                      Contact support
+                    </a>
+                  </p>
+                </div>
+              )}
 
               <dl className="space-y-3 text-sm">
                 <div className="flex justify-between">
@@ -187,17 +275,6 @@ function AccountPage() {
                   <dd>{new Date(activeLicense.expires).toLocaleDateString()}</dd>
                 </div>
               </dl>
-
-              {/* License Key Notice */}
-              <div className="mt-4 p-4 rounded-xl bg-surface text-sm">
-                <p className="text-muted">
-                  Your license key was sent to your email when you signed up.
-                  Can't find it?{" "}
-                  <a href="mailto:hello@tell.rs" className="underline hover:text-foreground">
-                    Contact support
-                  </a>
-                </p>
-              </div>
             </div>
           ) : (
             <div className="text-center py-8">
@@ -255,11 +332,11 @@ function AccountPage() {
           >
             Documentation
           </a>
-          <span className="text-border">•</span>
+          <span className="text-border">&bull;</span>
           <Link to="/download" className="text-muted hover:text-foreground transition">
             Download Tell
           </Link>
-          <span className="text-border">•</span>
+          <span className="text-border">&bull;</span>
           <a
             href="mailto:hello@tell.rs"
             className="text-muted hover:text-foreground transition"

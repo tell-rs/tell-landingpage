@@ -19,7 +19,6 @@ export const Route = createFileRoute("/api/webhook/polar")({
             productId: order.product_id,
           });
 
-          // Call tell-platform to generate license
           const apiKey = process.env.PLATFORM_API_KEY;
           if (!apiKey) {
             console.error("PLATFORM_API_KEY not configured");
@@ -37,8 +36,8 @@ export const Route = createFileRoute("/api/webhook/polar")({
                 email: customer.email,
                 customer_name: customer.name || customer.email.split("@")[0],
                 company_name: customer.organization?.name || customer.name,
-                tier: "pro", // Polar purchases are Pro tier
-                months: 12, // 1 year license
+                product_id: order.product_id,
+                months: 12,
               }),
             });
 
@@ -54,9 +53,6 @@ export const Route = createFileRoute("/api/webhook/polar")({
               tier: license.tier,
               expires: license.expires,
             });
-
-            // License key is now stored - user can view it in their account
-            // The key is returned in the response but we don't email it (security)
           } catch (err) {
             console.error("Error generating license:", err);
           }
@@ -65,13 +61,52 @@ export const Route = createFileRoute("/api/webhook/polar")({
         // When a subscription is created (for recurring billing)
         onSubscriptionActive: async (payload) => {
           console.log("Subscription active:", payload.data.id);
-          // Could extend license validity here
         },
 
-        // When a subscription is canceled
+        // When a subscription is canceled, revoke licenses
         onSubscriptionCanceled: async (payload) => {
-          console.log("Subscription canceled:", payload.data.id);
-          // License continues until expiry, no action needed
+          const subscription = payload.data;
+          const customerEmail = subscription.customer?.email;
+
+          console.log("Subscription canceled:", {
+            subscriptionId: subscription.id,
+            customerEmail,
+          });
+
+          if (!customerEmail) {
+            console.error("No customer email on canceled subscription");
+            return;
+          }
+
+          const apiKey = process.env.PLATFORM_API_KEY;
+          if (!apiKey) {
+            console.error("PLATFORM_API_KEY not configured");
+            return;
+          }
+
+          try {
+            const res = await fetch(`${config.apiUrl}/api/v1/licenses/revoke`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${apiKey}`,
+              },
+              body: JSON.stringify({
+                email: customerEmail,
+              }),
+            });
+
+            if (!res.ok) {
+              const error = await res.text();
+              console.error("Failed to revoke licenses:", error);
+              return;
+            }
+
+            const result = await res.json();
+            console.log("Licenses revoked:", result);
+          } catch (err) {
+            console.error("Error revoking licenses:", err);
+          }
         },
       }),
     },

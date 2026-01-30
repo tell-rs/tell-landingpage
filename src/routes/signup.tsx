@@ -52,7 +52,7 @@ function SignupPage() {
     company_name: "",
     role: "founder",
     company_type: "business",
-    revenue_band: "under_1m",
+    revenue_band: "under_100k",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -67,9 +67,13 @@ function SignupPage() {
       if (result.next_step === "free") {
         navigate({ to: "/download" });
       } else if (result.next_step?.monthly_price) {
-        // Pro tier - redirect to Polar checkout
+        // Paid tier - pick the right Polar product
+        const productId =
+          result.tier === "starter"
+            ? config.polar.starterProductId
+            : config.polar.proProductId;
         const checkoutParams = new URLSearchParams({
-          products: config.polar.proProductId,
+          products: productId,
           customerEmail: form.email,
           customerName: form.company_name,
           metadata: JSON.stringify({ customer_id: result.customer_id }),
@@ -179,7 +183,8 @@ function SignupPage() {
                 onChange={(e) => setForm({ ...form, revenue_band: e.target.value })}
                 className={selectClass}
               >
-                <option value="under_1m">Under $1M (Free)</option>
+                <option value="under_100k">Under $100K (Free)</option>
+                <option value="100k_to_1m">$100K - $1M ($9/mo)</option>
                 <option value="1m_to_10m">$1M - $10M ($299/mo)</option>
                 <option value="over_10m">Over $10M (Enterprise)</option>
               </select>
@@ -207,7 +212,7 @@ function SignupPage() {
         </div>
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
-          Free for companies under $1M revenue.{" "}
+          Free for companies under $100K revenue.{" "}
           <a href="https://github.com/tell-rs/tell/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" className="underline hover:text-muted transition">
             View license
           </a>

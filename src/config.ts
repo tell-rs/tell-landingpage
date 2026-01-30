@@ -8,7 +8,8 @@ export const config = {
 
   // Polar.sh configuration (public values - not secrets)
   polar: {
-    // Pro tier product ID from Polar dashboard
+    // Product IDs from Polar dashboard
+    starterProductId: "8b9ca437-d79a-412b-a6e6-db3f54c78329",
     proProductId: "12309e54-3194-4aad-826f-bb1dd64361cb",
     // Where to redirect after successful checkout
     successUrl: "https://tell.rs/thanks",
