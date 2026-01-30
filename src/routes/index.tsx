@@ -49,6 +49,39 @@ function CheckIcon() {
   );
 }
 
+function highlightCode(code: string): React.ReactNode[] {
+  // Order: strings, method chains (word.word / word::word), keywords, numbers
+  const regex = /(\"[^\"]*\"|'[^']*'|[a-zA-Z_]\w*(?:(?:\.\w+|::\w+))+|\b(?:use|let|import|const|final|from|Some|package|func)\b|\b\d+\.?\d*\b)/g;
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match;
+  let key = 0;
+
+  while ((match = regex.exec(code)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(<span key={key++}>{code.slice(lastIndex, match.index)}</span>);
+    }
+    const token = match[0];
+    if (token.startsWith('"') || token.startsWith("'")) {
+      parts.push(<span key={key++} className="text-zinc-300">{token}</span>);
+    } else if (/^[a-zA-Z_]/.test(token) && /[.:]/.test(token)) {
+      // Method chains: client.track, Tell::new, TellConfig::production
+      parts.push(<span key={key++} className="text-white">{token}</span>);
+    } else if (/^\d/.test(token)) {
+      parts.push(<span key={key++} className="text-zinc-300">{token}</span>);
+    } else {
+      // Keywords
+      parts.push(<span key={key++} className="text-brand">{token}</span>);
+    }
+    lastIndex = match.index + token.length;
+  }
+
+  if (lastIndex < code.length) {
+    parts.push(<span key={key++}>{code.slice(lastIndex)}</span>);
+  }
+  return parts;
+}
+
 const SDK_DATA = {
   swift: {
     name: "Swift",
@@ -89,19 +122,6 @@ client.Track("purchase_completed", tell.Props{
     "product": "Pro Plan",
 })`,
   },
-  typescript: {
-    name: "TypeScript",
-    available: false,
-    repo: null,
-    example: `import { Tell } from '@tell-rs/sdk';
-
-const client = new Tell({ apiKey: 'your-api-key' });
-
-client.track('purchase_completed', {
-  revenue: 149.99,
-  product: 'Pro Plan',
-});`,
-  },
   rust: {
     name: "Rust",
     available: true,
@@ -119,6 +139,19 @@ client.track("user_123", "purchase_completed", props! {
 
 client.log_info("Order processed", Some("billing"), props! {
     "order_id" => "ord_abc123"
+});`,
+  },
+  typescript: {
+    name: "TypeScript",
+    available: false,
+    repo: null,
+    example: `import { Tell } from '@tell-rs/sdk';
+
+const client = new Tell({ apiKey: 'your-api-key' });
+
+client.track('purchase_completed', {
+  revenue: 149.99,
+  product: 'Pro Plan',
 });`,
   },
 };
@@ -175,8 +208,8 @@ function SDKSection() {
                 <span className="text-xs text-zinc-600">Coming soon</span>
               )}
             </div>
-            <pre className="p-5 font-mono text-sm text-zinc-300 overflow-x-auto">
-              <code>{sdk.example}</code>
+            <pre className="p-5 font-mono text-sm text-zinc-400 overflow-x-auto">
+              <code>{highlightCode(sdk.example)}</code>
             </pre>
           </div>
         </div>
