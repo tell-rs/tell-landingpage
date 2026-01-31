@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/ot")({
+export const Route = createFileRoute("/ot/")({
   component: OTPage,
   head: () => ({
     meta: [
@@ -75,17 +75,6 @@ function OTPage() {
               Request Demo
               <ArrowIcon />
             </a>
-            <a
-              href="https://github.com/tell-rs/tell"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/5 text-white rounded-xl font-semibold hover:bg-white/10 transition-colors duration-200 border border-white/10"
-            >
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-              </svg>
-              View Source
-            </a>
           </div>
 
           <p className="mt-16 text-sm text-zinc-500">
@@ -142,8 +131,62 @@ function OTPage() {
         </div>
       </section>
 
-      {/* Secure by Design */}
+      {/* CVE Reality Check */}
       <section className="py-24 px-6 bg-zinc-900/30">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-sm font-medium text-brand uppercase tracking-wider mb-4">CVE Reality Check</p>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-6">Published vulnerabilities matter</h2>
+            <p className="text-zinc-400 max-w-2xl mx-auto">
+              The tools currently deployed in OT environments have documented security vulnerabilities — assigned CVE numbers and published in the National Vulnerability Database.
+            </p>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="text-left py-3 px-4 text-xs font-mono uppercase tracking-wider text-zinc-500">Vendor</th>
+                  <th className="text-left py-3 px-4 text-xs font-mono uppercase tracking-wider text-zinc-500">CVEs</th>
+                  <th className="text-left py-3 px-4 text-xs font-mono uppercase tracking-wider text-zinc-500 hidden sm:table-cell">Memory Safety</th>
+                  <th className="text-left py-3 px-4 text-xs font-mono uppercase tracking-wider text-zinc-500 hidden md:table-cell">Critical Examples</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { vendor: "Splunk", cves: "252", mem: true, example: "RCE via XSLT, SSRF, privilege escalation" },
+                  { vendor: "Elastic Stack", cves: "216", mem: true, example: "Buffer overflow in Filebeat syslog parser" },
+                  { vendor: "Wazuh", cves: "28", mem: true, example: "Heap overflow, use-after-free, RCE (9.9)" },
+                  { vendor: "Logpoint", cves: "25", mem: true, example: "SSRF (9.6 Critical), template injection RCE" },
+                  { vendor: "CrowdStrike", cves: "5", mem: true, example: "TLS validation flaw (8.1), race conditions" },
+                ].map((row) => (
+                  <tr key={row.vendor} className="border-b border-white/5">
+                    <td className="py-3 px-4 text-zinc-300">{row.vendor}</td>
+                    <td className="py-3 px-4 font-semibold text-red-400">{row.cves}</td>
+                    <td className="py-3 px-4 text-red-400 font-mono text-xs hidden sm:table-cell">{row.mem ? "Yes" : "—"}</td>
+                    <td className="py-3 px-4 text-zinc-500 text-xs hidden md:table-cell">{row.example}</td>
+                  </tr>
+                ))}
+                <tr className="bg-emerald-500/5">
+                  <td className="py-3 px-4 text-white font-semibold">Tell</td>
+                  <td className="py-3 px-4 font-bold text-emerald-400">0</td>
+                  <td className="py-3 px-4 text-emerald-400 font-mono text-xs hidden sm:table-cell">N/A</td>
+                  <td className="py-3 px-4 text-emerald-400 text-xs hidden md:table-cell">Rust compiler prevents these classes</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="mt-8">
+            <p className="text-xs text-zinc-600">
+              Source: <a href="https://app.opencve.io" target="_blank" rel="noopener noreferrer" className="text-brand hover:underline">OpenCVE</a>, January 2026
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Secure by Design */}
+      <section className="py-24 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-sm font-medium text-brand uppercase tracking-wider mb-4">Secure by Design</p>
