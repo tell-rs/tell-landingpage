@@ -83,45 +83,6 @@ function highlightCode(code: string): React.ReactNode[] {
 }
 
 const SDK_DATA = {
-  swift: {
-    name: "Swift",
-    available: true,
-    repo: "https://github.com/tell-rs/tell-swift",
-    example: `import Tell
-
-let client = Tell(apiKey: "your-api-key")
-
-client.track("purchase_completed", properties: [
-    "revenue": 149.99,
-    "product": "Pro Plan"
-])`,
-  },
-  flutter: {
-    name: "Flutter",
-    available: true,
-    repo: "https://github.com/tell-rs/tell-flutter",
-    example: `import 'package:tell/tell.dart';
-
-final client = Tell(apiKey: 'your-api-key');
-
-client.track('purchase_completed', {
-  'revenue': 149.99,
-  'product': 'Pro Plan',
-});`,
-  },
-  go: {
-    name: "Go",
-    available: true,
-    repo: "https://github.com/tell-rs/tell-go",
-    example: `import "github.com/tell-rs/tell-go"
-
-client := tell.New("your-api-key")
-
-client.Track("purchase_completed", tell.Props{
-    "revenue": 149.99,
-    "product": "Pro Plan",
-})`,
-  },
   rust: {
     name: "Rust",
     available: true,
@@ -141,10 +102,36 @@ client.log_info("Order processed", Some("billing"), props! {
     "order_id" => "ord_abc123"
 });`,
   },
+  go: {
+    name: "Go",
+    available: true,
+    repo: "https://github.com/tell-rs/tell-go",
+    example: `import "github.com/tell-rs/tell-go"
+
+client := tell.New("your-api-key")
+
+client.Track("purchase_completed", tell.Props{
+    "revenue": 149.99,
+    "product": "Pro Plan",
+})`,
+  },
+  cpp: {
+    name: "C++",
+    available: true,
+    repo: "https://github.com/tell-rs/tell-cpp",
+    example: `#include <tell/tell.h>
+
+auto client = tell::Client("your-api-key");
+
+client.track("purchase_completed", {
+    {"revenue", 149.99},
+    {"product", "Pro Plan"}
+});`,
+  },
   typescript: {
     name: "TypeScript",
-    available: false,
-    repo: null,
+    available: true,
+    repo: "https://github.com/tell-rs/tell-js",
     example: `import { Tell } from '@tell-rs/sdk';
 
 const client = new Tell({ apiKey: 'your-api-key' });
@@ -154,10 +141,36 @@ client.track('purchase_completed', {
   product: 'Pro Plan',
 });`,
   },
+  swift: {
+    name: "Swift",
+    available: false,
+    repo: null,
+    example: `import Tell
+
+let client = Tell(apiKey: "your-api-key")
+
+client.track("purchase_completed", properties: [
+    "revenue": 149.99,
+    "product": "Pro Plan"
+])`,
+  },
+  flutter: {
+    name: "Flutter",
+    available: false,
+    repo: null,
+    example: `import 'package:tell/tell.dart';
+
+final client = Tell(apiKey: 'your-api-key');
+
+client.track('purchase_completed', {
+  'revenue': 149.99,
+  'product': 'Pro Plan',
+});`,
+  },
 };
 
 function SDKSection() {
-  const [activeSDK, setActiveSDK] = useState<keyof typeof SDK_DATA>("swift");
+  const [activeSDK, setActiveSDK] = useState<keyof typeof SDK_DATA>("rust");
   const sdk = SDK_DATA[activeSDK];
 
   return (
