@@ -75,6 +75,13 @@ function OTPage() {
               Request Demo
               <ArrowIcon />
             </a>
+            <Link
+              to="/ot/whitepaper"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/5 text-white rounded-xl font-semibold hover:bg-white/10 transition-colors duration-200 border border-white/10"
+            >
+              Technical Whitepaper
+              <ArrowIcon />
+            </Link>
           </div>
 
           <p className="mt-16 text-sm text-zinc-500">
@@ -682,6 +689,13 @@ function OTPage() {
               </ul>
             </div>
           </div>
+
+          <div className="mt-10 text-center">
+            <Link to="/ot/whitepaper" className="inline-flex items-center gap-2 text-sm text-brand hover:text-brand/80 transition-colors">
+              Full CVE analysis, architecture, and compliance mapping in the technical whitepaper
+              <ArrowIcon />
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -804,6 +818,9 @@ function OTPage() {
             <span className="text-zinc-500 text-sm">OT / Industrial</span>
           </div>
           <div className="flex items-center gap-6 text-sm text-zinc-500">
+            <Link to="/ot/whitepaper" className="hover:text-white transition-colors">
+              Whitepaper
+            </Link>
             <a href="mailto:ot@tell.rs" className="hover:text-white transition-colors">
               ot@tell.rs
             </a>
