@@ -352,7 +352,7 @@ function OTPage() {
               <div>
                 <h3 className="text-xl font-semibold mb-3">Single Binary, Minimal Surface</h3>
                 <p className="text-zinc-400 mb-4">
-                  All functionality compiled into one executable. No runtime dependencies. No dynamic linking. Copy to host, point at config, run.
+                  All functionality compiled into one executable — the OT collector profile is 2.8 MB. No runtime dependencies. No dynamic linking. Copy to host, point at config, run.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-3 text-sm"><CheckIcon /><span className="text-zinc-300">Static linking — copy to deploy</span></li>
@@ -457,16 +457,16 @@ function OTPage() {
               <h3 className="font-semibold mb-4">Composable Architecture</h3>
               <p className="text-sm text-zinc-400 mb-4">Select only the components your deployment requires. Unused code is not in the binary — it cannot be exploited because it does not exist.</p>
               <ul className="space-y-2 text-sm">
-                <li className="flex items-center gap-3"><CheckIcon className="text-emerald-500" /><span className="text-zinc-300">Sources: TCP, Syslog TCP/UDP, HTTP</span></li>
-                <li className="flex items-center gap-3"><CheckIcon className="text-emerald-500" /><span className="text-zinc-300">Sinks: Disk, Parquet, Arrow, ClickHouse, Forwarder</span></li>
-                <li className="flex items-center gap-3"><CheckIcon className="text-emerald-500" /><span className="text-zinc-300">Core pipeline always included</span></li>
-                <li className="flex items-center gap-3"><CheckIcon className="text-emerald-500" /><span className="text-zinc-300">Connectors, ML, transforms — optional</span></li>
+                <li className="flex items-center gap-3"><CheckIcon className="text-emerald-500" /><span className="text-zinc-300"><span className="text-zinc-100 font-medium">ot-collector</span> — TCP, syslog, disk, forwarder (172 crates, 2.8 MB)</span></li>
+                <li className="flex items-center gap-3"><CheckIcon className="text-emerald-500" /><span className="text-zinc-300"><span className="text-zinc-100 font-medium">ot-forwarder</span> — TCP, syslog, forwarder only (170 crates, 2.5 MB)</span></li>
+                <li className="flex items-center gap-3"><CheckIcon className="text-emerald-500" /><span className="text-zinc-300"><span className="text-zinc-100 font-medium">full</span> — all sources, sinks, analytics, TUI, connectors</span></li>
+                <li className="flex items-center gap-3"><CheckIcon className="text-emerald-500" /><span className="text-zinc-300">Or compose your own: <span className="font-mono text-xs">--features "source-tcp,sink-forwarder"</span></span></li>
               </ul>
             </div>
 
             <div className="p-6 bg-zinc-900/50 rounded-xl border border-white/5">
               <h3 className="font-semibold mb-4">Auditable Supply Chain</h3>
-              <p className="text-sm text-zinc-400 mb-4">Each build produces its own CycloneDX SBOM — the supply chain manifest matches exactly what is deployed, not a superset.</p>
+              <p className="text-sm text-zinc-400 mb-4">Each build profile produces its own CycloneDX SBOM — the OT collector lists 172 dependencies, not the full platform's 588. The supply chain manifest matches exactly what is deployed.</p>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-center gap-3"><CheckIcon className="text-emerald-500" /><span className="text-zinc-300">Audit source code before building</span></li>
                 <li className="flex items-center gap-3"><CheckIcon className="text-emerald-500" /><span className="text-zinc-300">Pinned toolchain for reproducibility</span></li>
@@ -478,7 +478,7 @@ function OTPage() {
 
           <div className="p-6 bg-zinc-950 rounded-xl border border-white/5 text-center">
             <p className="text-sm text-zinc-400">
-              Aligns with IEC 62443's principle of <span className="text-zinc-300 font-medium">minimal functionality</span>: only ship what is required for the operational purpose. With Tell, this is a build configuration enforced by the compiler — not a policy enforced by process.
+              Aligns with IEC 62443's principle of <span className="text-zinc-300 font-medium">minimal functionality</span>: only ship what is required for the operational purpose. The OT collector profile compiles 172 crate dependencies into a 2.8 MB binary — analytics, HTTP, TUI, and connectors are excluded by the compiler, not by policy.
             </p>
           </div>
         </div>
@@ -570,6 +570,8 @@ function OTPage() {
               <p className="text-zinc-300 pl-4">path = <span className="text-emerald-400">"/var/log/tell"</span></p>
               <p className="text-zinc-300 pl-4">rotation = <span className="text-emerald-400">"hourly"</span></p>
               <p className="text-zinc-300 pl-4">compression = <span className="text-emerald-400">"lz4"</span></p>
+              <p className="text-zinc-400 mt-3">[telemetry]</p>
+              <p className="text-zinc-300 pl-4">enabled = <span className="text-brand">false</span>  <span className="text-zinc-600"># air-gapped</span></p>
             </div>
 
             <div className="space-y-6">
@@ -629,7 +631,7 @@ function OTPage() {
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckIcon className="text-emerald-500 mt-0.5" />
-                  <span className="text-zinc-400">Minimal functionality — build profiles exclude unused code</span>
+                  <span className="text-zinc-400">Minimal functionality — OT profiles (172 crates / 2.8 MB) exclude analytics, HTTP, TUI, connectors</span>
                 </li>
               </ul>
             </div>
@@ -671,7 +673,7 @@ function OTPage() {
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckIcon className="text-emerald-500 mt-0.5" />
-                  <span className="text-zinc-400">Minimal functionality — unused components not in the binary</span>
+                  <span className="text-zinc-400">Minimal functionality — OT collector compiles 172 of 588 total crates; unused code excluded by compiler</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckIcon className="text-emerald-500 mt-0.5" />

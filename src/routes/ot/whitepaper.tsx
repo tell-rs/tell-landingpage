@@ -230,7 +230,7 @@ function WhitepaperPage() {
               </Diagram>
 
               <H3>Deployment</H3>
-              <P>Tell is a single static binary. No JVM, no garbage collector, no Python interpreter, no Docker. Copy the binary, create a configuration file, run. No internet connectivity required. No license server. No telemetry.</P>
+              <P>Tell is a single static binary — the OT collector is 2.8 MB. No JVM, no garbage collector, no Python interpreter, no Docker. Copy to host, point at config, run. No internet connectivity required. No license server. No telemetry.</P>
 
               <H3>Performance</H3>
               <TableLabel>Throughput by Source Type</TableLabel>
@@ -274,17 +274,17 @@ function WhitepaperPage() {
               <ScenarioCard
                 title="Air-Gapped Collector"
                 subtitle="Collect logs from OT equipment on an isolated network. Retain locally for compliance."
-                detail="Syslog TCP → Disk binary sink"
+                detail="ot-collector profile · 172 crates · 2.8 MB binary"
               >
-                Equipment sends syslog or TCP data to Tell. The collector writes to local disk with hourly rotation and LZ4 compression. No internet, no outbound connections.
+                Equipment sends syslog or TCP data to Tell. The collector writes to local disk with hourly rotation and LZ4 compression. No internet, no outbound connections. Build with <code className="font-mono text-xs bg-slate-100 px-1 py-0.5 rounded">--features ot-collector</code> to compile only TCP, syslog, and disk sink code.
               </ScenarioCard>
 
               <ScenarioCard
                 title="Zone Boundary Forwarder"
                 subtitle="Collect in the OT zone. Retain locally. Forward to IT zone for centralized analysis."
-                detail="TCP source → Disk sink + Forwarder sink"
+                detail="ot-collector profile · Disk sink + Forwarder sink"
               >
-                The collector writes to disk as a compliance copy and simultaneously forwards upstream. Retry with configurable attempts, TCP keepalive, source IP preservation.
+                The collector writes to disk as a compliance copy and simultaneously forwards upstream. Retry with configurable attempts, TCP keepalive, source IP preservation. Uses the same <code className="font-mono text-xs bg-slate-100 px-1 py-0.5 rounded">ot-collector</code> build — disk and forwarder sinks are both included. For relay-only nodes that don't need local retention, the <code className="font-mono text-xs bg-slate-100 px-1 py-0.5 rounded">ot-forwarder</code> profile (2.5 MB, 170 crates) excludes disk storage entirely.
               </ScenarioCard>
 
               <ScenarioCard
@@ -296,7 +296,7 @@ function WhitepaperPage() {
               </ScenarioCard>
 
               <H3>Source Availability</H3>
-              <P>Tell is source-available. Full source code provided for audit, modification, and custom builds. Each build generates a CycloneDX SBOM (588 components).</P>
+              <P>Tell is source-available. Full source code provided for audit, modification, and custom builds. Each build profile generates a CycloneDX SBOM — the OT collector profile has 172 crate dependencies; the full platform build has 588. Customers audit exactly what ships.</P>
             </Section>
 
             <Divider />
@@ -319,7 +319,7 @@ function WhitepaperPage() {
                       <Tr><Td>Security by design</Td><Td>Rust compiler eliminates memory safety and thread safety vulnerability classes</Td></Tr>
                       <Tr><Td>Supply chain transparency</Td><Td>CycloneDX SBOM generated per build</Td></Tr>
                       <Tr><Td>Vulnerability handling</Td><Td><code className="font-mono text-xs bg-slate-100 px-1.5 py-0.5 rounded">cargo audit</code> for CVE monitoring</Td></Tr>
-                      <Tr><Td>Minimal functionality</Td><Td>Build profiles compile only required components</Td></Tr>
+                      <Tr><Td>Minimal functionality</Td><Td>OT profiles compile only required components: <code className="font-mono text-xs bg-slate-100 px-1 py-0.5 rounded">ot-collector</code> (172 crates, 2.8 MB) and <code className="font-mono text-xs bg-slate-100 px-1 py-0.5 rounded">ot-forwarder</code> (170 crates, 2.5 MB). Analytics, TUI, HTTP source, connectors excluded.</Td></Tr>
                     </tbody>
                   </table>
                 </div>
@@ -339,6 +339,7 @@ function WhitepaperPage() {
                       <Tr><Td>Zone/conduit architecture</Td><Td>Pipeline maps to zone boundaries; forwarder for conduits</Td></Tr>
                       <Tr><Td>Authentication</Td><Td>16-byte API keys, O(1) lookup, constant-time comparison</Td></Tr>
                       <Tr><Td>Deterministic operation</Td><Td>No GC, no runtime; 84ns latency, zero-copy pipeline</Td></Tr>
+                      <Tr><Td>Minimal functionality</Td><Td>Composable build profiles: OT collector (172 crates) excludes analytics, HTTP, TUI, connectors</Td></Tr>
                       <Tr><Td>Availability</Td><Td>Graceful shutdown, atomic file rotation, retry on failure</Td></Tr>
                     </tbody>
                   </table>
