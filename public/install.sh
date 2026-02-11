@@ -9,8 +9,7 @@
 set -euo pipefail
 
 # Configuration
-GITHUB_OWNER="tell-rs"
-GITHUB_REPO="tell"
+DL_BASE="https://dl.tell.rs"
 BINARY_NAME="tell"
 DEFAULT_INSTALL_DIR="$HOME/.local/bin"
 
@@ -194,12 +193,12 @@ detect_arch() {
 }
 
 get_latest_version() {
-    local url="https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/latest"
+    local url="${DL_BASE}/latest.txt"
 
     if command -v curl >/dev/null 2>&1; then
-        curl -fsSL "$url" 2>/dev/null | grep '"tag_name"' | sed -E 's/.*"v?([^"]+)".*/\1/'
+        curl -fsSL "$url" 2>/dev/null | tr -d '[:space:]'
     elif command -v wget >/dev/null 2>&1; then
-        wget -qO- "$url" 2>/dev/null | grep '"tag_name"' | sed -E 's/.*"v?([^"]+)".*/\1/'
+        wget -qO- "$url" 2>/dev/null | tr -d '[:space:]'
     else
         error "curl or wget is required"
     fi
@@ -299,7 +298,7 @@ main() {
     printf "${GRAY}Installing ${NC}${ORANGE}tell${NC} ${GRAY}v%s...${NC}\n\n" "$version"
 
     # Build artifact name
-    local base_url="https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/releases/download/v${version}"
+    local base_url="${DL_BASE}/v${version}"
     local artifact="tell-${version}-${os}-${arch}.tgz"
 
     # Create temp directory

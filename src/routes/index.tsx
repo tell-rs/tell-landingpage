@@ -86,7 +86,6 @@ const SDK_DATA = {
   rust: {
     name: "Rust",
     available: true,
-    repo: "https://github.com/tell-rs/tell-rs",
     example: `use tell::{Tell, TellConfig, props};
 
 let client = Tell::new(
@@ -105,7 +104,6 @@ client.log_info("Order processed", Some("billing"), props! {
   go: {
     name: "Go",
     available: true,
-    repo: "https://github.com/tell-rs/tell-go",
     example: `import "github.com/tell-rs/tell-go"
 
 client := tell.New("your-api-key")
@@ -118,7 +116,6 @@ client.Track("purchase_completed", tell.Props{
   cpp: {
     name: "C++",
     available: true,
-    repo: "https://github.com/tell-rs/tell-cpp",
     example: `#include <tell/tell.h>
 
 auto client = tell::Client("your-api-key");
@@ -131,7 +128,6 @@ client.track("purchase_completed", {
   typescript: {
     name: "TypeScript",
     available: true,
-    repo: "https://github.com/tell-rs/tell-js",
     example: `import { Tell } from '@tell-rs/sdk';
 
 const client = new Tell({ apiKey: 'your-api-key' });
@@ -144,7 +140,6 @@ client.track('purchase_completed', {
   swift: {
     name: "Swift",
     available: false,
-    repo: null,
     example: `import Tell
 
 let client = Tell(apiKey: "your-api-key")
@@ -157,7 +152,6 @@ client.track("purchase_completed", properties: [
   flutter: {
     name: "Flutter",
     available: false,
-    repo: null,
     example: `import 'package:tell/tell.dart';
 
 final client = Tell(apiKey: 'your-api-key');
@@ -205,19 +199,7 @@ function SDKSection() {
           <div className="bg-zinc-950 rounded-xl border border-white/5 overflow-hidden">
             <div className="flex items-center justify-between px-4 py-2 border-b border-white/5 bg-zinc-900/50">
               <span className="text-xs text-zinc-500">{sdk.name}</span>
-              {sdk.repo ? (
-                <a
-                  href={sdk.repo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs text-zinc-500 hover:text-white transition-colors flex items-center gap-1"
-                >
-                  <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-                    <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-                  </svg>
-                  View SDK
-                </a>
-              ) : (
+              {!sdk.available && (
                 <span className="text-xs text-zinc-600">Coming soon</span>
               )}
             </div>
@@ -465,17 +447,6 @@ function Home() {
               Get Started Free
               <ArrowIcon />
             </Link>
-            <a
-              href="https://github.com/tell-rs/tell"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/5 text-white rounded-xl font-semibold hover:bg-white/10 transition-colors duration-200 border border-white/10"
-            >
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-              </svg>
-              View on GitHub
-            </a>
           </div>
 
           <div className="mt-12 max-w-md mx-auto relative">
@@ -864,7 +835,7 @@ function Home() {
           </div>
 
           <p className="mt-6 text-center text-sm text-zinc-500">
-            Self-host anywhere · Source available · <a href="https://github.com/tell-rs/tell/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" className="underline hover:text-zinc-300 transition-colors duration-200">View license</a>
+            Self-host anywhere
           </p>
         </div>
       </section>
@@ -890,17 +861,6 @@ function Home() {
               Get Started Free
               <ArrowIcon />
             </Link>
-            <a
-              href="https://github.com/tell-rs/tell"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/5 text-white rounded-xl font-semibold hover:bg-white/10 transition-colors duration-200 border border-white/10"
-            >
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-              </svg>
-              Star on GitHub
-            </a>
           </div>
         </div>
       </section>

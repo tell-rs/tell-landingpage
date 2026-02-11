@@ -69,14 +69,7 @@ function Nav() {
             <a href="#sdks" className="text-sm text-zinc-400 hover:text-white transition-colors">SDKs</a>
             <a href="#pricing" className="text-sm text-zinc-400 hover:text-white transition-colors">Pricing</a>
             <Link to="/ot" className="text-sm text-zinc-400 hover:text-white transition-colors">OT</Link>
-            <a
-              href="https://github.com/tell-rs/tell#readme"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-zinc-400 hover:text-white transition-colors"
-            >
-              Docs
-            </a>
+            <a href="https://docs.tell.rs" className="text-sm text-zinc-400 hover:text-white transition-colors">Docs</a>
           </div>
         )}
 
@@ -111,9 +104,7 @@ function Footer() {
             <span className="text-sm">Analytics that tell the whole story</span>
           </div>
           <div className="flex items-center gap-6 text-sm">
-            <a href="https://github.com/tell-rs/tell" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">GitHub</a>
-            <a href="https://github.com/tell-rs/tell#readme" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">Docs</a>
-            <a href="https://github.com/tell-rs/tell/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">License</a>
+            <a href="mailto:hello@tell.rs" className="hover:text-white transition">Contact</a>
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-zinc-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm">

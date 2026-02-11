@@ -212,10 +212,7 @@ function SignupPage() {
         </div>
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
-          Free for companies under $100K revenue.{" "}
-          <a href="https://github.com/tell-rs/tell/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" className="underline hover:text-muted transition">
-            View license
-          </a>
+          Free for companies under $100K revenue.
         </p>
       </div>
     </main>

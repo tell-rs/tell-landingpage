@@ -324,15 +324,6 @@ function AccountPage() {
 
         {/* Quick Links */}
         <div className="mt-8 flex flex-wrap gap-4 justify-center text-sm">
-          <a
-            href="https://github.com/tell-rs/tell#readme"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted hover:text-foreground transition"
-          >
-            Documentation
-          </a>
-          <span className="text-border">&bull;</span>
           <Link to="/download" className="text-muted hover:text-foreground transition">
             Download Tell
           </Link>

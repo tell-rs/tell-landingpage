@@ -79,15 +79,7 @@ function DownloadPage() {
 
         {/* Links */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a
-            href="https://github.com/tell-rs/tell#readme"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-6 py-3 bg-brand text-white rounded-xl font-semibold hover:bg-brand/90 transition"
-          >
-            View Documentation
-          </a>
-          <Link to="/" className="px-6 py-3 bg-surface text-foreground rounded-xl font-semibold hover:bg-surface/80 transition border border-border">
+          <Link to="/" className="px-6 py-3 bg-brand text-white rounded-xl font-semibold hover:bg-brand/90 transition">
             Back to Home
           </Link>
         </div>

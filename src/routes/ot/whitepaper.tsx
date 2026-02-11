@@ -295,8 +295,6 @@ function WhitepaperPage() {
                 Each tenant authenticates with a dedicated API key mapping to an isolated workspace. Routing directs each workspace's data to tenant-specific storage paths.
               </ScenarioCard>
 
-              <H3>Source Availability</H3>
-              <P>Tell is source-available. Full source code provided for audit, modification, and custom builds. Each build profile generates a CycloneDX SBOM — the OT collector profile has 172 crate dependencies; the full platform build has 588. Customers audit exactly what ships.</P>
             </Section>
 
             <Divider />
@@ -487,7 +485,6 @@ function WhitepaperPage() {
               <div className="flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-sm">
                 <a href="mailto:ot@tell.rs" className="text-orange-700 hover:underline">ot@tell.rs</a>
                 <Link to="/ot" className="text-orange-700 hover:underline">tell.rs/ot</Link>
-                <a href="https://github.com/tell-rs/tell" target="_blank" rel="noopener noreferrer" className="text-orange-700 hover:underline">GitHub</a>
               </div>
               <p className="text-xs text-slate-400 mt-4">
                 CVE data independently verifiable at <a href="https://app.opencve.io" className="text-orange-700 hover:underline">app.opencve.io</a>. Data retrieved January 2026.
