@@ -13,8 +13,9 @@ DL_BASE="https://dl.tell.rs"
 BINARY_NAME="tell"
 DEFAULT_INSTALL_DIR="$HOME/.local/bin"
 
-# Global for cleanup
+# Globals
 CLEANUP_DIR=""
+PATH_MODIFIED=0
 
 cleanup() {
     if [ -n "$CLEANUP_DIR" ] && [ -d "$CLEANUP_DIR" ]; then
@@ -279,7 +280,8 @@ add_to_path() {
             ;;
     esac
 
-    printf "${GREEN}✓${NC} Added to PATH\n"
+    PATH_MODIFIED=1
+    printf "${GREEN}✓${NC} Added to PATH ${GRAY}via %s${NC}\n" "${config_file/$HOME/~}"
 }
 
 main() {
@@ -334,9 +336,16 @@ main() {
     # Track install (anonymous, runs in background)
     curl -s "https://tell.rs/api/install?v=${version}&os=${os}&arch=${arch}" >/dev/null 2>&1 &
 
-    # Next steps
-    printf "\nTo start: ${ORANGE}tell${NC}\n"
-    printf "${GRAY}https://tell.rs/docs${NC}\n\n"
+    # Restart hint if PATH was just modified
+    if [ "$PATH_MODIFIED" = "1" ]; then
+        printf "\n${GRAY}Restart your shell or run:${NC}  source %s\n" "$(get_shell_config "$(detect_shell)" | sed "s|$HOME|~|")"
+    fi
+
+    # Next steps (formatted to match CLI help output)
+    printf "\nGet started:\n"
+    printf "  ${ORANGE}tell init${NC}                       Generate config file\n"
+    printf "  ${ORANGE}tell run${NC}                        Start server\n"
+    printf "\n  ${GRAY}https://docs.tell.rs${NC}\n\n"
 }
 
 main "$@"
