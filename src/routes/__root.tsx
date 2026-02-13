@@ -1,7 +1,8 @@
 /// <reference types="vite/client" />
 import { createRootRoute, HeadContent, Link, Outlet, Scripts, useLocation } from "@tanstack/react-router";
-import { useState, useEffect, type ReactNode } from "react";
+import { useState, useEffect, useRef, type ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
+import { TellProvider, useTell } from "@tell-rs/react";
 
 import appCss from "../../styles.css?url";
 
@@ -130,6 +131,26 @@ function NotFoundComponent() {
   );
 }
 
+/** Track page views on route changes via TanStack Router. */
+function TellPageTracker() {
+  const tell = useTell();
+  const location = useLocation();
+  const prevPath = useRef(location.pathname);
+
+  useEffect(() => {
+    // Track on mount and on path change
+    tell.track("Page Viewed", {
+      url: window.location.href,
+      path: location.pathname,
+      referrer: document.referrer,
+      title: document.title,
+    });
+    prevPath.current = location.pathname;
+  }, [location.pathname, tell]);
+
+  return null;
+}
+
 function RootComponent() {
   return (
     <RootDocument>
@@ -147,7 +168,10 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         <HeadContent />
       </head>
       <body>
-        {children}
+        <TellProvider apiKey="00000000000000000000000000000000">
+          {children}
+          <TellPageTracker />
+        </TellProvider>
         <Analytics />
         <Scripts />
       </body>
