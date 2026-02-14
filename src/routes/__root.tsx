@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 import { createRootRoute, HeadContent, Link, Outlet, Scripts, useLocation } from "@tanstack/react-router";
-import { useState, useEffect, useRef, type ReactNode } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { TellProvider, useTell } from "@tell-rs/react";
 
@@ -135,17 +135,14 @@ function NotFoundComponent() {
 function TellPageTracker() {
   const tell = useTell();
   const location = useLocation();
-  const prevPath = useRef(location.pathname);
 
   useEffect(() => {
-    // Track on mount and on path change
     tell.track("Page Viewed", {
       url: window.location.href,
       path: location.pathname,
       referrer: document.referrer,
       title: document.title,
     });
-    prevPath.current = location.pathname;
   }, [location.pathname, tell]);
 
   return null;
@@ -168,7 +165,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         <HeadContent />
       </head>
       <body>
-        <TellProvider apiKey="00000000000000000000000000000000">
+        <TellProvider apiKey="00000000000000000000000000000000" options={{ endpoint: "https://t.tell.rs" }}>
           {children}
           <TellPageTracker />
         </TellProvider>
