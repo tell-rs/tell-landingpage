@@ -165,7 +165,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         <HeadContent />
       </head>
       <body>
-        <TellProvider apiKey="00000000000000000000000000000000" options={{ endpoint: "https://t.tell.rs" }}>
+        <TellProvider apiKey="9c048d72732ce3523f192e6447177a83" options={{ endpoint: "https://t.tell.rs" }}>
           {children}
           <TellPageTracker />
         </TellProvider>
