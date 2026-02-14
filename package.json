@@ -18,8 +18,8 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@tell-rs/browser": "^0.2.0",
-    "@tell-rs/react": "^0.2.0",
+    "@tell-rs/browser": "^0.2.2",
+    "@tell-rs/react": "^0.2.2",
     "@polar-sh/tanstack-start": "^0.4.3",
     "@tailwindcss/vite": "^4.1.17",
     "@tanstack/react-router": "^1.135.2",
