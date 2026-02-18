@@ -3,5 +3,6 @@ dist/
 .vercel/
 .output/
 bun.lock
+package-lock.json
 src/routeTree.gen.ts
 .DS_Store
