@@ -1,0 +1,42 @@
+---
+title: "Live analytics canvases"
+date: "2026-03-11"
+tags: ["collaboration", "analytics"]
+summary: "Build analytics narratives on infinite canvases — drop in live metric cards, connect them with edges, and share with a link."
+---
+
+You're preparing a board review. Signups are up, but retention is flat and churn is creeping. You need one surface that tells the whole story — not six separate charts in six separate tabs.
+
+## Canvases — build analytics narratives
+
+Canvases are infinite, zoomable surfaces where you arrange live metric cards, text, images, shapes, and embeds into a single visual story.
+
+- **Drop in a metric card** — pick an event, choose a visualization (line chart, bar, table, funnel, retention grid), and it updates live with your data
+- **Connect elements with edges** — draw straight or curved lines between cards to show cause and effect, with arrows, labels, and anchor points
+- **Group with sections** — wrap related cards in collapsible frames to organize complex narratives
+- **Pin your most important canvases** — pinned canvases float to the top of your workspace list
+- **Share with a link** — generate a public URL that anyone can view without logging in, with optional expiration and rate limiting
+## AI canvas tools — create dashboards by asking
+
+Your AI assistant can now build and manage canvases directly. Ask it to create a canvas, add metric cards, run every card to pull fresh data, or duplicate an existing canvas as a starting point.
+
+- **"Create a canvas with daily signups and retention side by side"** — the assistant builds the layout, adds the metric cards, and configures the queries
+- **"Run my Q1 review canvas"** — executes every metric card at once and returns the results in the conversation
+- **"Duplicate last month's board and update the date range"** — deep-copies the canvas with fresh IDs, ready to edit
+
+## Accurate analytics
+
+Audience filters now work consistently across every metric type. When you select an audience, funnels, retention grids, lifecycle charts, segments, and ML predictions all respect it. Before, some metrics silently ignored your filter.
+
+- **User counts reflect real people** — each user is counted once per period, not once per session. If your DAU drops after this update, that's the correct number
+- **Stickiness ratios reflect true engagement** — DAU/MAU now uses a rolling 30-day window instead of a cumulative total. Ratios will appear higher because they're no longer diluted by every user you've ever seen
+- **Funnels respect your filters** — global filter conditions (country, plan, platform) now apply to every funnel step, not just the first
+
+## Richer session exploration
+
+Explore sessions with six new fields visible out of the box — device model, operating system, OS version, app version, region, and city. Filter and break down by any of them without writing custom queries.
+
+## Also in this update
+
+- Start your server with `tell run` — the old `tell serve` command has been renamed
+- Event names with special characters are now properly escaped, closing a potential injection vector

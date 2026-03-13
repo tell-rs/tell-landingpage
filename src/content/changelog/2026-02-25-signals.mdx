@@ -1,0 +1,32 @@
+---
+title: "Signals"
+date: "2026-02-25"
+tags: ["pipeline", "cli"]
+summary: "A real-time pub/sub system for your pipeline — transformers and plugins emit typed signals, any number of subscribers can listen and act."
+---
+
+Tell now includes a workspace-scoped pub/sub system. Transformers and plugins emit typed signals when something notable happens. Any number of subscribers can listen, filter, and act on them — from the CLI, browser, or scripts.
+
+Built-in signals today:
+
+- `ip.banned` / `ip.unbanned` — an IP crossed your failure threshold
+- `pattern.new` — a new recurring log structure was discovered
+- `threshold.crossed` — event volume exceeded your configured window
+
+Plugins can emit any signal kind they choose — the source is tagged with the plugin name automatically.
+
+Subscribe with `tell signals`. Filter by kind (`--kind ip.*`) or source (`--source transform:jail:*`). Add `--json` to pipe to scripts, webhooks, or alerting. From the browser, subscribe over Server-Sent Events with the same filters.
+
+## Multi-server auth
+
+Register multiple Tell servers and switch between them without re-entering credentials.
+
+- `tell login https://prod.acme.com` — registers, authenticates, makes it active
+- `tell login prod` — switches instantly, no password prompt if your token is valid
+- `tell workspace use 2` — sets the default workspace for the active server
+
+## Also in this update
+
+- The API server now binds to localhost by default — safer out of the box
+- Plugins auto-fix file ownership when installed as root
+- Cumulative totals now shown alongside per-second rates in metrics output

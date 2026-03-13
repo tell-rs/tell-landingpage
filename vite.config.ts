@@ -4,10 +4,13 @@ import viteReact from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 import { nitro } from "nitro/vite";
+import mdx from "@mdx-js/rollup";
+import remarkFrontmatter from "remark-frontmatter";
+import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 
 export default defineConfig({
   server: {
-    port: 3000,
+    port: 3001,
   },
   plugins: [
     tsConfigPaths(),
@@ -20,6 +23,9 @@ export default defineConfig({
           runtime: "bun1.x",
         },
       },
+    }),
+    mdx({
+      remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
     }),
     // react's vite plugin must come after start's vite plugin
     viteReact(),

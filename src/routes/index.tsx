@@ -1,6 +1,49 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, type ReactNode } from "react";
 import { getAllEntries } from "../content/changelog";
+
+function BorderGlow({ children, className = "" }: { children: ReactNode; className?: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    const glow = glowRef.current;
+    if (!el || !glow) return;
+    const onMove = (e: MouseEvent) => {
+      const rect = el.getBoundingClientRect();
+      glow.style.opacity = "1";
+      glow.style.background = `radial-gradient(400px circle at ${e.clientX - rect.left}px ${e.clientY - rect.top}px, rgba(255,255,255,0.12), transparent 60%)`;
+    };
+    const onLeave = () => { glow.style.opacity = "0"; };
+    el.addEventListener("mousemove", onMove);
+    el.addEventListener("mouseleave", onLeave);
+    return () => { el.removeEventListener("mousemove", onMove); el.removeEventListener("mouseleave", onLeave); };
+  }, []);
+
+  return (
+    <div ref={containerRef} className={`relative ${className}`}>
+      {/* Glow border — behind content via z-0 */}
+      <div
+        ref={glowRef}
+        className="absolute -inset-px z-0 rounded-lg pointer-events-none transition-opacity duration-300"
+        style={{ opacity: 0 }}
+      />
+      {/* Content — above glow via z-10 */}
+      <div className="relative z-10 h-full">{children}</div>
+    </div>
+  );
+}
+
+// Stable hash per cell
+function cellHash(i: number, j: number) {
+  let h = (i * 7919 + j * 104729) | 0;
+  h = ((h >> 16) ^ h) * 0x45d9f3b;
+  h = ((h >> 16) ^ h) * 0x45d9f3b;
+  return ((h >> 16) ^ h) >>> 0;
+}
+
+const GLYPHS = ["\u2727", "\u25C6", "\u2726", "+", "\u00D7"]; // ✧ ◆ ✦ + ×
 
 function DotGrid({ focusPoints }: { focusPoints: [number, number][] }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -19,6 +62,10 @@ function DotGrid({ focusPoints }: { focusPoints: [number, number][] }) {
     const cols = Math.ceil(w / spacing) + 1;
     const rows = Math.ceil(h / spacing) + 1;
     const maxDist = Math.sqrt(w * w + h * h) * 0.55;
+    const t = time * 0.0006;
+
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
 
     for (let i = 0; i < cols; i++) {
       for (let j = 0; j < rows; j++) {
@@ -33,23 +80,29 @@ function DotGrid({ focusPoints }: { focusPoints: [number, number][] }) {
           const influence = Math.max(0, 1 - dist / maxDist);
           if (influence > maxInfluence) maxInfluence = influence;
         }
-
         if (maxInfluence < 0.03) continue;
 
-        // Slow diagonal sweep + per-dot shimmer
-        const t = time * 0.0004;
-        const sweep = Math.sin(t + (i + j) * 0.12) * 0.5 + 0.5;
-        const shimmer = Math.sin(t * 3.7 + i * 1.3 + j * 2.1) * 0.5 + 0.5;
-        const wave = sweep * 0.7 + shimmer * 0.3;
+        const wave = Math.sin(t + (i + j) * 0.12) * 0.5 + 0.5;
+        const alpha = maxInfluence * (0.15 + wave * 0.5);
+        if (alpha < 0.03) continue;
 
-        const size = 2.5 * maxInfluence * (0.1 + wave * 0.9);
-        const alpha = maxInfluence * (0.1 + wave * 0.65);
+        const hash = cellHash(i, j);
+        const isGlyph = (hash % 100) < 8; // ~8% are glyphs
 
-        if (size > 0.3) {
-          ctx.beginPath();
-          ctx.arc(x, y, size, 0, Math.PI * 2);
+        if (isGlyph) {
+          const glyph = GLYPHS[hash % GLYPHS.length];
+          const fontSize = Math.round(7 + 4 * maxInfluence * wave);
+          ctx.font = `${fontSize}px "JetBrains Mono", monospace`;
           ctx.fillStyle = `rgba(100,90,230,${alpha})`;
-          ctx.fill();
+          ctx.fillText(glyph, x, y);
+        } else {
+          const radius = 2.2 * maxInfluence * (0.15 + wave * 0.85);
+          if (radius > 0.3) {
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(100,90,230,${alpha})`;
+            ctx.fill();
+          }
         }
       }
     }
@@ -104,8 +157,99 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
+function InstallBlock() {
+  const [copied, setCopied] = useState(false);
+  const command = "curl -sSfL https://tell.rs | bash";
+
+  const copy = () => {
+    navigator.clipboard.writeText(command);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="inline-flex items-center gap-3">
+      <button
+        onClick={copy}
+        className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200 transition cursor-pointer shrink-0"
+        title="Copy install command"
+      >
+        {copied ? (
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M20 6L9 17l-5-5" />
+          </svg>
+        ) : (
+          <span className="text-[13px] font-mono font-semibold">$</span>
+        )}
+      </button>
+      <code className="text-[15px] font-mono text-zinc-500">{command}</code>
+    </div>
+  );
+}
+
 function AppShell() {
   const [agentOpen, setAgentOpen] = useState(true);
+  const [events, setEvents] = useState([
+    { name: "Cart updated", count: 4107, users: "2,034" },
+    { name: "Comment posted", count: 1847, users: "892" },
+    { name: "Content shared", count: 2891, users: "1,634" },
+    { name: "Content viewed", count: 48291, users: "8,412" },
+    { name: "Creator followed", count: 1203, users: "634" },
+    { name: "Liked", count: 8912, users: "3,247" },
+    { name: "Order completed", count: 847, users: "612" },
+    { name: "Sign up completed", count: 312, users: "312" },
+  ]);
+  const [mrr, setMrr] = useState(48200);
+  const [stars, setStars] = useState(3847);
+
+  // Event counts — one random event ticks every 2.5-5.5s, weighted by volume
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout>;
+    const tick = () => {
+      setEvents(prev => {
+        const next = prev.map(e => ({ ...e }));
+        const weights = next.map(e => e.count);
+        const total = weights.reduce((a, b) => a + b, 0);
+        const rand = Math.random() * total;
+        let cum = 0;
+        for (let i = 0; i < next.length; i++) {
+          cum += weights[i];
+          if (rand <= cum) {
+            next[i].count += 1;
+            break;
+          }
+        }
+        return next;
+      });
+      timeout = setTimeout(tick, 800 + Math.random() * 1200);
+    };
+    timeout = setTimeout(tick, 1000 + Math.random() * 500);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  // MRR — a payment lands every 3-6s
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout>;
+    const tick = () => {
+      setMrr(prev => prev + [9, 19, 29, 49, 99][Math.floor(Math.random() * 5)]);
+      timeout = setTimeout(tick, 3000 + Math.random() * 3000);
+    };
+    timeout = setTimeout(tick, 2000 + Math.random() * 2000);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  // GitHub Stars — one star every 8-15s
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout>;
+    const tick = () => {
+      setStars(prev => prev + 1);
+      timeout = setTimeout(tick, 8000 + Math.random() * 7000);
+    };
+    timeout = setTimeout(tick, 5000 + Math.random() * 5000);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  const fmtMrr = (v: number) => `$${(v / 1000).toFixed(1)}K`;
 
   return (
     <div className="w-full rounded-2xl bg-[#090a0b] p-3 text-[13px]">
@@ -113,7 +257,7 @@ function AppShell() {
       {/* Sidebar */}
       <div className="w-[232px] shrink-0 flex flex-col" style={{ padding: "8px 14px 8px 8px" }}>
         {/* Brand + switcher */}
-        <div className="px-2.5 h-[28px] flex items-center mb-3">
+        <div className="px-2.5 h-[48px] flex items-center mb-3">
           <button className="flex items-center gap-2.5 text-white font-semibold text-[14px] hover:text-zinc-300 transition">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="shrink-0">
               <path d="M5 6h10M5 10h7M5 14h4" stroke="#a1a1aa" strokeWidth="1.4" strokeLinecap="round" />
@@ -130,8 +274,8 @@ function AppShell() {
           <nav className="space-y-0.5">
             {[
               { label: "Events", icon: "M13 10V3L4 14h7v7l9-11h-7z" },
-              { label: "Users", icon: "M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" },
               { label: "Logs", icon: "M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" },
+              { label: "Users", icon: "M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" },
             ].map((item) => (
               <button
                 key={item.label}
@@ -187,7 +331,8 @@ function AppShell() {
       {/* Main content area */}
       <div className="flex-1 flex flex-col min-w-0 p-2">
         {/* Inset content panel */}
-        <div className="flex-1 rounded-lg border border-zinc-800/40 bg-[#121314] flex flex-col overflow-hidden">
+        <BorderGlow className="flex-1">
+        <div className="h-full rounded-lg border border-zinc-800/40 bg-[#121314] flex flex-col overflow-hidden">
           {/* Top bar */}
           <div className="h-[48px] flex items-center justify-between pr-5 shrink-0" style={{ paddingLeft: "32px" }}>
             <div className="flex items-center gap-3">
@@ -220,9 +365,9 @@ function AppShell() {
               {/* Stat cards row */}
               <div className="grid grid-cols-3 gap-4">
                 {[
-                  { label: "MRR", value: "$48.2K", trend: "↑ 8%", up: true },
+                  { label: "MRR", value: fmtMrr(mrr), trend: "↑ 8%", up: true },
                   { label: "Trial → Paid", value: "12.4%", trend: "↑ 1.2%", up: true },
-                  { label: "GitHub Stars", value: "3,847", trend: "↑ 234", up: true },
+                  { label: "GitHub Stars", value: stars.toLocaleString(), trend: "↑ 234", up: true },
                 ].map((stat) => (
                   <div key={stat.label} className="rounded-xl border border-zinc-800/40" style={{ padding: "20px 24px 22px" }}>
                     <p className="text-zinc-400 text-[12px] leading-[17px] font-medium mb-2">{stat.label}</p>
@@ -279,19 +424,10 @@ function AppShell() {
                       </tr>
                     </thead>
                     <tbody className="text-[13px] leading-[20px]">
-                      {[
-                        { name: "Content viewed", count: "48,291", users: "8,412" },
-                        { name: "Searched", count: "12,847", users: "4,891" },
-                        { name: "Liked", count: "8,912", users: "3,247" },
-                        { name: "Shared", count: "2,891", users: "1,634" },
-                        { name: "Comment posted", count: "1,847", users: "892" },
-                        { name: "User followed", count: "1,203", users: "634" },
-                        { name: "Item purchased", count: "634", users: "487" },
-                        { name: "Signed up", count: "312", users: "312" },
-                      ].map((row) => (
+                      {events.map((row) => (
                         <tr key={row.name} className="border-b border-zinc-800/30" style={{ height: "40px" }}>
                           <td className="text-zinc-300 pl-6">{row.name}</td>
-                          <td className="text-right text-zinc-400" style={{ fontVariantNumeric: "tabular-nums" }}>{row.count}</td>
+                          <td className="text-right text-zinc-400" style={{ fontVariantNumeric: "tabular-nums" }}>{row.count.toLocaleString()}</td>
                           <td className="text-right text-zinc-400 pr-6" style={{ fontVariantNumeric: "tabular-nums" }}>{row.users}</td>
                         </tr>
                       ))}
@@ -332,8 +468,8 @@ function AppShell() {
                   62% of new signups came from a <span className="text-zinc-300 bg-zinc-800 px-1.5 py-0.5 rounded font-mono text-[11px]">Hacker News</span> post on Monday. These users have <span className="text-zinc-300 bg-zinc-800 px-1.5 py-0.5 rounded font-mono text-[11px]">2.1x</span> higher activation rate than organic.
                 </p>
                 <div className="rounded-lg bg-[#111113] border border-zinc-800/60 px-4 py-3 space-y-2 text-[12px]">
-                  <p className="text-zinc-400"><span className="text-emerald-400">34</span> already converted to paid</p>
-                  <p className="text-purple-400/80">Created board: HN signup cohort analysis</p>
+                  <p className="text-zinc-400"><span className="text-white">34</span> already converted to paid</p>
+                  <p className="text-brand">Created board: HN signup cohort analysis</p>
                 </div>
               </div>
 
@@ -358,6 +494,7 @@ function AppShell() {
             </div>}
           </div>
         </div>
+        </BorderGlow>
       </div>
       </div>
     </div>
@@ -379,10 +516,11 @@ function Home() {
                   Analytics that tell the whole story
                 </h1>
                 <p className="mt-6 text-[17px] leading-[1.6] text-zinc-400 max-w-[540px]">
-                  Funnels, retention, lifecycle analysis, and ML-powered segments
-                  — unified with structured logs and a real-time pipeline.
-                  Self-host in 5 minutes.
+                  Product analytics, structured logs, and business signals — 64M events/sec. Rust.
                 </p>
+                <div className="mt-8">
+                  <InstallBlock />
+                </div>
               </div>
             </div>
           </div>
@@ -396,34 +534,12 @@ function Home() {
         </section>
       </div>
 
-      {/* Logo Bar — full container width */}
-      <section className="py-8 px-6 border-t border-b border-zinc-800/40">
-        <div className="max-w-[1340px] mx-auto flex items-center justify-between flex-wrap gap-y-4">
-          {[
-            { name: "Shopify", icon: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" },
-            { name: "JPMorgan", icon: "M4 4h16v16H4zM9 9h6v6H9z" },
-            { name: "Coinbase", icon: "M12 2a10 10 0 100 20 10 10 0 000-20zm0 14a4 4 0 110-8 4 4 0 010 8z" },
-            { name: "Square", icon: "M3 3h18v18H3zM8 8h8v8H8z" },
-            { name: "Ramp", icon: "M2 17L12 7l10 10" },
-            { name: "Vercel", icon: "M12 2L2 19h20L12 2z" },
-            { name: "Notion", icon: "M4 4h10l6 6v10H4V4zm10 0v6h6" },
-            { name: "GitHub", icon: "M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69C6.73 19.91 6.14 18 6.14 18c-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z" },
-          ].map(({ name, icon }, i) => (
-            <div key={i} className="flex items-center gap-1.5 text-zinc-500">
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d={icon} />
-              </svg>
-              <span className="text-[12px] font-semibold tracking-[0.06em] uppercase">{name}</span>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* Feature Intro — text inset */}
       <section className="py-28 md:py-36 px-6">
         <div className="max-w-[1340px] mx-auto md:px-8">
-          <p className="text-[26px] md:text-[32px] leading-[1.4] tracking-[-0.015em]">
-            <span className="text-white font-semibold">
+          <p className="text-[48px] leading-[1] tracking-[-0.022em]" style={{ fontWeight: 510, fontFeatureSettings: '"cv01", "ss03"' }}>
+            <span className="text-white">
               A new species of analytics tool.
             </span>{" "}
             <span className="text-zinc-500">
@@ -489,7 +605,7 @@ function Home() {
         <div className="max-w-[1340px] mx-auto">
           {/* Text — inset */}
           <div className="md:px-8 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 mb-14">
-            <h2 className="text-[48px] leading-[1] tracking-[-0.022em] text-white" style={{ fontWeight: 510 }}>
+            <h2 className="text-[48px] leading-[1] tracking-[-0.022em] text-white" style={{ fontWeight: 510, fontFeatureSettings: '"cv01", "ss03"' }}>
               Make product
               <br />
               analytics self-driving
@@ -528,7 +644,7 @@ function Home() {
         <div className="max-w-[1340px] mx-auto">
           {/* Text — inset */}
           <div className="md:px-8 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 mb-14">
-            <h2 className="text-[48px] leading-[1] tracking-[-0.022em] text-white" style={{ fontWeight: 510 }}>
+            <h2 className="text-[48px] leading-[1] tracking-[-0.022em] text-white" style={{ fontWeight: 510, fontFeatureSettings: '"cv01", "ss03"' }}>
               Define your
               <br />
               audiences with precision
@@ -555,7 +671,7 @@ function Home() {
         <div className="max-w-[1340px] mx-auto">
           {/* Text — inset */}
           <div className="md:px-8 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 mb-14">
-            <h2 className="text-[48px] leading-[1] tracking-[-0.022em] text-white" style={{ fontWeight: 510 }}>
+            <h2 className="text-[48px] leading-[1] tracking-[-0.022em] text-white" style={{ fontWeight: 510, fontFeatureSettings: '"cv01", "ss03"' }}>
               Connect every signal
               <br />
               across your stack
@@ -595,7 +711,7 @@ function Home() {
         <div className="max-w-[1340px] mx-auto">
           {/* Text — inset */}
           <div className="md:px-8 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 mb-14">
-            <h2 className="text-[48px] leading-[1] tracking-[-0.022em] text-white" style={{ fontWeight: 510 }}>
+            <h2 className="text-[48px] leading-[1] tracking-[-0.022em] text-white" style={{ fontWeight: 510, fontFeatureSettings: '"cv01", "ss03"' }}>
               Query anything
               <br />
               from anywhere
@@ -623,7 +739,7 @@ function Home() {
         <div className="max-w-[1340px] mx-auto">
           {/* Text — inset */}
           <div className="md:px-8 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 mb-14">
-            <h2 className="text-[48px] leading-[1] tracking-[-0.022em] text-white" style={{ fontWeight: 510 }}>
+            <h2 className="text-[48px] leading-[1] tracking-[-0.022em] text-white" style={{ fontWeight: 510, fontFeatureSettings: '"cv01", "ss03"' }}>
               Collaborate with
               <br />
               canvases and boards
@@ -657,7 +773,7 @@ function Home() {
       {/* Changelog */}
       <section className="px-6" style={{ paddingTop: 96, paddingBottom: 128 }}>
         <div className="max-w-[1340px] mx-auto md:px-8">
-          <h2 className="text-[48px] leading-[1] tracking-[-0.022em] text-white mb-16" style={{ fontWeight: 510 }}>
+          <h2 className="text-[48px] leading-[1] tracking-[-0.022em] text-white mb-16" style={{ fontWeight: 510, fontFeatureSettings: '"cv01", "ss03"' }}>
             Changelog
           </h2>
 
@@ -715,6 +831,9 @@ function Home() {
             >
               Contact
             </a>
+          </div>
+          <div className="mt-8 flex justify-center">
+            <InstallBlock />
           </div>
         </div>
       </section>

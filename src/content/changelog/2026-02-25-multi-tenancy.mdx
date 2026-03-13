@@ -1,0 +1,26 @@
+---
+title: "Multi-tenancy"
+date: "2026-02-25"
+tags: ["auth", "pipeline"]
+summary: "Each workspace now stores data in its own database, with dedicated ingestion keys you can create and rotate without restarting the server."
+---
+
+You run three products — a marketing site, a mobile app, and an internal tool. Each has its own team, its own data, and its own privacy requirements. They shouldn't share a database, and they shouldn't share ingestion keys.
+
+## Workspace isolation — your data, separated
+
+Each workspace now stores events, sessions, and logs in its own dedicated database. Data from one workspace can never leak into another, even at the query level. Workspace names map directly to database names — no numeric IDs, no shared tables.
+
+## Ingestion keys — create and rotate instantly
+
+Manage the keys your SDKs and collectors use to send data. Create a key, name it, and start ingesting immediately — no server restart required.
+
+- **Create from the CLI** — `tell apikeys new mobile-prod` generates a key and shows it once. It's live in the pipeline the moment it's created.
+- **List and delete** — `tell apikeys` shows all keys by name and prefix. `tell apikeys delete` revokes a key instantly.
+- **API access** — admins can manage keys programmatically via REST endpoints for automation and CI/CD workflows.
+
+## Also in this update
+
+- Funnels now align timestamps correctly and calculate drop-off rates accurately
+- Disconnected signal subscribers automatically receive missed events when they reconnect
+- `tell login` auto-derives the server name from the hostname and validates the connection before prompting for credentials

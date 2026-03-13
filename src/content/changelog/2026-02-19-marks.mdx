@@ -1,0 +1,48 @@
+---
+title: "Marks"
+date: "2026-02-19"
+tags: [analytics, cli]
+summary: "Annotate your analytics timeline with releases, incidents, and deployments — manually, from CI/CD, or automatically from plugins."
+---
+
+Know why your metrics changed, not just that they changed. Marks are timeline annotations that add operational context to your analytics — a deploy at 3pm, an incident at midnight, a major release on Tuesday. When DAU drops or conversion spikes, the mark tells you what happened.
+
+Three ways to create them:
+
+- **Manual** — `tell mark "Shipped v2.0" --category release` from the CLI, or via the API
+- **Automated** — your CI/CD pipeline creates a mark on every deploy, with a link back to the commit
+- **Plugin-emitted** — plugins auto-annotate your timeline. When the GitHub plugin detects a release, or Cloudflare sees a traffic anomaly, a mark appears automatically
+
+## Categories
+
+Marks carry a category that signals what kind of event it was:
+
+- **Release** — version deployments, feature launches, config changes
+- **Incident** — outages, degradation, error spikes
+- **News** — press coverage, announcements, external events that affect your metrics
+
+Filter by category to see only what matters — `tell mark list --last 30d --category incident` shows recent incidents.
+
+## Private and public
+
+Marks default to public (visible to workspace members). Mark something private and only you see it — useful for personal hypotheses, draft annotations, or notes you're not ready to share.
+
+## AI assistant
+
+Your AI assistant can create and query marks. Ask it to annotate a deploy, list recent incidents, or find what changed around a date range.
+
+## Interactive explorer
+
+Explore your data with `tell -i`. Six views in a terminal-based interface:
+
+- **Status** — live throughput and connection stats
+- **Query** — direct SQL access to your analytics
+- **Tail** — live stream of incoming data
+- **Boards** — browse and view dashboards
+- **Ask** — natural language queries powered by AI
+
+## Also in this update
+
+- Sign in with Tell — OAuth for team authentication
+- `tell update` checks for newer versions
+- Per-workspace throughput visible in `tell status`

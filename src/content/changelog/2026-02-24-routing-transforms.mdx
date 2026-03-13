@@ -1,0 +1,34 @@
+---
+title: "Routing & transforms"
+date: "2026-02-24"
+tags: [pipeline]
+summary: "Multi-match routing sends data to every matching destination. Named transforms with guard clauses process only what they need to — plus IP banning and workspace management from the CLI."
+---
+
+Send your data to multiple destinations at once. Logs to analytics, events to cold storage, everything to archive — each routing rule adds destinations based on what's flowing through. No duplication, no workarounds.
+
+Transforms now apply selectively. Define a transform once, reference it from any rule, and chain multiple transforms in sequence. Guard clauses ensure each transform only processes data that needs it — by service, log level, event name, or source IP. Everything else passes through untouched. A pattern matcher targeting sshd logs processes only the 2% it needs — the rest skips through at negligible cost. PII redaction handles millions of events per second, so compliance adds no meaningful latency.
+
+Five built-in transforms:
+
+- **Pattern matcher** — cluster similar log lines into patterns
+- **Redact** — strip PII at ingest time. Emails, phone numbers, SSNs are masked before data hits storage — GDPR and CCPA compliance built into the pipeline
+- **Filter** — drop or keep messages by field value
+- **Reduce** — aggregate messages in time windows
+- **Jail** — ban IPs that exceed failure thresholds
+
+## IP banning
+
+Automatic fail2ban-style threat response, built in. Set a failure threshold, a time window, and a ban duration. IPs that cross the line are banned automatically, with optional escalation for repeat offenders.
+
+- **Escalating bans** — first ban is 1 hour, second is 2, third is 4, up to your configured maximum
+- **CIDR ignore lists** — internal networks and monitoring IPs skip banning entirely
+- **Signals** — `ip.banned` and `ip.unbanned` fire in real time. Subscribe with `tell signals --kind ip.*` or pipe `--json` to scripts and webhooks
+
+## CLI management
+
+Manage boards, workspaces, and saved metrics without opening the dashboard.
+
+- **`tell boards`** — list, create, delete, pin, and share dashboards. Generate public links with `tell boards share <id>`
+- **`tell workspace`** — list workspaces, create new ones, manage members, and invite with `tell workspace invite <email> --role editor`
+- **`tell metrics saved`** — save, list, and delete metric definitions for reuse across boards and canvases

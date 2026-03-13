@@ -1,0 +1,40 @@
+---
+title: "Tell 2.0"
+date: "2026-02-11"
+tags: [pipeline, analytics]
+summary: "A high-performance analytics platform built in Rust. Ingest from TCP, HTTP, or syslog, store in ClickHouse, Parquet, Arrow, disk, stdout, or null — with live tail and sub-millisecond latency."
+---
+
+Tell, rewritten in Rust. Ingest product events, structured logs, and business data from multiple sources. Route to multiple storage formats. Sub-millisecond end-to-end.
+
+## Sources
+
+Three ingestion paths:
+
+- **TCP** — high-throughput binary ingestion for SDKs and collectors, with API key authentication
+- **HTTP** — JSON ingestion for web and mobile, with API key authentication
+- **Syslog** — TCP and UDP receivers for infrastructure logs, assigned to a workspace per port
+
+## Storage
+
+Six destinations, each optimized for its use case:
+
+- **ClickHouse** — real-time analytics queries over events, sessions, and logs
+- **Arrow IPC** — fast columnar format for hot data and local exploration
+- **Parquet** — compressed columnar archive with Snappy, Zstd, or LZ4 compression
+- **Disk** — binary and plaintext formats with log-level separation and optional compression
+- **Stdout** — structured output for debugging and development
+- **Null** — discard sink for benchmarking ingestion throughput
+
+Route the same data to multiple destinations at once — analytics to ClickHouse, archive to Parquet, plaintext logs to disk.
+
+## Live tail
+
+Stream data through your terminal in real time with `tell tail`. Filter by source, type, or content to watch exactly what's flowing through your system.
+
+## Also in this update
+
+- DAU, MAU, and retention queries out of the box
+- 18 AI tools for analytics via MCP
+- API key auth and role-based access — Viewer, Editor, Admin, Platform
+- Workspace isolation — each workspace in its own database

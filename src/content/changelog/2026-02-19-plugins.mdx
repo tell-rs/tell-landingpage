@@ -1,0 +1,41 @@
+---
+title: "Plugins"
+date: "2026-02-19"
+tags: [plugins, cli]
+summary: "Pull data from Stripe, Meta Ads, Klaviyo, and 12 more services into Tell — 15 integrations, 276 metrics, and a WASM plugin SDK for building your own."
+---
+
+Pull metrics from external services directly into your analytics. Stripe payments, Meta ad spend, Klaviyo campaigns, GitHub activity, Cloudflare traffic — 15 integrations bring your business data into Tell on a schedule, alongside your product events.
+
+See Stripe MRR next to daily active users. Compare Meta ad spend with signup conversion. Track GitHub stars alongside feature adoption. Plugin data and event data live in the same database — query and dashboard them together.
+
+## Integrations
+
+Each plugin pulls point-in-time snapshots on a configurable schedule — daily MRR, hourly traffic stats, campaign performance at any interval. 15 plugins available, 276 metrics total:
+
+- **Payments** — Stripe (21 metrics: charges, subscriptions, MRR, disputes), Shopify (16 metrics: orders, revenue, customers, inventory)
+- **Email & SMS** — Klaviyo (29 metrics: campaigns, flows, lists, subscribers), Resend (8 metrics: delivery, bounces, domains)
+- **Advertising** — Meta Ads (24 metrics: spend, reach, impressions, conversions), Bitly (16 metrics: clicks, geography, devices)
+- **App stores** — Appbot, AppFigures, AppFollow, AppTweak, ASODesk, MobileAction (15–23 metrics each: rankings, reviews, ratings, ASO)
+- **Infrastructure** — Cloudflare (25 metrics: DNS, traffic, security, cache performance)
+- **Development** — GitHub (13 metrics: stars, forks, issues, PRs, commits per repo)
+- **Links** — Dub (17 metrics: clicks, leads, sales, geography)
+
+## Install and pull
+
+Discover plugins from the registry, install, configure, and start pulling — all from the CLI.
+
+- **`tell plugin search stripe`** — find plugins by name or category
+- **`tell plugin install stripe`** — install from the registry
+- **`tell plugin info stripe`** — view available metrics, datasets, and setup guide
+- **`tell plugin pull my_stripe`** — test a one-shot pull or let the scheduler run it on cron
+
+Each plugin includes a setup guide that walks you through API key creation for that service.
+
+## Build your own
+
+Plugins are WASM components. Write in Rust (or any language that compiles to WebAssembly), implement a pull function that returns metrics, and publish to the registry.
+
+- **Rust SDK** — typed metric builders, timestamp helpers, HTTP client
+- **Sandboxed** — plugins can only make HTTP requests to their declared hosts
+- **`tell plugin publish`** — push to the registry for others to install
