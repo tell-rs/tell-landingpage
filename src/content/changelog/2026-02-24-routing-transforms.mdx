@@ -2,12 +2,15 @@
 title: "Routing & transforms"
 date: "2026-02-24"
 tags: [pipeline]
-summary: "Multi-match routing sends data to every matching destination. Named transforms with guard clauses process only what they need to — plus IP banning and workspace management from the CLI."
+summary: "Send data to every matching destination at once. Transforms process only what they need to — plus IP banning and workspace management from the CLI."
 ---
 
 Send your data to multiple destinations at once. Logs to analytics, events to cold storage, everything to archive — each routing rule adds destinations based on what's flowing through. No duplication, no workarounds.
 
-Transforms now apply selectively. Define a transform once, reference it from any rule, and chain multiple transforms in sequence. Guard clauses ensure each transform only processes data that needs it — by service, log level, event name, or source IP. Everything else passes through untouched. A pattern matcher targeting sshd logs processes only the 2% it needs — the rest skips through at negligible cost. PII redaction handles millions of events per second, so compliance adds no meaningful latency.
+Transforms now apply selectively. Define a transform once, reference it from any rule, and chain multiple transforms in sequence. Each transform declares what it cares about — a service name, a log level, an event type — and only processes matching data. Everything else passes through untouched.
+
+- **Targeted processing** — a pattern matcher on sshd logs touches only the 2% it matches. The rest flows through unaffected.
+- **PII redaction at scale** — emails, phone numbers, and SSNs are stripped at millions of events per second. Compliance adds no meaningful latency.
 
 Five built-in transforms:
 
@@ -25,7 +28,7 @@ Automatic fail2ban-style threat response, built in. Set a failure threshold, a t
 - **CIDR ignore lists** — internal networks and monitoring IPs skip banning entirely
 - **Signals** — `ip.banned` and `ip.unbanned` fire in real time. Subscribe with `tell signals --kind ip.*` or pipe `--json` to scripts and webhooks
 
-## CLI management
+## New: CLI management
 
 Manage boards, workspaces, and saved metrics without opening the dashboard.
 

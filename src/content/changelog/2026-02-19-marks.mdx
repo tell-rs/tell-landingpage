@@ -5,9 +5,7 @@ tags: [analytics, cli]
 summary: "Annotate your analytics timeline with releases, incidents, and deployments — manually, from CI/CD, or automatically from plugins."
 ---
 
-Know why your metrics changed, not just that they changed. Marks are timeline annotations that add operational context to your analytics — a deploy at 3pm, an incident at midnight, a major release on Tuesday. When DAU drops or conversion spikes, the mark tells you what happened.
-
-Three ways to create them:
+Marks are timeline annotations — a deploy, an incident, a release — pinned to your analytics so you can see what happened when a metric moved. Create them manually, from CI/CD, or automatically from plugins.
 
 - **Manual** — `tell mark "Shipped v2.0" --category release` from the CLI, or via the API
 - **Automated** — your CI/CD pipeline creates a mark on every deploy, with a link back to the commit
@@ -31,7 +29,7 @@ Marks default to public (visible to workspace members). Mark something private a
 
 Your AI assistant can create and query marks. Ask it to annotate a deploy, list recent incidents, or find what changed around a date range.
 
-## Interactive explorer
+## New: Interactive explorer
 
 Explore your data with `tell -i`. Six views in a terminal-based interface:
 

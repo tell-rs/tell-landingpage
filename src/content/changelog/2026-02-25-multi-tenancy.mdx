@@ -5,11 +5,11 @@ tags: ["auth", "pipeline"]
 summary: "Each workspace now stores data in its own database, with dedicated ingestion keys you can create and rotate without restarting the server."
 ---
 
-You run three products — a marketing site, a mobile app, and an internal tool. Each has its own team, its own data, and its own privacy requirements. They shouldn't share a database, and they shouldn't share ingestion keys.
+Tell now isolates each workspace into its own database. Events, sessions, and logs from one workspace can never appear in another — not in queries, not in dashboards, not anywhere.
 
-## Workspace isolation — your data, separated
+## Workspace isolation
 
-Each workspace now stores events, sessions, and logs in its own dedicated database. Data from one workspace can never leak into another, even at the query level. Workspace names map directly to database names — no numeric IDs, no shared tables.
+Each workspace gets a dedicated database. Data boundaries are enforced at the query level — there's no shared table to accidentally leak across.
 
 ## Ingestion keys — create and rotate instantly
 
