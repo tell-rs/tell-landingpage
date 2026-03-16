@@ -434,11 +434,19 @@ function BoardContent() {
                   <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" />
                 </svg>
               </button>
-              <button className="w-7 h-7 rounded-full border border-zinc-700 flex items-center justify-center text-zinc-500 hover:text-zinc-300 hover:border-zinc-500 transition">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 5v14M5 12l7-7 7 7" />
-                </svg>
-              </button>
+              <div className="inline-flex items-stretch rounded-lg overflow-hidden bg-brand">
+                <button className="flex items-center justify-center px-2.5 py-1.5 text-white hover:bg-brand/80 transition">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 4l18 8-18 8V4z" />
+                  </svg>
+                </button>
+                <div className="w-px bg-white/20" />
+                <button className="flex items-center justify-center px-2 py-1.5 text-white hover:bg-brand/80 transition">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M6 9l6 6 6-6" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </div>}
@@ -597,7 +605,7 @@ function LogsContent() {
             {/* Header */}
             <div className="h-[36px] flex items-center justify-between px-5 border-b border-zinc-800/30 shrink-0">
               <div className="flex items-center gap-4">
-                <span className="text-zinc-300 text-[13px] border-b border-zinc-300" style={{ paddingBottom: 6, marginBottom: -1 }}>Overview</span>
+                <span className="text-zinc-300 text-[13px]">Overview</span>
                 <span className="text-zinc-500 text-[13px] cursor-pointer hover:text-zinc-400 transition">Explain with AI</span>
               </div>
               <button onClick={() => setPaneOpen(false)} className="text-zinc-600 hover:text-zinc-400 transition cursor-pointer">
@@ -607,23 +615,37 @@ function LogsContent() {
               </button>
             </div>
 
-            {/* Timestamp + level */}
-            <div className="px-5 py-3 border-b border-zinc-800/30 shrink-0 flex items-center justify-between">
-              <span className="text-zinc-300 text-[13px]">{selected.time} ET</span>
-              <span className={`text-[13px] ${
-                selected.level === "ERROR" ? "text-red-400" : selected.level === "WARN" ? "text-red-300" : selected.level === "INFO" ? "text-[#818cf8]" : "text-zinc-500"
-              }`}>{selected.level}</span>
-            </div>
-
-            {/* JSON content */}
-            <div className="flex-1 overflow-y-auto px-5 py-3">
-              <div className="text-[11px] leading-[1.7] font-mono">
-                {jsonLines.map((line, i) => (
-                  <div key={i} className="flex hover:bg-white/[0.02] rounded-sm">
-                    <span className="text-zinc-700 select-none w-5 shrink-0 text-right mr-3">{i + 1}</span>
-                    <span className="text-zinc-400 whitespace-pre">{line}</span>
+            {/* Key-value details */}
+            <div className="flex-1 overflow-y-auto">
+              <div className="px-5 pt-4 pb-4 border-b border-zinc-800/30">
+                <div className="space-y-2.5 text-[13px]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-zinc-500">Timestamp</span>
+                    <span className="text-zinc-300">{selected.time} ET</span>
                   </div>
-                ))}
+                  <div className="flex items-center justify-between">
+                    <span className="text-zinc-500">Level</span>
+                    <span className={`${
+                      selected.level === "ERROR" ? "text-red-400" : selected.level === "WARN" ? "text-red-300" : selected.level === "INFO" ? "text-[#818cf8]" : "text-zinc-500"
+                    }`}>{selected.level}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-zinc-500">Source</span>
+                    <span className="text-zinc-300">{selected.source}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* JSON content */}
+              <div className="px-5 py-3">
+                <div className="text-[11px] leading-[1.7] font-mono">
+                  {jsonLines.map((line, i) => (
+                    <div key={i} className="flex hover:bg-white/[0.02] rounded-sm">
+                      <span className="text-zinc-700 select-none w-5 shrink-0 text-right mr-3">{i + 1}</span>
+                      <span className="text-zinc-400 whitespace-pre">{line}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -1109,6 +1131,19 @@ function EventsContent() {
 
 function AppShell() {
   const [view, setView] = useState<"board" | "logs" | "users" | "events" | "ask">("board");
+  const [switcherOpen, setSwitcherOpen] = useState(false);
+  const switcherRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!switcherOpen) return;
+    const onClickOutside = (e: MouseEvent) => {
+      if (switcherRef.current && !switcherRef.current.contains(e.target as Node)) {
+        setSwitcherOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
+  }, [switcherOpen]);
 
   const navItems = [
     { label: "Ask", icon: "M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z", target: "ask" as const },
@@ -1123,8 +1158,15 @@ function AppShell() {
       {/* Sidebar */}
       <div className="w-[232px] shrink-0 flex flex-col" style={{ padding: "8px 14px 8px 8px" }}>
         {/* Brand + switcher */}
-        <div className="px-2.5 h-[48px] flex items-center mb-3">
-          <button className="flex items-center gap-2.5 text-white font-semibold text-[14px] hover:text-zinc-300 transition">
+        <div className="px-2.5 h-[48px] flex items-center mb-3 relative" ref={switcherRef}>
+          <button
+            onClick={() => setSwitcherOpen(!switcherOpen)}
+            className={`flex items-center gap-2.5 text-white font-semibold text-[14px] transition px-2 py-1.5 -ml-2 rounded-lg border ${
+              switcherOpen
+                ? "border-zinc-700 bg-zinc-800/60"
+                : "border-transparent hover:border-zinc-700 hover:bg-zinc-800/60"
+            }`}
+          >
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="shrink-0">
               <path d="M5 6h10M5 10h7M5 14h4" stroke="#a1a1aa" strokeWidth="1.4" strokeLinecap="round" />
             </svg>
@@ -1133,6 +1175,48 @@ function AppShell() {
               <path d="M5 7l3 3 3-3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
+
+          {/* Workspace switcher popover */}
+          {switcherOpen && (
+            <div className="absolute top-full left-0 mt-1 w-[210px] rounded-lg border border-zinc-800 bg-[#1a1a1d] shadow-xl z-50 overflow-hidden">
+              {/* Workspaces */}
+              <div className="p-1.5">
+                <div className="px-2.5 py-1.5 mb-0.5">
+                  <span className="text-[11px] font-medium uppercase tracking-wider" style={{ color: "rgb(98, 102, 109)" }}>Workspaces</span>
+                </div>
+                <button className="w-full flex items-center gap-2.5 px-2.5 py-[7px] rounded-md bg-zinc-800/60 text-white text-left text-[13px]">
+                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" className="shrink-0 opacity-60">
+                    <path d="M5 6h10M5 10h7M5 14h4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+                  </svg>
+                  Tell
+                </button>
+                <button className="w-full flex items-center gap-2.5 px-2.5 py-[7px] rounded-md hover:bg-zinc-800/60 transition text-left text-[13px]" style={{ color: "rgb(208, 214, 224)" }}>
+                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" className="shrink-0 opacity-60">
+                    <path d="M5 6h10M5 10h7M5 14h4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+                  </svg>
+                  Acme Corp
+                </button>
+              </div>
+              {/* Divider */}
+              <div className="border-t border-zinc-800" />
+              {/* Actions */}
+              <div className="p-1.5">
+                <button className="w-full flex items-center gap-2.5 px-2.5 py-[7px] rounded-md hover:bg-zinc-800/60 transition text-left text-[13px]" style={{ color: "rgb(208, 214, 224)" }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="shrink-0 opacity-60">
+                    <path d="M12.22 2h-.44a2 2 0 00-2 2v.18a2 2 0 01-1 1.73l-.43.25a2 2 0 01-2 0l-.15-.08a2 2 0 00-2.73.73l-.22.38a2 2 0 00.73 2.73l.15.1a2 2 0 011 1.72v.51a2 2 0 01-1 1.74l-.15.09a2 2 0 00-.73 2.73l.22.38a2 2 0 002.73.73l.15-.08a2 2 0 012 0l.43.25a2 2 0 011 1.73V20a2 2 0 002 2h.44a2 2 0 002-2v-.18a2 2 0 011-1.73l.43-.25a2 2 0 012 0l.15.08a2 2 0 002.73-.73l.22-.39a2 2 0 00-.73-2.73l-.15-.08a2 2 0 01-1-1.74v-.5a2 2 0 011-1.74l.15-.09a2 2 0 00.73-2.73l-.22-.38a2 2 0 00-2.73-.73l-.15.08a2 2 0 01-2 0l-.43-.25a2 2 0 01-1-1.73V4a2 2 0 00-2-2z" strokeLinecap="round" strokeLinejoin="round" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                  Settings
+                </button>
+                <button className="w-full flex items-center gap-2.5 px-2.5 py-[7px] rounded-md hover:bg-zinc-800/60 transition text-left text-[13px]" style={{ color: "rgb(208, 214, 224)" }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="shrink-0 opacity-60">
+                    <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  Log out
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Nav items */}
@@ -1332,23 +1416,15 @@ function Home() {
               user automatically.
             </p>
           </div>
-          {/* Mockups — full width */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-[11px] text-zinc-500 bg-zinc-800/60 px-2 py-0.5 rounded">Funnels</span>
-                <span className="text-[11px] text-zinc-500 bg-zinc-800/60 px-2 py-0.5 rounded">Retention</span>
-                <span className="text-[11px] text-zinc-400">Conversion tracking</span>
-              </div>
-              <div className="aspect-[4/3] rounded-xl border border-zinc-800/60 bg-[#111113]" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-[11px] text-zinc-500 bg-zinc-800/60 px-2 py-0.5 rounded">Lifecycle</span>
-                <span className="text-[11px] text-zinc-500 bg-zinc-800/60 px-2 py-0.5 rounded">Stickiness</span>
-                <span className="text-[11px] text-zinc-400">DAU/MAU ratios</span>
-              </div>
-              <div className="aspect-[4/3] rounded-xl border border-zinc-800/60 bg-[#111113]" />
+          {/* Pricing comparison — full width */}
+          <div className="relative aspect-[2.4/1] rounded-xl border border-zinc-800/60 bg-[#111113] overflow-hidden">
+            <img src="/1.webp" alt="Pricing comparison showing Tell is more affordable than alternatives" className="absolute inset-0 w-full h-full object-cover object-top" />
+            <div className="absolute inset-x-0 bottom-0 p-8 pt-20 bg-gradient-to-t from-[#111113] via-[#111113]/95 to-transparent">
+              <h3 className="text-white font-medium text-[17px]">So affordable you'll ask what's wrong with it</h3>
+              <p className="mt-2 text-zinc-400 text-[15px] leading-relaxed">
+                Benefit from our economies of scale. We pass the savings on to you.<br />
+                Cheaper than self-hosting on AWS.
+              </p>
             </div>
           </div>
         </div>
@@ -1371,13 +1447,107 @@ function Home() {
               time.
             </p>
           </div>
-          {/* Mockup — full width */}
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-[11px] text-zinc-500 bg-zinc-800/60 px-2 py-0.5 rounded">Audiences</span>
-            <span className="text-[11px] text-zinc-500 bg-zinc-800/60 px-2 py-0.5 rounded">Churn prediction</span>
-            <span className="text-[11px] text-zinc-500 bg-zinc-800/60 px-2 py-0.5 rounded">Segments</span>
+          {/* Mockup — full width: CDP user profile with event timeline */}
+          <div className="aspect-[2.4/1] rounded-xl border border-zinc-800/60 bg-[#111113] overflow-hidden relative">
+            {/* Edge gradient fades */}
+            <div className="absolute inset-y-0 left-0 w-44 bg-gradient-to-r from-[#111113] to-transparent z-20 pointer-events-none" />
+            <div className="absolute inset-y-0 right-0 w-44 bg-gradient-to-l from-[#111113] to-transparent z-20 pointer-events-none" />
+            <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#111113] to-transparent z-20 pointer-events-none" />
+
+            {/* Cards layout — vertically centered, 24px gaps everywhere */}
+            <div className="absolute inset-0 flex items-center justify-center gap-[24px]">
+
+              {/* Far left — fading off edge */}
+              <div className="flex flex-col gap-[24px] shrink-0 h-fit opacity-40 -ml-[56px]">
+                <div className="w-[240px] rounded-xl border border-zinc-800/40 bg-[#18181b] p-5">
+                  <p className="text-white text-[14px] font-medium mb-3">Lifetime value</p>
+                  <p className="text-white text-[28px] font-semibold tracking-tight" style={{ fontVariantNumeric: "tabular-nums" }}>$847</p>
+                </div>
+                <div className="w-[240px] rounded-xl border border-zinc-800/40 bg-[#18181b] p-5">
+                  <p className="text-white text-[14px] font-medium mb-3">Subscription</p>
+                  <p className="text-zinc-300 text-[13px]">Pro &middot; $49/mo</p>
+                  <p className="text-zinc-500 text-[12px] mt-1">Since Mar 14, 2025</p>
+                </div>
+              </div>
+
+              {/* Left column — session context + purchase event */}
+              <div className="flex flex-col gap-[24px] shrink-0 h-fit">
+                <div className="w-[260px] rounded-xl border border-zinc-800/60 bg-[#18181b] p-5 shadow-lg">
+                  <p className="text-white text-[14px] font-medium mb-4">Session</p>
+                  <div className="space-y-2.5 text-[13px]">
+                    <div className="flex justify-between"><span className="text-zinc-500">Location</span><span className="text-zinc-300">San Francisco, US</span></div>
+                    <div className="flex justify-between"><span className="text-zinc-500">OS</span><span className="text-zinc-300">iOS 26.1</span></div>
+                    <div className="flex justify-between"><span className="text-zinc-500">Device</span><span className="text-zinc-300">iPhone 17 Pro</span></div>
+                    <div className="flex justify-between"><span className="text-zinc-500">Language</span><span className="text-zinc-300">English (en-US)</span></div>
+                  </div>
+                </div>
+
+                <div className="w-[260px] rounded-xl border border-zinc-800/60 bg-[#18181b] p-5 shadow-lg">
+                  <p className="text-white text-[14px] font-medium mb-3">purchase</p>
+                  <div className="space-y-2 text-[13px]">
+                    <div className="flex justify-between"><span className="text-zinc-500">amount</span><span className="text-zinc-300">$49.99</span></div>
+                    <div className="flex justify-between"><span className="text-zinc-500">plan</span><span className="text-zinc-300">pro_annual</span></div>
+                    <div className="flex justify-between"><span className="text-zinc-500">method</span><span className="text-zinc-300">apple_pay</span></div>
+                    <div className="flex justify-between"><span className="text-zinc-500">date</span><span className="text-zinc-300">2 min ago</span></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Center — user profile card with real photo */}
+              <div className="shrink-0 h-fit w-[280px] rounded-xl border border-zinc-800/60 bg-[#18181b] shadow-2xl z-10 flex flex-col overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=480&h=400&fit=crop&crop=face&facepad=2"
+                  alt="Sarah Miller"
+                  className="w-full h-[200px] object-cover object-[center_15%]"
+                />
+                <div className="px-6 py-5 text-center">
+                  <p className="text-white text-[18px] font-medium">Sarah Miller</p>
+                  <p className="text-zinc-500 text-[14px] mt-1">sarah@acme.com</p>
+                </div>
+              </div>
+
+              {/* Right column — attribution + sign_up event */}
+              <div className="flex flex-col gap-[24px] shrink-0 h-fit">
+                <div className="w-[260px] rounded-xl border border-zinc-800/60 bg-[#18181b] p-5 shadow-lg">
+                  <p className="text-white text-[14px] font-medium mb-4">Attribution</p>
+                  <div className="space-y-2.5 text-[13px]">
+                    <div className="flex justify-between"><span className="text-zinc-500">Source</span><span className="text-zinc-300">producthunt</span></div>
+                    <div className="flex justify-between"><span className="text-zinc-500">Campaign</span><span className="text-zinc-300">launch_day</span></div>
+                    <div className="flex justify-between"><span className="text-zinc-500">Landing</span><span className="text-zinc-300">/pricing</span></div>
+                  </div>
+                </div>
+
+                <div className="w-[260px] rounded-xl border border-zinc-800/60 bg-[#18181b] p-5 shadow-lg">
+                  <p className="text-white text-[14px] font-medium mb-3">sign_up</p>
+                  <div className="space-y-2 text-[13px]">
+                    <div className="flex justify-between"><span className="text-zinc-500">method</span><span className="text-zinc-300">google_sso</span></div>
+                    <div className="flex justify-between"><span className="text-zinc-500">referrer</span><span className="text-zinc-300">producthunt.com</span></div>
+                    <div className="flex justify-between"><span className="text-zinc-500">date</span><span className="text-zinc-300">8 min ago</span></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Far right — fading off edge */}
+              <div className="flex flex-col gap-[24px] shrink-0 h-fit opacity-40 -mr-[56px]">
+                <div className="w-[240px] rounded-xl border border-zinc-800/40 bg-[#18181b] p-5">
+                  <p className="text-white text-[14px] font-medium mb-3">onboarding_done</p>
+                  <div className="space-y-2 text-[13px]">
+                    <div className="flex justify-between"><span className="text-zinc-500">steps</span><span className="text-zinc-300">4 / 4</span></div>
+                    <div className="flex justify-between"><span className="text-zinc-500">duration</span><span className="text-zinc-300">2m 34s</span></div>
+                    <div className="flex justify-between"><span className="text-zinc-500">date</span><span className="text-zinc-300">5 min ago</span></div>
+                  </div>
+                </div>
+                <div className="w-[240px] rounded-xl border border-zinc-800/40 bg-[#18181b] p-5">
+                  <p className="text-white text-[14px] font-medium mb-3">app_install</p>
+                  <div className="space-y-2 text-[13px]">
+                    <div className="flex justify-between"><span className="text-zinc-500">platform</span><span className="text-zinc-300">ios</span></div>
+                    <div className="flex justify-between"><span className="text-zinc-500">store</span><span className="text-zinc-300">app_store</span></div>
+                    <div className="flex justify-between"><span className="text-zinc-500">date</span><span className="text-zinc-300">12 min ago</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="aspect-[2.4/1] rounded-xl border border-zinc-800/60 bg-[#111113]" />
         </div>
       </section>
 
@@ -1402,12 +1572,6 @@ function Home() {
             </p>
           </div>
           {/* Mockup — full width */}
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-[11px] text-zinc-500 bg-zinc-800/60 px-2 py-0.5 rounded">SQL</span>
-            <span className="text-[11px] text-zinc-500 bg-zinc-800/60 px-2 py-0.5 rounded">CLI</span>
-            <span className="text-[11px] text-zinc-500 bg-zinc-800/60 px-2 py-0.5 rounded">MCP</span>
-            <span className="text-[11px] text-zinc-500 bg-zinc-800/60 px-2 py-0.5 rounded">TUI</span>
-          </div>
           <div className="aspect-[2.4/1] rounded-xl border border-zinc-800/60 bg-[#111113]" />
         </div>
       </section>
@@ -1428,22 +1592,9 @@ function Home() {
               markdown notes. Share anything via secure URL with optional expiry.
             </p>
           </div>
-          {/* Mockups — full width */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-[11px] text-zinc-500 bg-zinc-800/60 px-2 py-0.5 rounded">Canvases</span>
-                <span className="text-[11px] text-zinc-400">Infinite zoom</span>
-              </div>
-              <div className="aspect-[4/3] rounded-xl border border-zinc-800/60 bg-[#111113]" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-[11px] text-zinc-500 bg-zinc-800/60 px-2 py-0.5 rounded">Dashboards</span>
-                <span className="text-[11px] text-zinc-400">Shared boards</span>
-              </div>
-              <div className="aspect-[4/3] rounded-xl border border-zinc-800/60 bg-[#111113]" />
-            </div>
+          {/* Mockup — full width */}
+          <div className="aspect-[2.4/1] rounded-xl border border-zinc-800/60 bg-[#111113] overflow-hidden">
+            <img src="/2.webp" alt="Slack and Linear integrations" className="w-full h-full object-cover object-left-top" />
           </div>
         </div>
       </section>
