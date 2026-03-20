@@ -1,0 +1,53 @@
+---
+title: "Rust SDK — metrics"
+date: "2026-03-19"
+tags: [pipeline]
+summary: "Track events, logs, and now metrics from your Rust applications — 80 ns per call, 10M events/sec delivered, with disk-buffered delivery."
+---
+
+The Tell Rust SDK supports product analytics, structured logging, and now infrastructure metrics from a single dependency. Fast and lightweight — 80 ns per call, 10M events/sec delivered. Your thread serializes, encodes, and moves on while the background worker batches and ships over a persistent TCP connection.
+
+## API
+
+Fire-and-forget, thread-safe, synchronous calls with async background delivery.
+
+- **Events** — `track`, `identify`, `group`, `revenue`, `alias`. User behavior, conversion, identity resolution
+- **Logs** — structured logging at any severity level with service tagging and typed payloads
+- **Metrics** (new) — gauge, counter, histogram with typed labels and optional source tagging
+
+```rust
+// Events
+client.track("user_123", "Page Viewed", props! { "url" => "/pricing" });
+
+// Logs
+client.log_error("connection refused", Some("db"), props! { "host" => "db.internal" });
+
+// Metrics
+client.gauge("cpu_percent", 72.5, &[("core", "0")]);
+client.counter("http_requests", 1.0, &[("method", "GET"), ("status", "200")]);
+```
+
+## Metrics (new)
+
+Monitor application performance and system resources from your Rust code. Three metric types, all at 30 ns per call with zero steady-state allocations.
+
+- **Gauge** — point-in-time values: CPU percentage, memory usage, queue depth, active connections
+- **Counter** — incremental counts: HTTP requests, errors, bytes processed. Delta by default, cumulative optional
+- **Histogram** — full distributions with bucket boundaries, count, sum, min, max. Request latency at p50, p95, p99 without pre-aggregation
+
+All three types support typed labels for breakdown by any dimension — endpoint, status code, host, region.
+
+## Disk-buffered delivery
+
+Unsent data survives process restarts and network outages. The [Witness](/changelog/witness) server monitoring agent uses this to guarantee delivery across network failures and service restarts. Enable it in your own applications with one config line:
+
+```rust
+TellConfig::builder("your_api_key")
+    .buffer_path("/var/lib/myapp/tell-buffer")
+```
+
+Batches are written to disk when the server is unreachable and drained on the next successful connection. Default buffer size is 64 MiB.
+
+## Get started
+
+[github.com/tell-rs/tell-rs](https://github.com/tell-rs/tell-rs)

@@ -20,6 +20,7 @@ const cloudPlans = [
     highlights: [
       "1M events included",
       "5 GB logs included",
+      "1-year retention",
       "Funnels, retention & lifecycle",
       "3 connectors",
       "10 AI queries/day",
@@ -40,9 +41,9 @@ const cloudPlans = [
     highlights: [
       "5M events included",
       "25 GB logs included",
+      "3-year retention",
       "Unlimited connectors",
       "Anomaly detection & ML",
-      "90-day retention",
       "Unlimited AI queries",
     ],
     overage: "$0.05/1K events, $0.25/GB logs",
@@ -59,10 +60,10 @@ const cloudPlans = [
     popular: false,
     highlights: [
       "Unlimited data",
+      "Custom retention",
       "PII auto-redaction",
       "SAML / SCIM SSO",
       "Dedicated infrastructure",
-      "Custom data residency",
       "Dedicated support + SLA",
     ],
   },
@@ -149,7 +150,7 @@ const cloudCompare: CompareSection[] = [
       { feature: "Event overage", free: "$0.10/1K", pro: "$0.05/1K", enterprise: "Volume pricing" },
       { feature: "Log overage", free: "$0.25/GB", pro: "$0.25/GB", enterprise: "Volume pricing" },
       { feature: "Seats", free: "Unlimited", pro: "Unlimited", enterprise: "Unlimited" },
-      { feature: "Retention", free: "30 days", pro: "90 days", enterprise: "Custom" },
+      { feature: "Retention", free: "1 year", pro: "3 years", enterprise: "Custom" },
       { feature: "Data refresh", free: "Daily", pro: "Hourly", enterprise: "Real-time" },
     ],
   },
@@ -624,6 +625,10 @@ function PricingPage() {
             <FaqItem
               question="Why don't you charge per seat?"
               answer="Because analytics shouldn't be something only one person on the team can afford to look at. Every Tell plan includes unlimited seats — invite your whole team at no extra cost. We charge for usage, not headcount."
+            />
+            <FaqItem
+              question="How long do you keep my data?"
+              answer="All data — events, logs, metrics, business data, and marks — follows the same retention policy. Cloud Free: 1 year. Pro: 3 years. Enterprise: custom, up to whatever your compliance requires. Self-hosted: unlimited — it's your hardware, your rules. We never charge separately for retention. It's included in every plan."
             />
             <FaqItem
               question="What does Tell replace?"

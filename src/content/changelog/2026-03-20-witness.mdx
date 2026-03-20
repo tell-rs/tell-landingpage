@@ -1,0 +1,53 @@
+---
+title: "Witness — server monitoring agent"
+date: "2026-03-20"
+tags: [pipeline, cli]
+summary: "A standalone Rust binary that ships logs and collects system metrics from your servers — 1.2 MB on disk, 4 MB idle memory, zero dependencies."
+---
+
+Witness is a standalone binary written in Rust that ships logs and collects system metrics from your servers. No runtime dependencies, no garbage collector, no Docker — one 1.2 MB file that handles both data types over a single TCP connection.
+
+4 MB of memory at idle, 7 MB under load. Witness handles collection — Tell handles the pipeline. Transforms, routing, multiple sinks, PII redaction — that runs centrally in Tell, not on every host. This is why Witness is 1.2 MB and 4 MB of memory while Vector needs 46 MB on disk and 40 MB to do the same job: Vector is the entire pipeline on every machine. With Tell, the agent just collects and ships — Tell processes the rest at 64M events/sec.
+
+```bash
+curl -sSfL https://tell.rs/agent | bash
+```
+
+Install, point at your Tell server, and data flows within 15 seconds.
+
+## Log shipping
+
+Tails your log files and forwards every line to Tell. System logs, nginx access logs, database slow queries, application output — anything that writes to a file on disk.
+
+- **Works immediately** — ships system, web server, and database logs by default. New files are discovered automatically without restarting
+- **Fast** — 76 ns per log line. Batched and shipped over a persistent TCP connection in the background
+- **Rotation safe** — handles both rename and copytruncate rotation. Tracks files by inode, drains the old file to the last line before switching
+- **Crash recovery** — file positions saved after every poll cycle. A crash may re-send up to ~250ms of recent lines, but never skips any
+- **Backpressure** — when the send channel is full, the agent stops reading and the filesystem becomes the buffer. No data loss, no memory growth
+
+## System metrics
+
+Collected every 15 seconds (configurable). All enabled by default, individually toggleable.
+
+- **CPU** — per-core user, system, idle, iowait, and steal percentages
+- **Memory** — total, available, used, cached, and swap
+- **Disk** — read/write throughput per device, filesystem space per mount
+- **Network** — bytes, packets, errors, and drops per interface
+- **Load** — 1, 5, and 15 minute averages
+- **TCP** — connection counts by state
+- **Containers** — CPU and memory per container via cgroups v2
+- **Processes** — top N by CPU and memory usage
+
+30 ns per metric, zero steady-state allocations. Counter metrics (disk, network) are shipped as deltas with hourly cumulative checkpoints — if data is lost during an outage, the next checkpoint recovers exact totals.
+
+## Reliability
+
+- **Memory safe** — no buffer overflows, no use-after-free, no data races. Unsafe is limited to system call wrappers
+- **No panics** — a failing metric collector or unreadable log file never takes down the process. Errors are handled with early returns, failed ticks retry automatically
+- **Independent modules** — if disk stats fail (e.g., permission error), CPU, memory, network, and every other collector keeps reporting. No cascading failures
+- **Counter safe** — kernel counter wraps and resets after reboots are handled gracefully. Always valid values, never negative numbers
+- **Disk-buffered delivery** — when the server is unreachable, unsent data is written to disk and drained on the next successful connection. Oldest data evicted when the buffer is full
+- **Graceful shutdown** — on SIGTERM, the agent drains all queues, saves log offsets, and persists unsent data to disk. Nothing lost between stop and start
+- **Config reload** — send SIGHUP to pick up config changes without dropping a single line or metric
+
+Witness is built on the [Tell Rust SDK](https://github.com/tell-rs/tell-rs). To send custom events, logs, or metrics from your own Rust applications — `cargo add tell`.

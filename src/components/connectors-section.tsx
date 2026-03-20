@@ -150,9 +150,9 @@ export function ConnectorsSection() {
             className="text-[48px] leading-[1] tracking-[-0.022em] text-white"
             style={{ fontWeight: 510, fontFeatureSettings: '"cv01", "ss03"' }}
           >
-            Connect every signal
+            Your data,
             <br />
-            across your stack
+            connected
           </h2>
           <p className="text-zinc-400 text-[24px] leading-[1.33] tracking-[-0.012em] md:pt-3">
             WASM plugin connectors pull data from Stripe, Shopify, GitHub,

@@ -126,59 +126,50 @@ function Nav() {
 
         {/* Center nav links - absolutely positioned for true centering */}
         <div className="hidden md:flex items-center gap-6 absolute left-1/2 -translate-x-1/2">
-          {isHomePage ? (
-            <>
-              {/* Features dropdown - homepage only */}
-              <div className="relative" onMouseEnter={openFeatures} onMouseLeave={closeFeatures}>
-                <button className="text-[13px] text-zinc-400 hover:text-white transition-colors flex items-center gap-1 cursor-pointer">
-                  Features
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={`transition-transform ${featuresOpen ? "rotate-180" : ""}`}>
-                    <path d="M6 9l6 6 6-6" />
-                  </svg>
-                </button>
-                {featuresOpen && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3" style={{ animation: "dropdown-in 150ms ease-out" }}>
-                    <div className="w-[620px] rounded-xl border border-zinc-800/60 bg-[#111113]/98 backdrop-blur-xl shadow-2xl flex flex-col">
-                      {/* 3-column grid */}
-                      <div className="grid grid-cols-3 divide-x divide-zinc-800/40 p-1.5 pb-3">
-                        {featureColumns.map((col) => (
-                          <div key={col.heading} className="px-1">
-                            <span className="text-[11px] font-medium text-zinc-400 uppercase tracking-wider px-2.5 pt-2 pb-1.5 block">{col.heading}</span>
-                            {col.items.map((item) => (
-                              <a
-                                key={item.label}
-                                href={item.href}
-                                className="flex flex-col gap-1 px-2.5 py-2 rounded-md hover:bg-white/[0.04] transition-colors group"
-                                onClick={() => setFeaturesOpen(false)}
-                              >
-                                <span className="text-[15px] text-white font-medium">{item.label}</span>
-                                <span className="text-[14px] text-zinc-400 group-hover:text-zinc-300 transition-colors leading-snug">{item.desc}</span>
-                              </a>
-                            ))}
-                          </div>
+          {/* Features dropdown */}
+          <div className="relative" onMouseEnter={openFeatures} onMouseLeave={closeFeatures}>
+            <button className="text-[13px] text-zinc-400 hover:text-white transition-colors flex items-center gap-1 cursor-pointer">
+              Features
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={`transition-transform ${featuresOpen ? "rotate-180" : ""}`}>
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
+            {featuresOpen && (
+              <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3" style={{ animation: "dropdown-in 150ms ease-out" }}>
+                <div className="w-[620px] rounded-xl border border-zinc-800/60 bg-[#111113]/98 backdrop-blur-xl shadow-2xl flex flex-col">
+                  {/* 3-column grid */}
+                  <div className="grid grid-cols-3 divide-x divide-zinc-800/40 p-1.5 pb-3">
+                    {featureColumns.map((col) => (
+                      <div key={col.heading} className="px-1">
+                        <span className="text-[11px] font-medium text-zinc-400 uppercase tracking-wider px-2.5 pt-2 pb-1.5 block">{col.heading}</span>
+                        {col.items.map((item) => (
+                          <a
+                            key={item.label}
+                            href={item.href}
+                            className="flex flex-col gap-1 px-2.5 py-2 rounded-md hover:bg-white/[0.04] transition-colors group"
+                            onClick={() => setFeaturesOpen(false)}
+                          >
+                            <span className="text-[15px] text-white font-medium">{item.label}</span>
+                            <span className="text-[14px] text-zinc-400 group-hover:text-zinc-300 transition-colors leading-snug">{item.desc}</span>
+                          </a>
                         ))}
                       </div>
-                      {/* Bottom strip */}
-                      <Link
-                        to={`/changelog/${latestChangelog.slug}`}
-                        className="flex items-center justify-between rounded-b-xl px-5 py-2.5 bg-white/[0.04] hover:bg-white/[0.07] transition-colors"
-                        onClick={() => setFeaturesOpen(false)}
-                      >
-                        <span className="text-[14px]"><span className="text-brand font-semibold">New:</span> <span className="text-zinc-300">{latestChangelog.title}</span></span>
-                        <span className="text-brand/50 text-[14px]">→</span>
-                      </Link>
-                    </div>
+                    ))}
                   </div>
-                )}
+                  {/* Bottom strip */}
+                  <Link
+                    to={`/changelog/${latestChangelog.slug}`}
+                    className="flex items-center justify-between rounded-b-xl px-5 py-2.5 bg-white/[0.04] hover:bg-white/[0.07] transition-colors"
+                    onClick={() => setFeaturesOpen(false)}
+                  >
+                    <span className="text-[14px]"><span className="text-brand font-semibold">New:</span> <span className="text-zinc-300">{latestChangelog.title}</span></span>
+                    <span className="text-brand/50 text-[14px]">→</span>
+                  </Link>
+                </div>
               </div>
-              <Link to="/pricing" className="text-[13px] text-zinc-400 hover:text-white transition-colors">Pricing</Link>
-            </>
-          ) : (
-            <>
-              <Link to="/#features" className="text-[13px] text-zinc-400 hover:text-white transition-colors">Features</Link>
-              <Link to="/pricing" className="text-[13px] text-zinc-400 hover:text-white transition-colors">Pricing</Link>
-            </>
-          )}
+            )}
+          </div>
+          <Link to="/pricing" className="text-[13px] text-zinc-400 hover:text-white transition-colors">Pricing</Link>
           <a href="https://docs.tell.rs" className="text-[13px] text-zinc-400 hover:text-white transition-colors">Docs</a>
           <Link to="/changelog" className="text-[13px] text-zinc-400 hover:text-white transition-colors">Changelog</Link>
         </div>
@@ -209,7 +200,7 @@ function Footer() {
   return (
     <footer className="py-16 px-6 text-zinc-400 border-t border-zinc-800/40 bg-[#0a0a0b]">
       <div className="max-w-[1340px] mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-8 mb-16">
           <div className="col-span-2 md:col-span-1">
             <span className="text-white font-bold text-lg">Tell</span>
             <p className="text-zinc-600 text-xs mt-2">Analytics platform</p>
@@ -222,6 +213,14 @@ function Footer() {
               <li><a href="#" className="hover:text-white transition">Connectors</a></li>
               <li><a href="#" className="hover:text-white transition">Self-host</a></li>
               <li><Link to="/ot" className="hover:text-white transition">Security</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-white text-[13px] font-medium mb-4">Legal</h4>
+            <ul className="space-y-2.5 text-[13px]">
+              <li><Link to="/legal/terms" className="hover:text-white transition">Terms</Link></li>
+              <li><Link to="/legal/privacy" className="hover:text-white transition">Privacy</Link></li>
+              <li><Link to="/legal/dpa" className="hover:text-white transition">DPA</Link></li>
             </ul>
           </div>
           <div>

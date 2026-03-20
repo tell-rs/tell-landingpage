@@ -42,6 +42,44 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
+const heroLines = [
+  { category: "Product analytics", desc: "understand the full user journey" },
+  { category: "Logs", desc: "catch issues before your users do" },
+  { category: "Infrastructure metrics", desc: "CPU, memory, latency, every service at a glance" },
+  { category: "Business data", desc: "GitHub, Stripe, Shopify, Cloudflare in one dashboard" },
+  { category: "AI", desc: "ask anything about your data" },
+];
+
+function CyclingSubtitle() {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % heroLines.length);
+    }, 3000);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div className="relative overflow-hidden" style={{ height: 28 }}>
+      {heroLines.map((line, i) => (
+        <div
+          key={line.category}
+          className="absolute left-0 top-0 w-full transition-all duration-500 ease-in-out"
+          style={{
+            transform: i === index ? "translateY(0)" : i === (index - 1 + heroLines.length) % heroLines.length ? "translateY(-100%)" : "translateY(100%)",
+            opacity: i === index ? 1 : 0,
+          }}
+        >
+          <span className="text-white">{line.category}</span>
+          <span className="text-zinc-500"> — </span>
+          <span className="text-zinc-400">{line.desc}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function InstallBlock() {
   const [copied, setCopied] = useState(false);
   const command = "curl -sSfL https://tell.rs | bash";
@@ -1312,11 +1350,11 @@ function Home() {
             <div className="flex items-start justify-between">
               <div className="max-w-[860px]">
                 <h1 className="text-[48px] md:text-[76px] leading-[1.05] font-semibold tracking-[-0.035em] text-white">
-                  Analytics that tell the whole story
+                  Analytics that tell the whole story.
                 </h1>
-                <p className="mt-6 text-[17px] leading-[1.6] text-zinc-400 max-w-[540px]">
-                  Product analytics, structured logs, and business signals — 64M events/sec. Rust.
-                </p>
+                <div className="mt-6 text-[17px] leading-[1.6] text-zinc-400">
+                  <CyclingSubtitle />
+                </div>
                 <div className="mt-8">
                   <InstallBlock />
                 </div>
@@ -1330,25 +1368,27 @@ function Home() {
           <div className="max-w-[1340px] mx-auto">
             <AppShell />
           </div>
+          <p className="mt-6 text-center text-[14px] text-zinc-500">
+            One Rust binary · 64M events/sec · Self-hosted or cloud
+          </p>
         </section>
       </div>
 
 
-      {/* Feature Intro — text inset */}
+      {/* Section 1: Outcome Cards — what you need to know */}
       <section className="py-28 md:py-36 px-6">
         <div className="max-w-[1340px] mx-auto md:px-8">
           <p className="text-[48px] leading-[1] tracking-[-0.022em]" style={{ fontWeight: 510, fontFeatureSettings: '"cv01", "ss03"' }}>
             <span className="text-white">
-              A new species of analytics tool.
+              Everything you need to know — in one platform.
             </span>{" "}
             <span className="text-zinc-500">
-              Built on a real-time pipeline with ML enrichment and WASM plugins
-              at its core, Tell sets a new standard for understanding users and
-              shipping products.
+              Product analytics, structured logs, infrastructure metrics, and
+              business data from every tool you use. One pipeline. One query.
             </span>
           </p>
 
-          <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div className="mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
             <div>
               <div className="w-12 h-12 mb-5 flex items-center justify-center">
                 <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" className="text-zinc-500">
@@ -1357,11 +1397,11 @@ function Home() {
                   <path d="M16 22l-4-4V10l4-4h8l4 4v8l-4 4H16z" strokeWidth="1.2" strokeOpacity="0.6"/>
                 </svg>
               </div>
-              <h3 className="text-white font-medium text-[15px] mb-2">Funnels & retention</h3>
+              <h3 className="text-white font-medium text-[15px] mb-2">Know your users</h3>
               <p className="text-zinc-500 text-[14px] leading-relaxed">
-                Conversion funnels with per-step filters, cohort retention
-                matrices, lifecycle analysis, and DAU/MAU stickiness ratios.
-                Built-in segments for new, returning, and churned users.
+                See where they drop off. Track if they come back. Find what
+                drives activation. Funnels, retention, cohorts, segments,
+                lifecycle analysis.
               </p>
             </div>
             <div>
@@ -1372,11 +1412,11 @@ function Home() {
                   <path d="M8 20c0 2.2 5.4 4 12 4s12-1.8 12-4" strokeWidth="1.2" strokeOpacity="0.5"/>
                 </svg>
               </div>
-              <h3 className="text-white font-medium text-[15px] mb-2">Structured logging</h3>
+              <h3 className="text-white font-medium text-[15px] mb-2">Know your systems</h3>
               <p className="text-zinc-500 text-[14px] leading-relaxed">
-                9 severity levels, source and service metadata, ML anomaly
-                detection, and PII redaction with 11 built-in patterns. Live
-                tail from the CLI.
+                See errors in real time. Search, filter, route logs. Live
+                tail from terminal. 64M events/sec ingest with ML anomaly
+                detection and PII redaction.
               </p>
             </div>
             <div>
@@ -1388,49 +1428,213 @@ function Home() {
                   <path d="M4 26l16-6 16 6" strokeWidth="1.2" strokeOpacity="0.3"/>
                 </svg>
               </div>
-              <h3 className="text-white font-medium text-[15px] mb-2">Real-time pipeline</h3>
+              <h3 className="text-white font-medium text-[15px] mb-2">Know your infrastructure</h3>
               <p className="text-zinc-500 text-[14px] leading-relaxed">
-                64M events/sec ingestion, content-aware routing, WASM plugin
-                connectors for Shopify, GitHub, and Cloudflare. One binary, one
-                config.
+                Counters, gauges, histograms — native, not bolted on. 2 MB
+                host agent. CPU, memory, disk, network, custom metrics. One
+                binary, one config.
+              </p>
+            </div>
+            <div>
+              <div className="w-12 h-12 mb-5 flex items-center justify-center">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" className="text-zinc-500">
+                  <circle cx="20" cy="20" r="14" strokeWidth="1.2"/>
+                  <path d="M20 6v4M20 30v4M6 20h4M30 20h4" strokeWidth="1.2" strokeOpacity="0.4"/>
+                  <path d="M10.1 10.1l2.8 2.8M27.1 27.1l2.8 2.8M10.1 29.9l2.8-2.8M27.1 12.9l2.8-2.8" strokeWidth="1.2" strokeOpacity="0.3"/>
+                </svg>
+              </div>
+              <h3 className="text-white font-medium text-[15px] mb-2">Know your world</h3>
+              <p className="text-zinc-500 text-[14px] leading-relaxed">
+                GitHub stars alongside signups. Shopify revenue alongside
+                product usage. Campaign ROI in the same dashboard. 15+
+                connectors, WASM plugins for anything else.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Feature 1: Product analytics — 2-up mockups */}
+      {/* Section 2: Understand the full user journey — product analytics */}
       <section className="px-6" style={{ paddingTop: 96, paddingBottom: 128 }}>
         <div className="max-w-[1340px] mx-auto">
           {/* Text — inset */}
           <div className="md:px-8 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 mb-14">
             <h2 className="text-[48px] leading-[1] tracking-[-0.022em] text-white" style={{ fontWeight: 510, fontFeatureSettings: '"cv01", "ss03"' }}>
-              Make product
-              <br />
-              analytics self-driving
+              Understand the full user journey
             </h2>
             <p className="text-zinc-400 text-[24px] leading-[1.33] tracking-[-0.012em] md:pt-3">
-              Funnels with per-step filters and breakdown. Cohort retention
-              by day, week, or month. Lifecycle charts showing new, returning,
-              and resurrected users. ML-powered churn prediction scores every
-              user automatically.
+              See how users move through your product — where they convert,
+              what keeps them engaged, and where you lose them.
             </p>
           </div>
-          {/* Pricing comparison — full width */}
+          {/* Sub-sections */}
+          <div className="md:px-8 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 mb-14">
+            <div>
+              <span className="text-zinc-600 text-[13px] font-mono">01</span>
+              <h3 className="text-white font-medium text-[15px] mt-1">Convert more users</h3>
+            </div>
+            <div>
+              <span className="text-zinc-600 text-[13px] font-mono">02</span>
+              <h3 className="text-white font-medium text-[15px] mt-1">Drive engagement</h3>
+            </div>
+            <div>
+              <span className="text-zinc-600 text-[13px] font-mono">03</span>
+              <h3 className="text-white font-medium text-[15px] mt-1">Retain and grow</h3>
+            </div>
+            <div>
+              <span className="text-zinc-600 text-[13px] font-mono">04</span>
+              <h3 className="text-white font-medium text-[15px] mt-1">Predict churn</h3>
+            </div>
+          </div>
+          {/* Image — full width */}
           <div className="relative aspect-[2.4/1] rounded-xl border border-zinc-800/60 bg-[#111113] overflow-hidden">
-            <img src="/1.webp" alt="Pricing comparison showing Tell is more affordable than alternatives" className="absolute inset-0 w-full h-full object-cover object-top" />
-            <div className="absolute inset-x-0 bottom-0 p-8 pt-20 bg-gradient-to-t from-[#111113] via-[#111113]/95 to-transparent">
-              <h3 className="text-white font-medium text-[17px]">So affordable you'll ask what's wrong with it</h3>
-              <p className="mt-2 text-zinc-400 text-[15px] leading-relaxed">
-                Benefit from our economies of scale. We pass the savings on to you.<br />
-                Cheaper than self-hosting on AWS.
+            <img src="/1.webp" alt="Product analytics dashboard showing user journey" className="absolute inset-0 w-full h-full object-cover object-top" />
+          </div>
+        </div>
+      </section>
+
+      {/* Section 3: Ask anything. Tell answers. — AI / MCP / CLI */}
+      <section className="px-6" style={{ paddingTop: 96, paddingBottom: 128 }}>
+        <div className="max-w-[1340px] mx-auto">
+          {/* Text — inset */}
+          <div className="md:px-8 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 mb-14">
+            <h2 className="text-[48px] leading-[1] tracking-[-0.022em] text-white" style={{ fontWeight: 510, fontFeatureSettings: '"cv01", "ss03"' }}>
+              Ask anything.
+              <br />
+              Tell answers.
+            </h2>
+            <p className="text-zinc-400 text-[24px] leading-[1.33] tracking-[-0.012em] md:pt-3">
+              21 MCP tools. Works with Claude, Cursor, or any AI agent you build.
+              Raw SQL via ClickHouse, live tail from the CLI, interactive TUI mode.
+              Ask your data questions in natural language.
+            </p>
+          </div>
+          {/* Mockup — full width */}
+          <div className="aspect-[2.4/1] rounded-xl border border-zinc-800/60 bg-[#111113]" />
+        </div>
+      </section>
+
+      {/* Section 5: Your data, connected — Connectors */}
+      <ConnectorsSection />
+
+      {/* Section: Built for speed */}
+      <section className="px-6" style={{ paddingTop: 96, paddingBottom: 128 }}>
+        <div className="max-w-[1340px] mx-auto">
+          {/* Text — inset */}
+          <div className="md:px-8 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 mb-14">
+            <h2 className="text-[48px] leading-[1] tracking-[-0.022em] text-white" style={{ fontWeight: 510, fontFeatureSettings: '"cv01", "ss03"' }}>
+              Unreasonably fast.
+            </h2>
+            <p className="text-zinc-400 text-[24px] leading-[1.33] tracking-[-0.012em] md:pt-3">
+              Rust from the ground up. Every component benchmarked, every number reproducible.
+            </p>
+          </div>
+          {/* Sub-sections */}
+          <div className="md:px-8 grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-10">
+            <div>
+              <span className="text-zinc-600 text-[13px] font-mono">Pipeline</span>
+              <h3 className="text-white font-medium text-[15px] mt-1">64M events/sec ingestion</h3>
+            </div>
+            <div>
+              <span className="text-zinc-600 text-[13px] font-mono">Routing</span>
+              <h3 className="text-white font-medium text-[15px] mt-1">750 picoseconds per batch decision</h3>
+            </div>
+            <div>
+              <span className="text-zinc-600 text-[13px] font-mono">Transforms</span>
+              <h3 className="text-white font-medium text-[15px] mt-1">10.9M events/sec PII redaction in-flight</h3>
+            </div>
+            <div>
+              <span className="text-zinc-600 text-[13px] font-mono">Storage</span>
+              <h3 className="text-white font-medium text-[15px] mt-1">33M events/sec to disk, 2.6M/sec to Parquet</h3>
+            </div>
+            <div>
+              <span className="text-zinc-600 text-[13px] font-mono">SDK</span>
+              <h3 className="text-white font-medium text-[15px] mt-1">80ns per event, 1,000x faster than PostHog</h3>
+            </div>
+            <div>
+              <span className="text-zinc-600 text-[13px] font-mono">Agent</span>
+              <h3 className="text-white font-medium text-[15px] mt-1">76ns per log, 30ns per metric, 1.2 MB binary</h3>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 5: Why teams choose Tell — proof cards */}
+      <section className="py-28 md:py-36 px-6">
+        <div className="max-w-[1340px] mx-auto md:px-8">
+          <h2 className="text-[48px] leading-[1] tracking-[-0.022em] text-white mb-20" style={{ fontWeight: 510, fontFeatureSettings: '"cv01", "ss03"' }}>
+            Why teams choose Tell
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div>
+              <h3 className="text-white font-medium text-[17px] mb-3">Fastest pipeline ever built</h3>
+              <p className="text-zinc-500 text-[14px] leading-relaxed">
+                64M events/sec. 640x faster than PostHog. One node replaces
+                clusters. Verify it yourself:{" "}
+                <code className="text-zinc-400 bg-zinc-800 px-1.5 py-0.5 rounded text-[13px]">tell-bench tcp load</code>
+              </p>
+            </div>
+            <div>
+              <h3 className="text-white font-medium text-[17px] mb-3">One binary. Nothing else.</h3>
+              <p className="text-zinc-500 text-[14px] leading-relaxed">
+                3 MB. No Docker. No JVM. No Python. No runtime dependencies.
+                Copy to host, run. Works on a Raspberry Pi, a $4/mo VPS, or
+                an air-gapped substation.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-white font-medium text-[17px] mb-3">Zero CVEs by design</h3>
+              <p className="text-zinc-500 text-[14px] leading-relaxed">
+                Rust eliminates memory safety bugs at compile time. Splunk: 252
+                CVEs. Elastic: 216. Tell: zero. Structurally impossible in the
+                compiled binary.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-white font-medium text-[17px] mb-3">Your data. Your servers.</h3>
+              <p className="text-zinc-500 text-[14px] leading-relaxed">
+                Self-host forever or use Tell Cloud. Your data never leaves your
+                infrastructure unless you want it to. No vendor lock-in.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-white font-medium text-[17px] mb-3">Source-available</h3>
+              <p className="text-zinc-500 text-[14px] leading-relaxed">
+                AGPL. Inspect every line. We run Tell on Tell — our signups,
+                GitHub activity, Cloudflare traffic, and product telemetry run
+                on the same binary you'd install.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-white font-medium text-[17px] mb-3">AI-native from day one</h3>
+              <p className="text-zinc-500 text-[14px] leading-relaxed">
+                21 MCP tools ship today. Query from Claude, Cursor, or any AI
+                agent. Natural language queries, anomaly detection, churn
+                prediction — not add-ons, built in.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Feature 2: Audiences & ML — full-width mockup */}
+      {/* Section 8: Enterprise-ready */}
+      <section className="px-6" style={{ paddingTop: 96, paddingBottom: 128 }}>
+        <div className="max-w-[1340px] mx-auto md:px-8">
+          <p className="text-[48px] leading-[1] tracking-[-0.022em]" style={{ fontWeight: 510, fontFeatureSettings: '"cv01", "ss03"' }}>
+            <span className="text-white">
+              Enterprise-ready. Without the complexity.
+            </span>{" "}
+            <span className="text-zinc-500">
+              64M events/sec on commodity hardware. Self-hosted, air-gapped capable.
+              RBAC, SSO, audit logs. Built by the founder of Logpoint — European
+              SIEM, acquired. Source-available and auditable by your security team.
+            </span>
+          </p>
+        </div>
+      </section>
+
+      {/* Audiences & ML — define your audiences */}
       <section className="px-6" style={{ paddingTop: 96, paddingBottom: 128 }}>
         <div className="max-w-[1340px] mx-auto">
           {/* Text — inset */}
@@ -1551,50 +1755,40 @@ function Home() {
         </div>
       </section>
 
-      {/* Feature 3: Connectors */}
-      <ConnectorsSection />
-
-      {/* Feature 4: CLI & AI — full-width mockup */}
+      {/* Collaboration — share the whole story */}
       <section className="px-6" style={{ paddingTop: 96, paddingBottom: 128 }}>
         <div className="max-w-[1340px] mx-auto">
           {/* Text — inset */}
           <div className="md:px-8 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 mb-14">
             <h2 className="text-[48px] leading-[1] tracking-[-0.022em] text-white" style={{ fontWeight: 510, fontFeatureSettings: '"cv01", "ss03"' }}>
-              Query anything
-              <br />
-              from anywhere
+              Share the whole story
             </h2>
             <p className="text-zinc-400 text-[24px] leading-[1.33] tracking-[-0.012em] md:pt-3">
-              Raw SQL via ClickHouse, live tail from the CLI, and an MCP server
-              for AI assistants. Interactive TUI mode with dashboards, query
-              builder, and streaming views. Ask your data questions in natural
-              language.
+              Product, engineering, and marketing — aligned around the same data, without bottlenecks.
             </p>
           </div>
-          {/* Mockup — full width */}
-          <div className="aspect-[2.4/1] rounded-xl border border-zinc-800/60 bg-[#111113]" />
-        </div>
-      </section>
-
-      {/* Feature 5: Collaboration — 2-up mockups */}
-      <section className="px-6" style={{ paddingTop: 96, paddingBottom: 128 }}>
-        <div className="max-w-[1340px] mx-auto">
-          {/* Text — inset */}
-          <div className="md:px-8 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 mb-14">
-            <h2 className="text-[48px] leading-[1] tracking-[-0.022em] text-white" style={{ fontWeight: 510, fontFeatureSettings: '"cv01", "ss03"' }}>
-              Collaborate with
-              <br />
-              canvases and boards
-            </h2>
-            <p className="text-zinc-400 text-[24px] leading-[1.33] tracking-[-0.012em] md:pt-3">
-              Infinite zoomable canvases with live metric cards, text, shapes,
-              and connections. Dashboards with configurable grid layouts and
-              markdown notes. Share anything via secure URL with optional expiry.
-            </p>
+          {/* Sub-sections */}
+          <div className="md:px-8 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 mb-14">
+            <div>
+              <span className="text-zinc-600 text-[13px] font-mono">01</span>
+              <h3 className="text-white font-medium text-[15px] mt-1">Share insights with a link</h3>
+            </div>
+            <div>
+              <span className="text-zinc-600 text-[13px] font-mono">02</span>
+              <h3 className="text-white font-medium text-[15px] mt-1">Align on the metrics that matter</h3>
+            </div>
+            <div>
+              <span className="text-zinc-600 text-[13px] font-mono">03</span>
+              <h3 className="text-white font-medium text-[15px] mt-1">Control access by role</h3>
+            </div>
+            <div>
+              <span className="text-zinc-600 text-[13px] font-mono">04</span>
+              <h3 className="text-white font-medium text-[15px] mt-1">Investor updates in real time</h3>
+            </div>
           </div>
           {/* Mockup — full width */}
           <div className="aspect-[2.4/1] rounded-xl border border-zinc-800/60 bg-[#111113] overflow-hidden">
-            <img src="/2.webp" alt="Slack and Linear integrations" className="w-full h-full object-cover object-left-top" />
+            <img src="/2.webp" alt="Shared dashboard view" className="w-full h-full object-cover object-left-top" />
           </div>
         </div>
       </section>

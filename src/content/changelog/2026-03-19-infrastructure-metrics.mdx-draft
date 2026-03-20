@@ -1,0 +1,47 @@
+---
+title: "Infrastructure metrics"
+date: "2026-03-19"
+tags: [analytics, pipeline]
+summary: "Ingest, store, and query infrastructure metrics alongside your product events — gauge, counter, and histogram support with label breakdown and percentile queries."
+---
+
+Tell now ingests infrastructure metrics as a first-class data type. CPU usage, memory trends, network throughput, request latency distributions — stored in ClickHouse and queryable with the same tools you use for product analytics.
+
+Collect with Witness, query in Tell. Your server metrics live next to your product events in the same database.
+
+## Three metric types
+
+- **Gauge** — point-in-time values. CPU percentage, available memory, disk space, queue depth
+- **Counter** — cumulative or delta counts. Bytes sent, requests served, errors total. Tell handles both Prometheus-style cumulative and StatsD-style delta temporality
+- **Histogram** — full distributions with bucket boundaries, count, sum, min, max. Request latency at p50, p95, p99 without pre-aggregation
+
+Every metric carries string and integer labels for slicing by host, service, core, device, interface, status code — any dimension you need.
+
+## Query and breakdown
+
+Eleven aggregation functions, all with time bucketing and label breakdown:
+
+- **avg, sum, min, max** — standard aggregates across any time window
+- **last** — most recent observed value, useful for gauge snapshots
+- **rate** — change over period, for counters that report cumulative totals
+- **count** — number of data points in the window
+- **p50, p75, p90, p95, p99** — percentile queries directly on stored values
+
+Break down any metric by any label. CPU percentage by core, disk I/O by device, network bytes by interface, request latency by endpoint — one query, one chart.
+
+## Witness integration
+
+The recommended way to collect infrastructure metrics. Install the Witness agent on your servers and metrics flow automatically — CPU, memory, disk, network, load, TCP state, containers, and top processes out of the box.
+
+- **Same connection** — metrics and logs ship over a single TCP connection
+- **Hourly checkpoints** — cumulative totals alongside deltas, recovers exact counts after outages
+- **15-second resolution** — configurable down to sub-second intervals
+
+Any Tell SDK can also send custom application metrics using the same gauge, counter, and histogram types.
+
+## Also in this update
+
+- Delta and cumulative temporality — works with both Prometheus-style and StatsD-style instrumentation
+- Integer labels for numeric dimensions like status codes and ports — efficient range queries without string conversion
+- Session correlation for client-side metrics — tie app performance to user sessions
+- 90-day retention with daily partitioning, configurable per workspace
