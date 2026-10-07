@@ -240,36 +240,20 @@ export function SourcesSection() {
         </div>
 
         <div
-          className="grid grid-cols-1 lg:grid-cols-[1.1fr_auto_1fr] items-center gap-5 lg:gap-10 rounded-[14px] px-7 py-5 border border-brand/40"
+          className="mx-auto max-w-[720px] flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 rounded-[14px] px-6 py-5 border border-brand/40"
           style={{
             background: "radial-gradient(90% 180% at 50% 0%, rgba(100,90,230,.22), rgba(100,90,230,.04) 60%, transparent), #0e0e12",
             boxShadow: "0 0 48px 2px rgba(100,90,230,.10), inset 0 .5px 0 rgba(255,255,255,.18)",
           }}
         >
-          <div className="flex items-center gap-4">
-            <span className="w-9 h-9 rounded-[10px] bg-brand grid place-items-center text-white font-bold text-[18px] tracking-[-0.03em] flex-none">T</span>
-            <h4 className="m-0 text-[17px] font-semibold tracking-[-0.01em] text-white">
-              Tell wire protocol
-              <span className="block mt-1 text-[13px] font-normal text-zinc-400">Binary, batched, built for this. Not JSON over HTTP.</span>
-            </h4>
+          <span className="w-9 h-9 rounded-[10px] bg-brand grid place-items-center text-white font-bold text-[18px] tracking-[-0.03em] flex-none">T</span>
+          <div>
+            <h4 className="m-0 text-[16px] font-semibold tracking-[-0.01em] text-white">Tell wire protocol</h4>
+            <p className="m-0 mt-1 text-[13px] leading-[1.5] text-zinc-400">
+              A compact binary protocol, so SDKs and agents ship data with almost no overhead.
+              HTTP, Syslog, OTLP and Modbus are accepted too, so nothing you already run has to change.
+            </p>
           </div>
-          <div className="flex gap-6 sm:gap-10">
-            {[
-              ["64M", "events / second"],
-              ["30 ns", "per metric, zero allocs"],
-              ["1", "binary, no cluster"],
-            ].map(([n, l]) => (
-              <div key={l}>
-                <b className="block text-[22px] font-semibold leading-none tracking-[-0.02em] text-white">{n}</b>
-                <span className="block mt-[5px] text-[12px] text-zinc-500">{l}</span>
-              </div>
-            ))}
-          </div>
-          <p className="m-0 text-[13px] leading-[1.5] text-zinc-500 lg:text-right lg:justify-self-end">
-            Also speaks <b className="font-medium text-zinc-300">HTTP</b>, <b className="font-medium text-zinc-300">Syslog</b>,{" "}
-            <b className="font-medium text-zinc-300">OTLP</b> and <b className="font-medium text-zinc-300">Modbus</b>.
-            <br className="hidden lg:block" /> Nothing you already run has to change.
-          </p>
         </div>
 
         {/* 3. How it gets in */}
