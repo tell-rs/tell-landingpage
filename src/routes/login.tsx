@@ -1,55 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import { config } from "../config";
-
-// Server function to send magic link
-const sendMagicLink = createServerFn({ method: "POST" })
-  .inputValidator((input: { email: string }) => input)
-  .handler(async ({ data }) => {
-    const apiKey = process.env.PLATFORM_API_KEY;
-    if (!apiKey) throw new Error("Server configuration error");
-
-    const res = await fetch(`${config.apiUrl}/api/v1/auth/magic-link`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({ email: data.email }),
-    });
-
-    if (!res.ok) {
-      const error = await res.json().catch(() => ({ error: "Failed to send magic link" }));
-      throw new Error(error.error || "Failed to send magic link");
-    }
-
-    return res.json();
-  });
-
-// Server function to verify code
-const verifyCode = createServerFn({ method: "POST" })
-  .inputValidator((input: { email: string; code: string }) => input)
-  .handler(async ({ data }) => {
-    const apiKey = process.env.PLATFORM_API_KEY;
-    if (!apiKey) throw new Error("Server configuration error");
-
-    const res = await fetch(`${config.apiUrl}/api/v1/auth/verify`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({ email: data.email, code: data.code }),
-    });
-
-    if (!res.ok) {
-      const error = await res.json().catch(() => ({ error: "Invalid code" }));
-      throw new Error(error.error || "Invalid code");
-    }
-
-    return res.json();
-  });
+import { sendMagicLink, verifyCode } from "../auth";
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,

@@ -438,14 +438,16 @@ function WhitepaperPage() {
             {/* Pricing */}
             <Section>
               <H2>Pricing</H2>
-              <P>Revenue-based. All features included. No per-seat fees.</P>
+              <P>Self-hosted, priced by company size — self-certified. Unlimited seats, no per-seat fees.</P>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-slate-200 rounded-lg overflow-hidden my-6">
-                <PricingTier name="Free" price="€0" criteria="< €100K ARR" highlighted />
-                <PricingTier name="Starter" price="€9" per="/mo" criteria="€100K – €1M" />
-                <PricingTier name="Pro" price="€299" per="/mo" criteria="€1M – €10M" />
-                <PricingTier name="Enterprise" price="Custom" criteria="> €10M ARR" />
+                <PricingTier name="Free" price="$0" criteria="Anyone, forever" highlighted />
+                <PricingTier name="Pro" price="$99" per="/mo" criteria="< 100 employees" />
+                <PricingTier name="Business" price="$349" per="/mo" criteria="< 1,000 employees" />
+                <PricingTier name="Enterprise" price="From $24k" per="/yr" criteria="No size limit" />
               </div>
+
+              <P>Syslog ingestion is included on Pro and above. Modbus support and compliance reporting are Enterprise features.</P>
 
               <P><strong>Government, education, non-profit:</strong> Contact for special terms.</P>
             </Section>

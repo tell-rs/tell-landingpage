@@ -46,7 +46,7 @@ function DownloadPage() {
 
         <h1 className="text-3xl font-bold tracking-tight mb-2">You're all set!</h1>
         <p className="text-muted mb-8">
-          You're eligible for the free tier. No license key needed for companies under $1M revenue.
+          Self-hosted Free is free for anyone, forever. No license key needed.
         </p>
 
         {/* Install Command */}
@@ -68,7 +68,7 @@ function DownloadPage() {
             </li>
             <li className="flex gap-3">
               <span className="flex-shrink-0 w-6 h-6 rounded-full bg-brand text-white text-xs font-semibold flex items-center justify-center">2</span>
-              <span>Start Tell with <code className="bg-card border border-border px-1.5 py-0.5 rounded text-xs">tell serve</code></span>
+              <span>Start Tell with <code className="bg-card border border-border px-1.5 py-0.5 rounded text-xs">tell run</code></span>
             </li>
             <li className="flex gap-3">
               <span className="flex-shrink-0 w-6 h-6 rounded-full bg-brand text-white text-xs font-semibold flex items-center justify-center">3</span>

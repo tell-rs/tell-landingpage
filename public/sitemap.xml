@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://tell.rs/</loc><priority>1.0</priority></url>
+  <url><loc>https://tell.rs/pricing</loc><priority>0.9</priority></url>
+  <url><loc>https://tell.rs/download</loc><priority>0.8</priority></url>
+  <url><loc>https://tell.rs/changelog</loc><priority>0.8</priority></url>
+  <url><loc>https://tell.rs/about</loc><priority>0.6</priority></url>
+  <url><loc>https://tell.rs/signup</loc><priority>0.6</priority></url>
+  <url><loc>https://tell.rs/changelog/witness</loc></url>
+  <url><loc>https://tell.rs/changelog/rust-sdk-metrics</loc></url>
+  <url><loc>https://tell.rs/changelog/multi-tenancy</loc></url>
+  <url><loc>https://tell.rs/changelog/signals</loc></url>
+  <url><loc>https://tell.rs/changelog/routing-transforms</loc></url>
+  <url><loc>https://tell.rs/changelog/analytics</loc></url>
+  <url><loc>https://tell.rs/changelog/marks</loc></url>
+  <url><loc>https://tell.rs/changelog/plugins</loc></url>
+  <url><loc>https://tell.rs/changelog/tell-2</loc></url>
+  <url><loc>https://tell.rs/legal/terms</loc></url>
+  <url><loc>https://tell.rs/legal/privacy</loc></url>
+  <url><loc>https://tell.rs/legal/dpa</loc></url>
+</urlset>

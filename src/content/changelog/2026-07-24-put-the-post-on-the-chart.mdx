@@ -1,0 +1,37 @@
+---
+title: "Put the post on the chart"
+date: "2026-07-24"
+tags: ["collaboration", "analytics"]
+summary: "Paste a TikTok, a YouTube video, or a release link onto your timeline — marks now fetch the title, author, and thumbnail, and render right on your charts."
+---
+
+Tuesday, 6pm: sessions triple. Thursday, someone finally figures out it was a TikTok. By the next spike, nobody remembers which one.
+
+Marks have annotated Tell timelines since day one — releases, incidents, news. Now they carry the actual thing that happened.
+
+### Paste a link, keep the story
+
+Drop a URL into a mark and Tell fetches what it is.
+
+- **A TikTok, a YouTube video or Short, a post on X** — resolves to its title, author, and thumbnail, and the mark auto-categorizes as a post
+- **A GitHub repo or release** — pulls the release name and details, no token needed
+- **Any other page** — falls back to the page's own preview data, and a page with none becomes a clean bare link. Pasting never fails
+- **Your own image** — override the thumbnail with any image URL when the auto-fetched one isn't the story
+
+### See it on the charts
+
+Marks draw directly on your line charts as color-coded vertical lines — release, incident, news, and post each in their own color, labeled, in light and dark theme.
+
+- **The thumbnail comes along** — link marks render with their preview, so the viral video sits on the spike it caused
+- **Filter per chart** — showing only incidents on the error chart and only posts on the signup chart takes one click
+- **Edit in place** — fix a title, nudge a timestamp, recategorize, or swap the link without recreating the mark
+
+### Fetched safely
+
+The fetch runs on your server, so it's built like it.
+
+- **It can't be pointed inward** — every fetch is validated against private and reserved addresses, doesn't follow redirects, and carries size and time caps. A blocked fetch quietly degrades to a bare link
+- **Rate-limited per user** — a runaway script can't turn the preview endpoint into a crawler
+- **Audited** — every preview fetch lands in the audit log, including blocked ones
+
+Everything from the original marks release still works — create from the CLI, your CI/CD, or plugins, filter by category, keep private drafts.

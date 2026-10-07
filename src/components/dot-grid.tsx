@@ -29,6 +29,10 @@ export function DotGrid({ focusPoints }: { focusPoints: [number, number][] }) {
     const maxDist = Math.sqrt(w * w + h * h) * 0.55;
     const t = time * 0.0006;
 
+    // Brand purple reads much stronger on a light page — soften it there
+    const isLight = !document.documentElement.classList.contains("dark");
+    const alphaScale = isLight ? 0.5 : 1;
+
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
@@ -58,14 +62,14 @@ export function DotGrid({ focusPoints }: { focusPoints: [number, number][] }) {
           const glyph = GLYPHS[hash % GLYPHS.length];
           const fontSize = Math.round(7 + 4 * maxInfluence * wave);
           ctx.font = `${fontSize}px "JetBrains Mono", monospace`;
-          ctx.fillStyle = `rgba(100,90,230,${alpha})`;
+          ctx.fillStyle = `rgba(100,90,230,${alpha * alphaScale})`;
           ctx.fillText(glyph, x, y);
         } else {
           const radius = 2.2 * maxInfluence * (0.15 + wave * 0.85);
           if (radius > 0.3) {
             ctx.beginPath();
             ctx.arc(x, y, radius, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(100,90,230,${alpha})`;
+            ctx.fillStyle = `rgba(100,90,230,${alpha * alphaScale})`;
             ctx.fill();
           }
         }
@@ -81,7 +85,8 @@ export function DotGrid({ focusPoints }: { focusPoints: [number, number][] }) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let animId: number;
+    let animId = 0;
+    let inView = true;
 
     const resize = () => {
       const dpr = window.devicePixelRatio || 1;
@@ -101,11 +106,29 @@ export function DotGrid({ focusPoints }: { focusPoints: [number, number][] }) {
       draw(canvas, ctx, time);
       animId = requestAnimationFrame(loop);
     };
-    animId = requestAnimationFrame(loop);
+
+    // Only animate while on screen and the tab is visible
+    const maybeRun = () => {
+      cancelAnimationFrame(animId);
+      if (inView && !document.hidden) animId = requestAnimationFrame(loop);
+    };
+
+    const io = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      maybeRun();
+    });
+    io.observe(canvas);
+
+    const onVisibility = () => maybeRun();
+    document.addEventListener("visibilitychange", onVisibility);
+
+    maybeRun();
 
     return () => {
       cancelAnimationFrame(animId);
       ro.disconnect();
+      io.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, [draw]);
 

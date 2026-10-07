@@ -20,7 +20,7 @@ function ChangelogEntry() {
       <div className="max-w-[820px] mx-auto">
         <Link
           to="/changelog"
-          className="text-[13px] text-zinc-500 hover:text-zinc-300 transition-colors mb-8 inline-flex items-center gap-1.5"
+          className="text-[13px] text-muted-foreground hover:text-strong transition-colors mb-8 inline-flex items-center gap-1.5"
         >
           <svg
             className="w-3.5 h-3.5"
@@ -40,14 +40,14 @@ function ChangelogEntry() {
 
         <article>
           <header className="mb-10">
-            <time className="text-[13px] text-zinc-500 mb-3 block">
+            <time className="text-[13px] text-muted-foreground mb-3 block">
               {new Date(entry.date + "T00:00:00").toLocaleDateString("en-US", {
                 month: "long",
                 day: "numeric",
                 year: "numeric",
               })}
             </time>
-            <h1 className="text-[36px] md:text-[44px] font-semibold tracking-[-0.03em] text-white leading-[1.1] mb-4">
+            <h1 className="text-[36px] md:text-[44px] font-semibold tracking-[-0.03em] text-foreground leading-[1.1] mb-4">
               {entry.title}
             </h1>
             {entry.tags.length > 0 && (
@@ -55,7 +55,7 @@ function ChangelogEntry() {
                 {entry.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="text-[12px] text-zinc-500 bg-zinc-800/60 px-2.5 py-0.5 rounded"
+                    className="text-[12px] text-muted-foreground bg-pill-bg/60 px-2.5 py-0.5 rounded"
                   >
                     {tag}
                   </span>

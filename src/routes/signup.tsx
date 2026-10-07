@@ -38,38 +38,6 @@ const submitSignup = createServerFn({ method: "POST" })
     return res.json();
   });
 
-// Server function to generate a free license key for self-hosted
-const generateLicense = createServerFn({ method: "POST" })
-  .inputValidator((input: { email: string; company_name: string }) => input)
-  .handler(async ({ data }) => {
-    const apiKey = process.env.PLATFORM_API_KEY;
-    if (!apiKey) {
-      throw new Error("Server configuration error");
-    }
-
-    const res = await fetch(`${config.apiUrl}/api/v1/licenses`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        email: data.email,
-        customer_name: data.company_name,
-        company_name: data.company_name,
-        tier: "free",
-        months: 12,
-      }),
-    });
-
-    if (!res.ok) {
-      const error = await res.json().catch(() => ({ error: "License generation failed" }));
-      throw new Error(error.error || "License generation failed");
-    }
-
-    return res.json();
-  });
-
 export const Route = createFileRoute("/signup")({
   component: SignupPage,
 });
@@ -94,6 +62,14 @@ function SignupPage() {
 
   const handleSubmit = async () => {
     if (!deployment) return;
+
+    if (deployment === "self-hosted") {
+      // Self-hosted Free is free for anyone, forever — no license key, no
+      // account, no card. Straight to download.
+      navigate({ to: "/download" });
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -107,19 +83,8 @@ function SignupPage() {
         },
       });
 
-      if (deployment === "self-hosted") {
-        // Generate a free license key and go to download
-        const license = await generateLicense({
-          data: { email: form.email, company_name: form.company_name },
-        });
-        navigate({
-          to: "/download",
-          search: { license_key: license.license_key },
-        });
-      } else {
-        // Cloud — go to provisioning placeholder
-        navigate({ to: "/cloud" });
-      }
+      // Cloud — go to provisioning placeholder
+      navigate({ to: "/cloud" });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
@@ -222,12 +187,13 @@ function SignupPage() {
                   className={`w-full text-left rounded-xl border p-5 transition cursor-pointer ${
                     deployment === "self-hosted"
                       ? "border-brand bg-brand/5"
-                      : "border-border hover:border-zinc-600"
+                      : "border-border hover:border-faint"
                   }`}
                 >
-                  <p className="text-[15px] font-medium text-white mb-1">Self-hosted</p>
-                  <p className="text-[13px] text-zinc-500 leading-relaxed">
-                    Your servers, your data. Get a license key instantly.
+                  <p className="text-[15px] font-medium text-foreground mb-1">Self-hosted</p>
+                  <p className="text-[13px] text-muted-foreground leading-relaxed">
+                    Your servers, your data. Free for anyone, forever — no
+                    license key needed. Just download and run.
                   </p>
                 </button>
 
@@ -237,11 +203,11 @@ function SignupPage() {
                   className={`w-full text-left rounded-xl border p-5 transition cursor-pointer ${
                     deployment === "cloud"
                       ? "border-brand bg-brand/5"
-                      : "border-border hover:border-zinc-600"
+                      : "border-border hover:border-faint"
                   }`}
                 >
-                  <p className="text-[15px] font-medium text-white mb-1">Cloud</p>
-                  <p className="text-[13px] text-zinc-500 leading-relaxed">
+                  <p className="text-[15px] font-medium text-foreground mb-1">Cloud</p>
+                  <p className="text-[13px] text-muted-foreground leading-relaxed">
                     We run the infrastructure. Start in 2 minutes.
                   </p>
                 </button>
@@ -257,7 +223,7 @@ function SignupPage() {
                 <button
                   type="button"
                   onClick={() => { setStep(1); setError(null); }}
-                  className="h-12 px-5 rounded-xl border border-border text-zinc-400 font-medium hover:text-white hover:border-zinc-600 transition cursor-pointer"
+                  className="h-12 px-5 rounded-xl border border-border text-muted font-medium hover:text-foreground hover:border-faint transition cursor-pointer"
                 >
                   Back
                 </button>

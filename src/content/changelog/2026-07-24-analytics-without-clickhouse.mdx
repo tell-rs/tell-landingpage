@@ -1,0 +1,45 @@
+---
+title: "ClickHouse, now optional"
+date: "2026-07-24"
+tags: [analytics, pipeline]
+summary: "The full analytics suite now also runs on plain files — local disk or any S3-compatible bucket, verified identical to ClickHouse. Two first-class stores, your choice."
+---
+
+You want funnels, retention, and user profiles for your product. What you don't want is to operate a column database to get them. Until now, Tell's answer was "run ClickHouse" — great at billions of events, overkill on a single VPS.
+
+Now the whole analytics suite also runs on files. ClickHouse didn't go anywhere — you have a second first-class store, and the choice is yours.
+
+### One binary, your files
+
+Point Tell at a directory and start sending events. Data lands as Apache Arrow files — an open columnar format any data tool can read — and every query runs directly against them. No database server, no connection strings, nothing else to install.
+
+- **Every report works** — funnels, retention, lifecycle, user paths, people profiles, audiences, revenue, group analytics. Same features, same numbers
+- **Verified, not promised** — a differential test suite runs each metric against both the file store and ClickHouse and requires identical results
+- **Your data stays yours** — plain files on your disk, in a format DuckDB, pandas, or a Python script can open tomorrow
+
+### Or point it at a bucket
+
+Set `mode = "s3"` and the file store becomes a shared one — AWS S3, MinIO, or Cloudflare R2.
+
+- **Stateless collectors** — ingest nodes upload straight to the bucket and keep nothing local. Kill one, start another, no data to migrate
+- **Readers scan the same bucket** — the dashboard queries what collectors wrote, seconds later
+- **Hot local, durable remote** — `local+upload` keeps recent data on disk for fast queries while every file is also uploaded for safekeeping
+- **You can see it working** — `tell status` shows upload backlog, and the server checks the bucket is reachable before it starts taking traffic
+
+### It cleans up after itself
+
+File stores usually mean a cron job and a shell script. Not here.
+
+- **Background compaction** — small files merge into bigger ones automatically, so queries stay fast as data grows
+- **Retention windows** — tell it to keep 90 days and older partitions are deleted for you
+- **On your schedule** — `tell maintenance` runs a one-shot compaction and cleanup pass without restarting the server
+
+### ClickHouse or files — your call
+
+Two stores, equal citizens. Every feature works on both, and the differential suite holds them to identical answers — so the choice is about your deployment, not your feature list.
+
+- **Choose ClickHouse** for proven scale — billions of events, a mature operational ecosystem, and blazing queries over deep history
+- **Choose files** for zero moving parts — one binary, an open on-disk format, and object-storage durability without running a database
+- **Switch whenever** — it's a config line, and your boards, funnels, and audiences don't change
+
+Either way, the same binary scales from a laptop to a fleet of stateless collectors sharing one bucket. And don't assume files are the slow option — early numbers hold up better than we expected. We're benchmarking, not calling a winner.

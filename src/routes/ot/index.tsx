@@ -289,7 +289,7 @@ function OTPage() {
             Ready to secure your<br /> infrastructure?
           </h2>
           <p className="text-lg text-zinc-400 mb-14 max-w-lg mx-auto">
-            Revenue-based pricing — all features included, no per-seat fees.
+            Free to self-host — paid tiers priced by company size, no per-seat fees.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

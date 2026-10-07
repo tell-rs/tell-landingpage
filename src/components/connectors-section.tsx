@@ -67,6 +67,21 @@ const connectors: Connector[] = [
     ),
   },
   {
+    name: "Google Ads",
+    category: "marketing",
+    categoryLabel: "Marketing",
+    description:
+      "Pull campaign spend, clicks, and conversion metrics. Compare paid search performance against signups and measure cost per acquisition across campaigns.",
+    signals: ["Ad spend & CPA", "Click & impression trends", "Campaign conversions", "Keyword performance", "Budget pacing"],
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 20V10" />
+        <path d="M18 20V4" />
+        <path d="M6 20v-4" />
+      </svg>
+    ),
+  },
+  {
     name: "Cloudflare",
     category: "infrastructure",
     categoryLabel: "Infrastructure",
@@ -107,6 +122,19 @@ const connectors: Connector[] = [
     ),
   },
   {
+    name: "YouTube",
+    category: "marketing",
+    categoryLabel: "Video",
+    description:
+      "Channel subscribers, views, and video metrics. Correlate content performance with signups and watch audience growth alongside your product events.",
+    signals: ["Subscriber growth", "View trends", "Video performance", "Channel milestones"],
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M23.5 6.19a3.02 3.02 0 00-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.5A3.02 3.02 0 00.5 6.19C0 8.07 0 12 0 12s0 3.93.5 5.81a3.02 3.02 0 002.12 2.14c1.88.5 9.38.5 9.38.5s7.5 0 9.38-.5a3.02 3.02 0 002.12-2.14C24 15.93 24 12 24 12s0-3.93-.5-5.81zM9.55 15.57V8.43L15.82 12l-6.27 3.57z" />
+      </svg>
+    ),
+  },
+  {
     name: "Dub",
     category: "marketing",
     categoryLabel: "Links",
@@ -132,7 +160,12 @@ const filters: { label: string; value: Category }[] = [
 
 const VISIBLE_COUNT = 4;
 
-export function ConnectorsSection() {
+/**
+ * Connector cards grid — rendered as the second half of the
+ * #marketing-data section on the homepage. Keeps the #integrations
+ * anchor so existing nav/footer links continue to work.
+ */
+export function ConnectorsGrid() {
   const [active, setActive] = useState<Category>("all");
   const [activeCard, setActiveCard] = useState(0);
   const [expanded, setExpanded] = useState(false);
@@ -142,36 +175,30 @@ export function ConnectorsSection() {
   const visible = expanded ? filtered : filtered.slice(0, VISIBLE_COUNT);
 
   return (
-    <section className="px-6" style={{ paddingTop: 96, paddingBottom: 128 }}>
-      <div className="max-w-[1340px] mx-auto">
-        {/* Header */}
-        <div className="md:px-8 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 mb-14">
-          <h2
-            className="text-[48px] leading-[1] tracking-[-0.022em] text-white"
-            style={{ fontWeight: 510, fontFeatureSettings: '"cv01", "ss03"' }}
-          >
-            Your data,
-            <br />
-            connected
-          </h2>
-          <p className="text-zinc-400 text-[24px] leading-[1.33] tracking-[-0.012em] md:pt-3">
-            WASM plugin connectors pull data from Stripe, Shopify, GitHub,
-            and more — crash-isolated, hot-loadable. 15 integrations,
-            276 metrics, all queryable alongside your events.
+    <div id="integrations" className="scroll-mt-24" style={{ paddingTop: 96 }}>
+        {/* Sub-header */}
+        <div className="md:px-8 mb-8">
+          <p className="text-foreground text-[20px] leading-snug" style={{ fontWeight: 510 }}>
+            {connectors.length} connectors, zero pipelines
+          </p>
+          <p className="text-muted-foreground text-[15px] leading-relaxed mt-1.5">
+            Connect Stripe, GitHub, or YouTube once — Tell pulls the numbers on a
+            schedule and charts them next to your product data. Build your own with
+            a plugin if a source is missing.
           </p>
         </div>
 
         {/* Filter tabs */}
         <div className="md:px-8 mb-8">
-          <div className="inline-flex items-center gap-1 rounded-lg bg-zinc-900/60 p-1">
+          <div className="inline-flex items-center gap-1 rounded-lg bg-surface p-1">
             {filters.map((f) => (
               <button
                 key={f.value}
                 onClick={() => { setActive(f.value); setExpanded(false); setActiveCard(0); }}
                 className={`px-3.5 py-1.5 rounded-md text-[13px] font-medium transition cursor-pointer ${
                   active === f.value
-                    ? "bg-zinc-800 text-white"
-                    : "text-zinc-500 hover:text-zinc-300"
+                    ? "bg-pill-bg text-foreground"
+                    : "text-muted-foreground hover:text-strong"
                 }`}
               >
                 {f.label}
@@ -192,36 +219,36 @@ export function ConnectorsSection() {
                   c.soon ? "opacity-50" : ""
                 } ${
                   isActive
-                    ? "bg-[#0d0b1a] border-brand/20"
-                    : "bg-[#111113] border-zinc-800/60 hover:border-zinc-700"
+                    ? "bg-announce border-brand/20"
+                    : "bg-card border-border/60 hover:border-border"
                 }`}
                 style={{ padding: "24px 24px 28px" }}
               >
                 {/* Top: icon + name + category */}
                 <div className="flex items-center gap-4 mb-5">
                   <div className={`w-11 h-11 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-200 ${
-                    isActive ? "bg-brand/15 text-brand" : "bg-zinc-800/80 text-zinc-300"
+                    isActive ? "bg-brand/15 text-brand" : "bg-pill-bg/80 text-strong"
                   }`}>
                     {c.icon}
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2.5">
                       <h3 className={`text-[16px] font-medium transition-colors duration-200 ${
-                        isActive ? "text-white" : "text-zinc-300"
+                        isActive ? "text-foreground" : "text-strong"
                       }`}>{c.name}</h3>
                       {c.soon && (
-                        <span className="text-[11px] text-zinc-500 bg-zinc-800 px-2 py-0.5 rounded">Soon</span>
+                        <span className="text-[11px] text-muted-foreground bg-pill-bg px-2 py-0.5 rounded">Soon</span>
                       )}
                     </div>
                     <p className={`text-[13px] transition-colors duration-200 ${
-                      isActive ? "text-zinc-400" : "text-zinc-500"
+                      isActive ? "text-muted" : "text-muted-foreground"
                     }`}>{c.categoryLabel}</p>
                   </div>
                 </div>
 
                 {/* Description */}
                 <p className={`text-[14px] leading-[1.6] mb-8 transition-colors duration-200 ${
-                  isActive ? "text-zinc-300" : "text-zinc-500"
+                  isActive ? "text-strong" : "text-muted-foreground"
                 }`}>
                   {c.description}
                 </p>
@@ -229,17 +256,17 @@ export function ConnectorsSection() {
                 {/* Data signals */}
                 <div className="mt-auto">
                   <p className={`text-[11px] font-medium uppercase tracking-wider mb-3 transition-colors duration-200 ${
-                    isActive ? "text-zinc-500" : "text-zinc-600"
+                    isActive ? "text-muted-foreground" : "text-faint"
                   }`}>
                     Data Signals
                   </p>
                   <ul className="space-y-2">
                     {c.signals.map((s) => (
                       <li key={s} className={`flex items-center gap-2.5 text-[13px] transition-colors duration-200 ${
-                        isActive ? "text-zinc-300" : "text-zinc-500"
+                        isActive ? "text-strong" : "text-muted-foreground"
                       }`}>
                         <span className={`w-1.5 h-1.5 rounded-full shrink-0 transition-colors duration-200 ${
-                          isActive ? "bg-zinc-400" : "bg-zinc-600"
+                          isActive ? "bg-muted" : "bg-faint"
                         }`} />
                         {s}
                       </li>
@@ -256,13 +283,12 @@ export function ConnectorsSection() {
           <div className="mt-8 md:px-8">
             <button
               onClick={() => setExpanded(true)}
-              className="inline-flex items-center gap-1.5 text-[14px] text-zinc-500 hover:text-white transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-[14px] text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
             >
               Show all {filtered.length} connectors <span>&rarr;</span>
             </button>
           </div>
         )}
-      </div>
-    </section>
+    </div>
   );
 }

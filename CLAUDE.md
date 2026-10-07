@@ -7,7 +7,7 @@
 - **Styling**: Tailwind CSS v4 (inline `@theme`, CSS custom properties)
 - **Content**: MDX for changelog entries (remark-frontmatter)
 - **Deployment**: Vercel
-- **Payments**: Polar (`@polar-sh/tanstack-start`)
+- **Payments**: Stripe (Checkout Sessions via `src/checkout.ts`, prices configured in tell-platform)
 
 ## Commands
 - `bun run dev` — start dev server

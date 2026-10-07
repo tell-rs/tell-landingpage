@@ -1,0 +1,37 @@
+---
+title: "Security improvements"
+date: "2026-07-24"
+tags: ["auth", "plugins"]
+summary: "Plugin sandboxing tightened, sign-in timing leaks closed, secrets locked down, and an audit log that covers every new surface. Nothing flashy — that's the point."
+---
+
+Nothing in this post is a feature you'll click on. It's the work that keeps a box you run yourself worth trusting — spelled out, because "various security fixes" is not something you can take to a compliance review.
+
+### Plugins are fenced in
+
+Plugins run other people's code on your server. This release treats that with the respect it deserves.
+
+- **Sandbox upgraded** — the isolation layer that contains WASM plugins now includes fixes for 12 published advisories, among them two critical escape routes on ARM64 hosts. If you run plugins, update
+- **Hard resource caps** — each plugin instance is limited to 256 MB of memory and force-stopped when it exceeds its time budget. An infinite loop in a plugin can no longer pin one of your cores
+- **No redirects** — a plugin's HTTP requests stop at the first redirect, closing the trick where an allowed host forwards the request to an internal address, like a cloud metadata service
+- **No impersonation** — signals emitted by plugins are namespaced, so a plugin can't fake the built-in signals that drive things like firewall automation
+- **Verified installs** — downloaded plugins are checked against the registry's published checksum before they touch disk. A mismatch refuses to install
+
+### Sign-in leaks less
+
+- **Timing tells nothing** — a failed login now takes the same time whether the email exists or not, so an attacker can't probe which addresses have accounts
+- **Strict signature checks** — platform tokens are verified strictly; malformed or non-canonical signatures are rejected outright
+- **Keys fail loudly** — you can now pin the session signing key in config so logins survive redeploys, and an invalid key stops the server at startup instead of silently generating a new one
+
+### The unglamorous list
+
+- Secret files are created owner-only *before* any bytes are written — there is no window where a fresh credential is readable by other users on the machine, and a failed permission change is an error, not a shrug
+- The server warns at startup when your config file is world-readable and holds secrets
+- User ids are validated the moment they arrive — empty, oversized, or control-character ids are rejected at the door instead of being silently dropped deep inside
+- Raw SQL queries are checked for blocked functions, scoped to your workspace, and written to the audit log — every one
+- Live streams enforce per-workspace subscriber and payload caps, and malformed subscribe requests that could exhaust memory are rejected
+- Every fetch your server makes on a user's behalf — notification webhooks, Slack delivery, link previews — is validated against private and reserved addresses and rate-limited per user
+
+### An audit log that keeps up
+
+Every surface added in this release writes to the audit log from day one: notification channels and alerts, digests, metric trees, the event dictionary, audiences and their snapshots and syncs, board groups, marks and link previews, person erasure, quota transitions, and retention changes — including denied attempts. If it changes state or reads something sensitive, it leaves a record with who, what, and the role they held at the time.

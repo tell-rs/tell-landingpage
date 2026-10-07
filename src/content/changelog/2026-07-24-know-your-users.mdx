@@ -1,0 +1,56 @@
+---
+title: "Know your users"
+date: "2026-07-24"
+tags: [analytics]
+summary: "A people directory, full person profiles, funnels that show who dropped and why, user paths, and audiences with real logic — your metrics finally have faces."
+---
+
+The funnel says 40% drop at checkout. Which 40%? Until you can click a number and see the people behind it, analytics is guesswork with charts.
+
+### People — every user, findable
+
+Your product has been identifying users all along — now there's a place to meet them. Browse everyone, search by name, email, or your own user id, and sort by traits or activity.
+
+- **Open anyone's profile** — one page per person: who they are, their traits, a full event timeline, session history, and every audience they belong to
+- **Scope the directory to an audience** — see exactly who's inside "trial users who hit the paywall twice"
+- **Erase on request** — one admin-only action removes a person's events, sessions, identity, and traits. GDPR requests stop being a database excavation
+
+### One person, not three devices
+
+Identity now works the way your product does.
+
+- **Identify with your own user id** — email is no longer required
+- **Alias merging** — connect an anonymous visitor or a legacy id to the canonical user; their history, devices, and traits carry forward
+- **Set-once and remove** — write a trait only if it's never been set, or delete one, alongside plain updates
+
+### Funnels that answer why
+
+Conversion rates tell you *that* people left. These tell you who, where, and how.
+
+- **Click into any step** — see the actual users who reached or dropped there, with names and emails for identified people
+- **Break down by any property** — split conversion by plan, country, or campaign, with an (other) bucket so the groups always sum to the total
+- **Exclusion steps** — drop anyone who did a disqualifying event between two steps, like contacting support
+- **Ordering modes** — require strict sequences when the order matters, or stay loose when it doesn't
+- **Time to convert** — median, p90, and average time from first step to last, on every funnel
+
+### Where they go next
+
+User paths draw a flow diagram of what people actually do after any starting event — or everything that led up to one. Set the depth, cap the branches, scope it to an audience, and watch the real journeys, not the ones on the whiteboard.
+
+### Audiences with real logic
+
+- **Nest conditions** — AND/OR groups, negation, and "did this at least N times" frequency rules
+- **Static cohorts** — freeze a list of people and reuse it
+- **Snapshots** — capture membership on a schedule and chart audience size over time
+- **Syncs** — push membership to a signed webhook, full or just who entered and left, on a schedule or on demand
+- **Applied everywhere** — the audience picker now works on funnels, retention, paths, people, and grouped metrics alike
+
+### Also in this update
+
+- Session quality metrics — average, median, and p90 session length, events per session, and bounce rate, splittable by any property
+- Count unique users who did an event, or unique sessions containing it
+- Weekly and monthly active users now use true rolling windows at any granularity
+- An event dictionary with descriptions, tags, and verified flags — and event/property autocomplete everywhere you type one
+- Virtual events — one name for any combination of real events, usable in metrics, funnels, and audience rules alike
+- Events now carry country, city, and network resolved from the source address — geographic breakdowns with zero client work
+- Everything above runs identically on ClickHouse or the file store

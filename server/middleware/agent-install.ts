@@ -18,8 +18,8 @@ set -euo pipefail
 REPO="tell-rs/witness"
 BINARY_NAME="witness"
 INSTALL_DIR="/usr/local/bin"
-CONFIG_DIR="/etc/tell"
-CONFIG_FILE="\${CONFIG_DIR}/agent.toml"
+CONFIG_DIR="/etc/witness"
+CONFIG_FILE="\${CONFIG_DIR}/config.toml"
 SERVICE_FILE="/etc/systemd/system/witness.service"
 
 TOKEN=""
@@ -126,14 +126,27 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/witness --config /etc/tell/agent.toml
+ExecStart=/usr/local/bin/witness --config /etc/witness/config.toml
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=always
 RestartSec=5
 User=witness
 Group=witness
-ReadOnlyPaths=/proc /sys /var/log
+
+# State — disk buffer lives here (/var/lib/witness)
 StateDirectory=witness
+
+# Hardening — drop everything the agent doesn't need
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+RestrictSUIDSGID=yes
+
+# Read-only access to metrics sources and log files
+ReadOnlyPaths=/proc /sys /var/log
+ReadWritePaths=/var/lib/witness
 
 [Install]
 WantedBy=multi-user.target

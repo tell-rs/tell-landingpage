@@ -3,5 +3,9 @@
   "buildCommand": "bun run build",
   "installCommand": "bun install",
   "framework": null,
-  "bunVersion": "1.x"
+  "bunVersion": "1.x",
+  "rewrites": [
+    { "source": "/pipeline", "destination": "/install-pipeline.sh" },
+    { "source": "/collect", "destination": "/install-collect.sh" }
+  ]
 }

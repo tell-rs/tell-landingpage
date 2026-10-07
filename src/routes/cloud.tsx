@@ -21,7 +21,7 @@ function CloudPage() {
         </p>
 
         <div className="bg-surface rounded-2xl border border-border p-6 text-left mb-8">
-          <p className="text-sm text-zinc-400 leading-relaxed">
+          <p className="text-sm text-muted leading-relaxed">
             Your workspace is being provisioned. This typically takes under a minute.
             Once ready, you can start sending events immediately using any of our 6 SDKs.
           </p>
@@ -36,7 +36,7 @@ function CloudPage() {
           </Link>
           <a
             href="mailto:hello@tell.rs"
-            className="px-6 py-3 border border-border text-zinc-400 rounded-xl font-medium hover:text-white hover:border-zinc-600 transition"
+            className="px-6 py-3 border border-border text-muted rounded-xl font-medium hover:text-foreground hover:border-faint transition"
           >
             Contact us
           </a>
