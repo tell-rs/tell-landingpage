@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useCallback, type ReactNode } from "react"
 import { getAllEntries } from "../content/changelog";
 import { ConnectorsSection } from "../components/connectors-section";
 import { DotGrid } from "../components/dot-grid";
+import { SourcesSection } from "../components/SourcesSection";
 
 function BorderGlow({ children, className = "" }: { children: ReactNode; className?: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -1374,6 +1375,9 @@ function Home() {
         </section>
       </div>
 
+
+      {/* Sources — what data comes in and how */}
+      <SourcesSection />
 
       {/* Section 1: Outcome Cards — what you need to know */}
       <section className="py-28 md:py-36 px-6">
